@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="232.0"
+            prefWidth="408.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="de.iav.frontend.controller.LoginController">
+<Label layoutX="55.0" layoutY="59.0" text="Email address"/>
+<TextField fx:id="email" layoutX="141.0" layoutY="55.0"/>
+<Label layoutX="55.0" layoutY="100.0" text="Password"/>
+<PasswordField fx:id="password" layoutX="141.0" layoutY="96.0" onAction="#onActionPasswordField"/>
+<Button layoutX="47.0" layoutY="146.0" mnemonicParsing="false" onAction="#signInButtonPressed" prefHeight="25.0"
+        prefWidth="93.0" text="Sign In"/>
+<Button layoutX="158.0" layoutY="146.0" mnemonicParsing="false" onAction="#signUpButtonPressed" prefHeight="25.0"
+        prefWidth="93.0" text="New User"/>
+<Label fx:id="informationForUser" layoutX="47.0" layoutY="194.0" prefHeight="0.0" prefWidth="247.0"/>
+<Button layoutX="275.0" layoutY="146.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="25.0"
+        prefWidth="93.0" text="Delete User"/>
+</AnchorPane>
