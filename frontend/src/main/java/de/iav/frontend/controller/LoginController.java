@@ -14,6 +14,7 @@ package de.iav.frontend.controller;
 
         import java.io.IOException;
 // jaro.jenaro@speaker.de
+// kasia.kasia@wasnun.de
 public class LoginController {
     private final UserService userService = UserService.getInstance();
     private final AuthService authService = AuthService.getInstance();
@@ -25,7 +26,7 @@ public class LoginController {
     public Label informationForUser;
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
 
-    public void signInButtonPressed(ActionEvent actionEvent) throws IOException {
+    public void LoginButtonPressed(ActionEvent actionEvent) throws IOException {
 
         loginAuthorized(actionEvent);
     }
@@ -44,16 +45,28 @@ public class LoginController {
 
     }
 
-    public void signUpButtonPressed(ActionEvent actionEvent) throws IOException {
+    public void RegisterButtonPressed(ActionEvent actionEvent) throws IOException {
 
-        System.out.println(userService.getUserByEmail(email.getText()) != null);
-        if (userService.getUserByEmail(email.getText()) != null) {
-            informationForUser.setText("This email already exists, sign in instead");
-        } else {
+        System.out.println("RegisterButtonPressed: drin");
+        try {
+            System.out.println(userService.getUserByEmail(email.getText()) != null);
+            System.out.println("RegisterButtonPressed: direkt vor if schleife");
+            if (userService.getUserByEmail(email.getText()) != null) {
+                System.out.println("User existiert und kann mit der mail nicht registriert werden");
+                informationForUser.setText("This email already exists, sign in instead");
+            } else {
+                System.out.println("User existiert NICHT und kann mit der mail registriert werden");
+                UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto("getName", "getName", email.getText(), password.getText());
+                sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
+
+
+            }
+        }
+        catch (RuntimeException e) {
+            System.out.println("RuntimeException: " +e.getMessage());
+            System.out.println("User existiert NICHT und kann mit der mail registriert werden");
             UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto("getName", "getName", email.getText(), password.getText());
             sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
-
-
         }
     }
 
@@ -65,6 +78,8 @@ public class LoginController {
     public void onActionPasswordField(ActionEvent event) throws IOException {
         loginAuthorized(event);
     }
+
+
 }
 
 

@@ -3,7 +3,6 @@ package de.iav.frontend.service;
 import de.iav.frontend.controller.*;
 import de.iav.frontend.model.User;
 import de.iav.frontend.HelloController;
-import de.iav.frontend.controller.RegistrationController;
 import de.iav.frontend.model.UserWithoutIdDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -37,7 +36,8 @@ public class SceneSwitchService {
 
     // das hier zum RegisterController umbenennen
     public void switchToRegisterController(ActionEvent actionEvent, UserWithoutIdDto userWithoutIdDto) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/user.fxml"));
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/Registration.fxml"));
         Parent root = loader.load();
 
 
@@ -50,7 +50,22 @@ public class SceneSwitchService {
         stage.setScene(scene);
         stage.show();
     }
+    /*
+    public void switchToRegisterControllerEmpty(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/Registration.fxml"));
+        Parent root = loader.load();
 
+
+        RegistrationController registrationController = loader.getController();
+        System.out.println("  ----> public void switchToUserController(ActionEvent actionEvent, UserWithoutIdDto userWithoutIdDto) throws IOException {: " + userWithoutIdDto);
+        registrationController.setUserWithoutIdDtoForSignIn(userWithoutIdDto);
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+*/
     public void switchToHelloController(ActionEvent actionEvent, User user) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/hello-view.fxml"));
         Parent root = loader.load();

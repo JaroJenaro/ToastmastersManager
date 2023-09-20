@@ -23,8 +23,9 @@ public class AuthService {
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
     //private static final String BACKEND_AUTH_URL = "http://localhost:8080/api/auth";
-    private static final String BACKEND_AUTH_URL = "http://localhost:8080/api/toastMasterManager/users";
-   // private String STUDENTS_URL_BACKEND = System.getenv("BACKEND_STUDENT_URI");
+    //private static final String BACKEND_AUTH_URL = "http://localhost:8080/api/toastMasterManager/users";
+    private static final String BACKEND_AUTH_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/users";
+   // private String STUDENTS_URL_BACKEND = System.getenv("BACKEND_TOASTMASTER_URI");
 
     private AuthService() {
     }

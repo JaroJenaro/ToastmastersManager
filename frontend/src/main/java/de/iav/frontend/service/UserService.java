@@ -16,7 +16,10 @@ public class UserService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
-    private static final String BACKEND_AUTH_URL = "http://localhost:8080/api/toastMasterManager/usersData";
+    //private static final String BACKEND_AUTH_URL = "http://localhost:8080/api/toastMasterManager/usersData";
+
+    private static final String BACKEND_AUTH_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/usersData";
+
     public UserService() {
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();

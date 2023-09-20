@@ -46,10 +46,15 @@ public class RegistrationController {
     }
 
     public void setUserWithoutIdDtoForSignIn(UserWithoutIdDto userWithoutIdDto) {
+        System.out.println("setUserWithoutIdDtoForSignIn drin");
         email.setText(userWithoutIdDto.email());
+        System.out.println("setUserWithoutIdDtoForSignIn mail");
         password.setText(userWithoutIdDto.password());
+        System.out.println("setUserWithoutIdDtoForSignIn password");
         firstName.setText(userWithoutIdDto.firstName());
+        System.out.println("setUserWithoutIdDtoForSignIn firstname");
         lastName.setText(userWithoutIdDto.lastName());
+        System.out.println("setUserWithoutIdDtoForSignIn lastname");
     }
 
 
