@@ -1,18 +1,17 @@
 package de.iav.frontend.controller;
-//import de.iav.frontend.model.TransactionWithoutUser;
 
-        import de.iav.frontend.model.UserWithoutIdDto;
-        import de.iav.frontend.security.AppUserRequest;
-        import de.iav.frontend.security.AuthService;
-        import de.iav.frontend.service.SceneSwitchService;
-        import javafx.event.ActionEvent;
-        import javafx.fxml.FXML;
-        import javafx.scene.control.Button;
-        import javafx.scene.control.Label;
-        import javafx.scene.control.PasswordField;
-        import javafx.scene.control.TextField;
+import de.iav.frontend.model.UserWithoutIdDto;
+import de.iav.frontend.security.AppUserRequest;
+import de.iav.frontend.security.AuthService;
+import de.iav.frontend.service.SceneSwitchService;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
-        import java.io.IOException;
+import java.io.IOException;
 
 public class RegistrationController {
     @FXML
