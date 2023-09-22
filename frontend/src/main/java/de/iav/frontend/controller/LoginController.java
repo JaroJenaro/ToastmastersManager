@@ -15,6 +15,7 @@ package de.iav.frontend.controller;
         import java.io.IOException;
 // jaro.jenaro@speaker.de
 // kasia.kasia@wasnun.de
+//
 public class LoginController {
     private final UserService userService = UserService.getInstance();
     private final AuthService authService = AuthService.getInstance();
