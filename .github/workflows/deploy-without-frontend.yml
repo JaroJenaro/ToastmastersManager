@@ -49,7 +49,7 @@ jobs:
         with:
           push: true
           #Set dockerhub project (replace "bartfastiel/java-capstone-project.de-example-app")
-          tags: jarojenarp/toastmastersmanager:latest
+          tags: jarojenaro/toastmastersmanager:latest
           context: .
 
   deploy:
@@ -69,6 +69,6 @@ jobs:
           script: |
             sudo docker stop muc-java-23-1-jaro
             sudo docker rm muc-java-23-1-jaro
-            sudo docker run --pull=always --name muc-java-23-1-jaro --network capstones --ip 10.0.6.5 --detach --env MONGO_DB_URI=${{ secrets.MONGO_DB_URI }} jarojenarp/toastmastersmanager:latest
+            sudo docker run --pull=always --name muc-java-23-1-jaro --network capstones --ip 10.0.6.5 --detach --env MONGO_DB_URI=${{ secrets.MONGO_DB_URI }} jarojenaro/toastmastersmanager:latest
             sleep 15s
             sudo docker logs muc-java-23-1-jaro
