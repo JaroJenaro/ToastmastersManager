@@ -50,6 +50,22 @@ public class SceneSwitchService {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void switchToTimeSlotsController(ActionEvent actionEvent, User user) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/TimeSlotsData.fxml"));
+        Parent root = loader.load();
+
+
+        TimeSlotsController timeSlotsController = loader.getController();
+        System.out.println("  ----> public void switchToTimeSlotsController(ActionEvent actionEvent, UserWithoutIdDto userWithoutIdDto) throws IOException {: " + user);
+        timeSlotsController.setUserToShow(user);
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
     /*
     public void switchToRegisterControllerEmpty(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/Registration.fxml"));

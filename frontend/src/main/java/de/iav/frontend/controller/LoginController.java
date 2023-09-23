@@ -26,7 +26,8 @@ public class LoginController {
     @FXML
     public Label informationForUser;
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
-
+    private static final String GET_FIRSTNAME = "get Firtsname";
+    private static final String GET_LASTNAME = "get Lastsname";
     public void LoginButtonPressed(ActionEvent actionEvent) throws IOException {
 
         loginAuthorized(actionEvent);
@@ -38,7 +39,7 @@ public class LoginController {
             informationForUser.setText("login successfully");
             User logInUser = userService.getUserByEmail(email.getText());
             System.out.println("logInUser: " + logInUser);
-            sceneSwitchService.switchToHelloController(actionEvent, logInUser);
+            sceneSwitchService.switchToTimeSlotsController(actionEvent, logInUser);
             System.out.println("scene Switch : " + logInUser);
         } else {
             informationForUser.setText("login unsuccessfully");
@@ -57,7 +58,7 @@ public class LoginController {
                 informationForUser.setText("This email already exists, sign in instead");
             } else {
                 System.out.println("User existiert NICHT und kann mit der mail registriert werden");
-                UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto("getName", "getName", email.getText(), password.getText());
+                UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
                 sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
 
 
@@ -66,7 +67,7 @@ public class LoginController {
         catch (RuntimeException e) {
             System.out.println("RuntimeException: " +e.getMessage());
             System.out.println("User existiert NICHT und kann mit der mail registriert werden");
-            UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto("getName", "getName", email.getText(), password.getText());
+            UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
             sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
         }
     }
