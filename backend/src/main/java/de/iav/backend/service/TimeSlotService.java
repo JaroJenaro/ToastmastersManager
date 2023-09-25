@@ -57,4 +57,8 @@ public class TimeSlotService {
         return timeSlotLists;
     }
 
+    public TimeSlot saveTimeSlot(TimeSlot timeSlot) {
+        return timeSlotRepository.save(timeSlot);
+    }
+
 }

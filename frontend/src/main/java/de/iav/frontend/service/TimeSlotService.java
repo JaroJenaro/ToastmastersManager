@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.iav.frontend.exception.MappingRuntimeException;
 import de.iav.frontend.model.TimeSlot;
 
 import java.net.URI;
@@ -47,10 +48,35 @@ public class TimeSlotService {
             });
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to map stocks List", e);
+            throw new MappingRuntimeException("Failed to map TimeSlotList" + e.getMessage());
         }
 
     }
 
+    public TimeSlot saveTimeSlot(TimeSlot timeSlot) {
+        try {
+            String requestBody = objectMapper.writeValueAsString(timeSlot);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BACKEND_AUTH_URL))
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+            return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenApply(this::mapToTimeSlot)
+                    .join();
+        } catch (JsonProcessingException e) {
+            throw new MappingRuntimeException("Failed to save TimeSlot" + e.getMessage());
+        }
+    }
+
+    private TimeSlot mapToTimeSlot(String json) {
+        try {
+            return objectMapper.readValue(json, TimeSlot.class);
+        } catch (JsonProcessingException e) {
+            throw new MappingRuntimeException("Failed to map TimeSlot" + e.getMessage());
+        }
+    }
 
 }

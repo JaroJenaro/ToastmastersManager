@@ -11,7 +11,7 @@
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
-   <Label fx:id="l_loggedInUser" text="Label" />
+   <Label fx:id="lLoggedInUser" text="Label" />
 
    <HBox prefHeight="100.0" prefWidth="200.0">
       <children>
@@ -32,5 +32,5 @@
          </Button>
       </children>
    </HBox>
-   <ListView fx:id="lv_timeSlots" prefHeight="200.0" prefWidth="200.0" />
+   <ListView fx:id="lvTimeSlots" prefHeight="200.0" prefWidth="200.0" />
 </VBox>

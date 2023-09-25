@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -31,13 +33,10 @@ public class RegistrationController {
     private final AuthService authService = AuthService.getInstance();
 
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
-
+    private static final Logger LOG = LogManager.getLogger();
     @FXML
     public void onSignUpButtonClick(ActionEvent event) throws IOException {
-        //userWithoutIdDto = new UserWithoutIdDto(firstName.getText(), lastName.getText(), email.getText(), password.getText());
-        //sceneSwitchService.switchToPortfolioScene(event, userService.addUser(userWithoutIdDto));
-        register(event);
-
+      register(event);
     }
 
     public void backButtonPressed(ActionEvent actionEvent) throws IOException {
@@ -45,15 +44,15 @@ public class RegistrationController {
     }
 
     public void setUserWithoutIdDtoForSignIn(UserWithoutIdDto userWithoutIdDto) {
-        System.out.println("setUserWithoutIdDtoForSignIn drin");
+        LOG.info("setUserWithoutIdDtoForSignIn drin");
         email.setText(userWithoutIdDto.email());
-        System.out.println("setUserWithoutIdDtoForSignIn mail");
+        LOG.info("setUserWithoutIdDtoForSignIn mail");
         password.setText(userWithoutIdDto.password());
-        System.out.println("setUserWithoutIdDtoForSignIn password");
+        LOG.info("setUserWithoutIdDtoForSignIn password");
         firstName.setText(userWithoutIdDto.firstName());
-        System.out.println("setUserWithoutIdDtoForSignIn firstname");
+        LOG.info("setUserWithoutIdDtoForSignIn firstname");
         lastName.setText(userWithoutIdDto.lastName());
-        System.out.println("setUserWithoutIdDtoForSignIn lastname");
+        LOG.info("setUserWithoutIdDtoForSignIn lastname");
     }
 
 
@@ -68,13 +67,15 @@ public class RegistrationController {
 
         if (authService.registerAppUser(appUserRequest)) {
             sceneSwitchService.switchToLoginController(event);
-            System.out.println(appUserRequest);
+            LOG.info(appUserRequest);
 
 
         } else {
             errorLabel.setText(authService.getErrorMessage());
         }
     }
+
+
 }
 
 

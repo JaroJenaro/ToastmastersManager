@@ -8,9 +8,9 @@
 <TextField fx:id="email" layoutX="141.0" layoutY="55.0"/>
 <Label layoutX="55.0" layoutY="100.0" text="Password"/>
 <PasswordField fx:id="password" layoutX="141.0" layoutY="96.0" onAction="#onActionPasswordField"/>
-<Button layoutX="47.0" layoutY="146.0" mnemonicParsing="false" onAction="#LoginButtonPressed" prefHeight="25.0"
+<Button layoutX="47.0" layoutY="146.0" mnemonicParsing="false" onAction="#loginButtonPressed" prefHeight="25.0"
         prefWidth="93.0" text="Login"/>
-<Button layoutX="158.0" layoutY="146.0" mnemonicParsing="false" onAction="#RegisterButtonPressed" prefHeight="25.0"
+<Button layoutX="158.0" layoutY="146.0" mnemonicParsing="false" onAction="#registerButtonPressed" prefHeight="25.0"
         prefWidth="93.0" text="Register"/>
 <Label fx:id="informationForUser" layoutX="47.0" layoutY="194.0" prefHeight="0.0" prefWidth="247.0"/>
 <Button layoutX="275.0" layoutY="146.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="25.0"

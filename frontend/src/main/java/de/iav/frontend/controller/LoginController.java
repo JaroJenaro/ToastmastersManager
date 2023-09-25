@@ -11,14 +11,16 @@ package de.iav.frontend.controller;
         import javafx.scene.control.Label;
         import javafx.scene.control.PasswordField;
         import javafx.scene.control.TextField;
+        import org.apache.logging.log4j.LogManager;
+        import org.apache.logging.log4j.Logger;
 
         import java.io.IOException;
 // jaro.jenaro@speaker.de
 // kasia.kasia@wasnun.de
-//
 public class LoginController {
     private final UserService userService = UserService.getInstance();
     private final AuthService authService = AuthService.getInstance();
+    private static final Logger LOG = LogManager.getLogger();
     @FXML
     public PasswordField password;
     @FXML
@@ -28,36 +30,36 @@ public class LoginController {
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private static final String GET_FIRSTNAME = "get Firtsname";
     private static final String GET_LASTNAME = "get Lastsname";
-    public void LoginButtonPressed(ActionEvent actionEvent) throws IOException {
+    public void loginButtonPressed(ActionEvent actionEvent) throws IOException {
 
         loginAuthorized(actionEvent);
     }
 
     private void loginAuthorized(ActionEvent actionEvent) throws IOException {
-        System.out.println("loginversuch");
+        LOG.info("loginversuch");
         if (authService.login(email.getText(), password.getText())) {
             informationForUser.setText("login successfully");
             User logInUser = userService.getUserByEmail(email.getText());
-            System.out.println("logInUser: " + logInUser);
+            LOG.info("logInUser: {}" , logInUser);
             sceneSwitchService.switchToTimeSlotsController(actionEvent, logInUser);
-            System.out.println("scene Switch : " + logInUser);
+            LOG.info("scene Switch : {}",  logInUser);
         } else {
             informationForUser.setText("login unsuccessfully");
         }
 
     }
 
-    public void RegisterButtonPressed(ActionEvent actionEvent) throws IOException {
+    public void registerButtonPressed(ActionEvent actionEvent) throws IOException {
 
-        System.out.println("RegisterButtonPressed: drin");
+        LOG.info("RegisterButtonPressed: drin");
         try {
-            System.out.println(userService.getUserByEmail(email.getText()) != null);
-            System.out.println("RegisterButtonPressed: direkt vor if schleife");
+            LOG.info(userService.getUserByEmail(email.getText()) != null);
+            LOG.info("RegisterButtonPressed: direkt vor if schleife");
             if (userService.getUserByEmail(email.getText()) != null) {
-                System.out.println("User existiert und kann mit der mail nicht registriert werden");
+                LOG.info("User existiert und kann mit der mail nicht registriert werden");
                 informationForUser.setText("This email already exists, sign in instead");
             } else {
-                System.out.println("User existiert NICHT und kann mit der mail registriert werden");
+                LOG.info("User existiert NICHT und kann mit der mail registriert werden");
                 UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
                 sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
 
@@ -65,15 +67,15 @@ public class LoginController {
             }
         }
         catch (RuntimeException e) {
-            System.out.println("RuntimeException: " +e.getMessage());
-            System.out.println("User existiert NICHT und kann mit der mail registriert werden");
+            LOG.info("RuntimeException: {}", e.getMessage());
+            LOG.info("User existiert NICHT und kann mit der mail registriert werden");
             UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
             sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
         }
     }
 
     public void deleteUser() {
-
+        // Wird später umgesetzt
     }
 
 
