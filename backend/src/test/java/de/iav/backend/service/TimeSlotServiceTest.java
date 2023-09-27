@@ -4,6 +4,7 @@ import de.iav.backend.exception.TimeSlotNotFoundException;
 import de.iav.backend.model.TimeSlot;
 import de.iav.backend.repository.TimeSlotRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 import java.util.Optional;
 
+@SpringBootTest
 class TimeSlotServiceTest {
 
 
