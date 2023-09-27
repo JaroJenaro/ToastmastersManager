@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.iav.frontend.exception.MappingRuntimeException;
 import de.iav.frontend.model.TimeSlot;
+import javafx.application.Platform;
+import javafx.scene.control.ListView;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -79,4 +81,25 @@ public class TimeSlotService {
         }
     }
 
+    public void deleteTimeSlot(String idToDelete, ListView<TimeSlot> listView, String sessionId ) {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BACKEND_AUTH_URL + "/" + idToDelete))
+                .header("Cookie", "JSESSIONID=" + sessionId)
+                .DELETE()
+                .build();
+
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenAccept(response -> {
+                    if (response.statusCode() == 204) {
+                        Platform.runLater(() -> {
+                            listView.getItems().removeIf(timeSlot -> timeSlot.id().equals(idToDelete));
+                            listView.refresh();
+                        });
+                    } else {
+                        throw new RuntimeException("Fehler beim Löschen des TimeSlots mit der id " + idToDelete);
+                    }
+                })
+                .join();
+    }
 }

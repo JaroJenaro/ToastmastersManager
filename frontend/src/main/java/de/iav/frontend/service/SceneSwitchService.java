@@ -38,7 +38,6 @@ public class SceneSwitchService {
         stage.show();
     }
 
-    // das hier zum RegisterController umbenennen
     public void switchToRegisterController(ActionEvent actionEvent, UserWithoutIdDto userWithoutIdDto) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/Registration.fxml"));

@@ -2,6 +2,7 @@ package de.iav.frontend.controller;
 
 import de.iav.frontend.model.User;
 import de.iav.frontend.model.TimeSlot;
+import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.TimeSlotService;
 import javafx.event.ActionEvent;
@@ -16,6 +17,8 @@ import java.io.IOException;
 public class TimeSlotsController {
     private final TimeSlotService timeSlotService = TimeSlotService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
+    private final AuthService authService = AuthService.getInstance();
+
 
     private static final Logger LOG = LogManager.getLogger();
     @FXML
@@ -45,8 +48,8 @@ public class TimeSlotsController {
         sceneSwitchService.switchToTimeSlotEditController(event, loggedUser, lvTimeSlots.getSelectionModel().getSelectedItem());
     }
 
-    public void onDeleteTimeSlotClick(ActionEvent event) {
-        // Wird später umgesetzt
+    public void onDeleteTimeSlotClick() {
+        timeSlotService.deleteTimeSlot(lvTimeSlots.getSelectionModel().getSelectedItem().id(), lvTimeSlots, authService.getSessionId());
     }
 
     public void setUserToShow(User user) {

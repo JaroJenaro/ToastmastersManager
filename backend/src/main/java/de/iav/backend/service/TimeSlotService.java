@@ -61,4 +61,7 @@ public class TimeSlotService {
         return timeSlotRepository.save(timeSlot);
     }
 
+    public void deleteTimeSlot(String id) {
+        timeSlotRepository.deleteById(id);
+    }
 }

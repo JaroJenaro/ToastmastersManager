@@ -55,7 +55,7 @@ public class TimeSlotEditController {
 
     @FXML
     public void onCancelButtonClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToNewTimeSlotEditController(event,loggedUser);
+        sceneSwitchService.switchToTimeSlotsController(event,loggedUser);
     }
 
 

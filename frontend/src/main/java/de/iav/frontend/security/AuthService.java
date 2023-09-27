@@ -26,6 +26,10 @@ public class AuthService {
         this.sessionId = sessionId;
     }
 
+    public String getSessionId() {
+        return sessionId;
+    }
+
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }

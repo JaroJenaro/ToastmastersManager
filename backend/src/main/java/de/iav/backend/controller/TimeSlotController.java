@@ -1,5 +1,7 @@
 package de.iav.backend.controller;
 
+import de.iav.backend.model.TimeSlotDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,10 +41,15 @@ public class TimeSlotController {
     }
 
     @PostMapping
-    public ResponseEntity<TimeSlot> saveTimeSlot(@RequestBody TimeSlot timeSlot) {
-        TimeSlot createdTimeSlot = timeSlotService.saveTimeSlot(timeSlot);
+    public ResponseEntity<TimeSlot> saveTimeSlot(@RequestBody TimeSlotDTO timeSlotDTO) {
+        TimeSlot createdTimeSlot = timeSlotService.saveTimeSlot(timeSlotDTO.getTimeSlot());
         return ResponseEntity.created(URI.create("/timeslots/" + createdTimeSlot.getId())).body(createdTimeSlot);
     }
 
+    @DeleteMapping("/id")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTimeSlot(@PathVariable String id) {
+        timeSlotService.deleteTimeSlot(id);
+    }
 }
 

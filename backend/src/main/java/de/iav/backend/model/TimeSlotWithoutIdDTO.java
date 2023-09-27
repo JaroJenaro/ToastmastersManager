@@ -17,6 +17,6 @@ public class TimeSlotWithoutIdDTO {
     String red;
 
     public TimeSlot getTimeSlotWithoutId(){
-        return new TimeSlot(this.title, this.description, this.green, this.amber, this.red);
+        return new TimeSlot( this.title, this.description, this.green, this.amber, this.red);
     }
 }
