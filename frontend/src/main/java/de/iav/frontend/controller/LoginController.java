@@ -28,15 +28,15 @@ public class LoginController {
     @FXML
     public Label informationForUser;
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
-    private static final String GET_FIRSTNAME = "get Firtsname";
-    private static final String GET_LASTNAME = "get Lastsname";
+    private static final String GET_FIRSTNAME = "get Firstname";
+    private static final String GET_LASTNAME = "get Lastname";
     public void loginButtonPressed(ActionEvent actionEvent) throws IOException {
 
         loginAuthorized(actionEvent);
     }
 
     private void loginAuthorized(ActionEvent actionEvent) throws IOException {
-        LOG.info("loginversuch");
+        LOG.info("loginVersuch");
         if (authService.login(email.getText(), password.getText())) {
             informationForUser.setText("login successfully");
             User logInUser = userService.getUserByEmail(email.getText());

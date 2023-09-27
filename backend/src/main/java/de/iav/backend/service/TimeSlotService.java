@@ -43,9 +43,17 @@ public class TimeSlotService {
 
     }
 
+
     private List<TimeSlot> fillDataWithTimeSlots(){
-        return timeSlotRepository.saveAll(getTimeSlotsWithoutId(tempTimeSlots));
+        List<TimeSlot> savedTimeSlots = new ArrayList<>();
+        for (TimeSlot timeSlot:getTimeSlotsWithoutId(tempTimeSlots)
+             ) {
+            savedTimeSlots.add(timeSlotRepository.save(timeSlot));
+
+        }
+        return savedTimeSlots;
     }
+
 
     private List<TimeSlot> getTimeSlotsWithoutId(List<TimeSlotWithoutIdDTO> timeSlotWithoutIdDTOList){
         List<TimeSlot> timeSlotLists = new ArrayList<>();

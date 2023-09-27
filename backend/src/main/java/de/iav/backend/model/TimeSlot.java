@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Document(collection = "timeSlots")
+@Document(collection = "timeslots")
 public class TimeSlot {
     @MongoId
     String id;
@@ -26,6 +26,7 @@ public class TimeSlot {
         this.red = red;
 
     }
+
 
 }
 

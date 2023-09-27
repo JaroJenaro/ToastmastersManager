@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.iav.frontend.exception.DeletingRuntimeException;
 import de.iav.frontend.exception.MappingRuntimeException;
 import de.iav.frontend.model.TimeSlot;
 import javafx.application.Platform;
@@ -20,6 +21,9 @@ public class TimeSlotService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private static final String BACKEND_AUTH_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/timeslots";
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String JSESSIONID_IS_EQUAL ="JSESSIONID=";
+    private static final String COOKIE = "Cookie";
     public TimeSlotService() {
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
@@ -55,14 +59,34 @@ public class TimeSlotService {
 
     }
 
-    public TimeSlot saveTimeSlot(TimeSlot timeSlot) {
+    public TimeSlot createTimeSlot(TimeSlot timeSlot, String sessionId) {
         try {
             String requestBody = objectMapper.writeValueAsString(timeSlot);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BACKEND_AUTH_URL))
-                    .header("Content-Type", "application/json")
-                    .header("Accept", "application/json")
+                    .header("Content-Type", APPLICATION_JSON)
+                    .header("Accept", APPLICATION_JSON)
+                    .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+            return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenApply(this::mapToTimeSlot)
+                    .join();
+        } catch (JsonProcessingException e) {
+            throw new MappingRuntimeException("Failed to save TimeSlot" + e.getMessage());
+        }
+    }
+
+    public TimeSlot updateTimeSlot(TimeSlot timeSlot, String sessionId) {
+        try {
+            String requestBody = objectMapper.writeValueAsString(timeSlot);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BACKEND_AUTH_URL))
+                    .header("Content-Type", APPLICATION_JSON)
+                    .header("Accept", APPLICATION_JSON)
+                    .header(COOKIE, JSESSIONID_IS_EQUAL+ sessionId)
+                    .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
             return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body)
@@ -85,7 +109,7 @@ public class TimeSlotService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BACKEND_AUTH_URL + "/" + idToDelete))
-                .header("Cookie", "JSESSIONID=" + sessionId)
+                .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
                 .DELETE()
                 .build();
 
@@ -97,7 +121,7 @@ public class TimeSlotService {
                             listView.refresh();
                         });
                     } else {
-                        throw new RuntimeException("Fehler beim Löschen des TimeSlots mit der id " + idToDelete);
+                        throw new DeletingRuntimeException("Fehler beim Löschen des TimeSlots mit der id " + idToDelete);
                     }
                 })
                 .join();

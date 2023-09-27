@@ -2,6 +2,7 @@ package de.iav.frontend.controller;
 
 import de.iav.frontend.model.TimeSlot;
 import de.iav.frontend.model.User;
+import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.TimeSlotService;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ public class TimeSlotEditController {
 
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private final TimeSlotService timeSlotService = TimeSlotService.getInstance();
+    private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
     @FXML
     public TextField tfTitle;
@@ -49,7 +51,17 @@ public class TimeSlotEditController {
     @FXML
     public void onSaveButtonClick(ActionEvent event) throws IOException {
 
-        timeSlotService.saveTimeSlot(getNewDataOfTimeSlot());
+        TimeSlot timeSlotToSave = getNewDataOfTimeSlot();
+        TimeSlot savedTimeSlot;
+        if (timeSlotToSave.id().isEmpty())
+        {
+            savedTimeSlot = timeSlotService.createTimeSlot(timeSlotToSave, authService.getSessionId());
+        }
+        else{
+            savedTimeSlot = timeSlotService.updateTimeSlot(timeSlotToSave, authService.getSessionId());
+        }
+
+        LOG.info("Gespeicherte timeSlot {}", savedTimeSlot);
         sceneSwitchService.switchToTimeSlotsController(event, loggedUser);
     }
 
