@@ -6,6 +6,7 @@ import de.iav.backend.model.User;
 import de.iav.backend.model.UserResponseDTO;
 import de.iav.backend.repository.UserRepository;
 
+import de.iav.backend.security.NewAppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -57,8 +58,25 @@ public class UserService {
 
 
     }
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public UserResponseDTO addUser(NewAppUser newAppUser) {
+        User user = User.builder()
+                .firstName(newAppUser.firstName())
+                .lastName(newAppUser.lastName())
+                .email(newAppUser.email())
+                .role("USER")
+                .password(newAppUser.password())
+                .build();
+
+        User savedUser = userRepository.save(user);
+
+        return UserResponseDTO.builder()
+                .firstName(savedUser.getFirstName())
+                .lastName(savedUser.getLastName())
+                .email(savedUser.getEmail())
+                .role(savedUser.getRole())
+                .build();
+
+
     }
 
     public List<User> setUserByRepository() {

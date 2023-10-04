@@ -2,6 +2,7 @@ package de.iav.backend.model;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Document(collection = "users")
+@Builder
 public class User implements UserDetails {
     @MongoId
     String id;
