@@ -11,8 +11,8 @@
     <groupId>de.iav</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>beckend</name>
-    <description>beckend</description>
+    <name>backend</name>
+    <description>backend</description>
     <properties>
         <java.version>20</java.version>
         <sonar.organization>jarojenaro</sonar.organization>
@@ -61,8 +61,8 @@
         </dependency>
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <version>4.7.1</version>
+            <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
+            <version>4.9.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>

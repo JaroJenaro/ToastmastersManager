@@ -11,7 +11,8 @@ public class FrontendJavaFXApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(FrontendJavaFXApplication.class.getResource("Login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 800);
+        //prefHeight="232.0" prefWidth="408.0"
+        Scene scene = new Scene(fxmlLoader.load(), 420, 250);
         stage.setTitle("ToastMasters");
         stage.setScene(scene);
         stage.show();

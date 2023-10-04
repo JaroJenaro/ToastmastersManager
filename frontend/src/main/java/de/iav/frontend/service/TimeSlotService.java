@@ -74,7 +74,7 @@ public class TimeSlotService {
                     .thenApply(this::mapToTimeSlot)
                     .join();
         } catch (JsonProcessingException e) {
-            throw new MappingRuntimeException("Failed to save TimeSlot" + e.getMessage());
+            throw new MappingRuntimeException("--->Failed to save TimeSlot: " + e.getMessage());
         }
     }
 
@@ -82,7 +82,7 @@ public class TimeSlotService {
         try {
             String requestBody = objectMapper.writeValueAsString(timeSlot);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BACKEND_AUTH_URL))
+                    .uri(URI.create(BACKEND_AUTH_URL + "/" + timeSlot.id()))
                     .header("Content-Type", APPLICATION_JSON)
                     .header("Accept", APPLICATION_JSON)
                     .header(COOKIE, JSESSIONID_IS_EQUAL+ sessionId)

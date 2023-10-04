@@ -1,7 +1,7 @@
 package de.iav.backend.controller;
 
 import de.iav.backend.model.User;
-import de.iav.backend.model.UserWithoutUserDetails;
+import de.iav.backend.model.UserResponseDTO;
 import de.iav.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("email/{email}")
-    public Optional<UserWithoutUserDetails> getUserByEmail(@PathVariable String email) {
+    public Optional<UserResponseDTO> getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 
@@ -46,7 +46,7 @@ public class UserController {
         return ResponseEntity.created(URI.create("/users/" + createdUser.getId())).body(createdUser);
     }
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable String id, @RequestBody User user) {
+    public UserResponseDTO updateUser(@PathVariable String id, @RequestBody UserResponseDTO user) {
         return userService.updateUser(id, user);
     }
     @DeleteMapping("/{id}")
@@ -55,8 +55,4 @@ public class UserController {
     }
 
 
-    /*
-    *   GET http://localhost:8080/api/toastMasterManager/usersData/email/jaro.jenaro@speaker.de
-        GET http://localhost:8080/api/toastMasterManager/usersData/email/jaro.jenaro@speaker.de
-    * */
 }

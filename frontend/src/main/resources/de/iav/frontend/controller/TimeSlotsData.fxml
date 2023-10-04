@@ -7,30 +7,31 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="390.0" prefWidth="492.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.TimeSlotsController">
+<VBox alignment="CENTER" prefHeight="613.0" prefWidth="473.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.TimeSlotsController">
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
    <Label fx:id="lLoggedInUser" text="Label" />
 
-   <HBox prefHeight="100.0" prefWidth="200.0">
-      <children>
+    <HBox prefHeight="100.0" prefWidth="200.0">
         <Button onAction="#onNewTimeSlotClick" text="neuen timeSlot anlegen">
             <HBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </HBox.margin>
-         </Button>
+        </Button>
         <Button onAction="#onEditTimeSlotClick" text="timeSlot bearbeiten">
             <HBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </HBox.margin>
-         </Button>
-         <Button onAction="#onDeleteTimeSlotClick" text="timeSlot löschen">
-            <HBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </HBox.margin>
-         </Button>
-      </children>
-   </HBox>
-   <ListView fx:id="lvTimeSlots" prefHeight="200.0" prefWidth="200.0" />
+        </Button>
+        <Button onAction="#onDeleteTimeSlotClick" text="timeSlot löschen">
+           <HBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+           </HBox.margin>
+        </Button>
+    </HBox>
+   <ListView fx:id="lvTimeSlots" prefHeight="631.0" prefWidth="452.0" />
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </VBox>

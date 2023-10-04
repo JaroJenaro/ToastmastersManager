@@ -55,9 +55,11 @@ public class TimeSlotEditController {
         TimeSlot savedTimeSlot;
         if (timeSlotToSave.id().isEmpty())
         {
+            LOG.error("Versuch zu createn: {}", timeSlotToSave);
             savedTimeSlot = timeSlotService.createTimeSlot(timeSlotToSave, authService.getSessionId());
         }
         else{
+            LOG.error("Versuch zu updaten: {}", timeSlotToSave);
             savedTimeSlot = timeSlotService.updateTimeSlot(timeSlotToSave, authService.getSessionId());
         }
 

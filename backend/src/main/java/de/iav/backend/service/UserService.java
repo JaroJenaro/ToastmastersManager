@@ -1,11 +1,11 @@
 package de.iav.backend.service;
 
+
 import de.iav.backend.exception.UserNotFoundException;
-
 import de.iav.backend.model.User;
-import de.iav.backend.model.UserWithoutUserDetails;
-
+import de.iav.backend.model.UserResponseDTO;
 import de.iav.backend.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +18,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     public final List<User> tempUsers = new ArrayList<>(Arrays.asList(
-            new User("12345", "Erum", "Schuakat", "erum.schaukat@iav.de", "12345", "USER"),
-            new User("23456", "Houman", "Mohammadi", "houman.mohammadi@iav.de", "23456", "USER"),
-            new User("34567", "Jaroslaw", "Placzek", "jaroslaw.placzek@iav.de", "34567", "USER")
+            new User(null, "Erum", "Schuakat", "erum.schaukat@iav.de", "12345", "USER"),
+            new User(null, "Houman", "Mohammadi", "houman.mohammadi@iav.de", "23456", "USER"),
+            new User(null, "Jaroslaw", "Placzek", "jaroslaw.placzek@iav.de", "34567", "USER")
     ));
     private final UserRepository userRepository;
 
@@ -37,17 +37,32 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User updateUser(String id, User userToUpdate) {
-        userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        User updatedStudent = userToUpdate.withId(id);
-        return userRepository.save(updatedStudent);
+    public UserResponseDTO updateUser(String id, UserResponseDTO userResponseDtoToUpdate) {
+        User userToUpdate = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        userToUpdate.setFirstName(userResponseDtoToUpdate.getFirstName());
+        userToUpdate.setLastName(userResponseDtoToUpdate.getLastName());
+        userToUpdate.setEmail(userResponseDtoToUpdate.getEmail());
+        userToUpdate.setRole(userResponseDtoToUpdate.getRole());
+
+        User savedUser = userRepository.save(userToUpdate);
+
+
+        return UserResponseDTO.builder()
+                .id(savedUser.getId())
+                .firstName(savedUser.getFirstName())
+                .lastName(savedUser.getLastName())
+                .email(savedUser.getEmail())
+                .role(savedUser.getRole())
+                .build();
+
+
     }
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
     public List<User> setUserByRepository() {
-        if (userRepository.findAll().size() == 0)
+        if (userRepository.findAll().isEmpty())
             return fillDataWithUsers();
         else
             return userRepository.findAll();
@@ -57,7 +72,7 @@ public class UserService {
         return userRepository.saveAll(tempUsers);
     }
 
-    public Optional<UserWithoutUserDetails> getUserByEmail(String email) {
+    public Optional<UserResponseDTO> getUserByEmail(String email) {
         return Optional.ofNullable(userRepository.findByEmail(email).getUserWithoutUserDetails());
     }
 }

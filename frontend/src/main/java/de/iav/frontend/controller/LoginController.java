@@ -8,6 +8,7 @@ package de.iav.frontend.controller;
         import de.iav.frontend.service.UserService;
         import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
+        import javafx.scene.control.Button;
         import javafx.scene.control.Label;
         import javafx.scene.control.PasswordField;
         import javafx.scene.control.TextField;
@@ -30,6 +31,9 @@ public class LoginController {
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private static final String GET_FIRSTNAME = "get Firstname";
     private static final String GET_LASTNAME = "get Lastname";
+    @FXML
+    public Button bSpecialLogin;
+
     public void loginButtonPressed(ActionEvent actionEvent) throws IOException {
 
         loginAuthorized(actionEvent);
@@ -84,6 +88,11 @@ public class LoginController {
     }
 
 
+    public void onSpecialLoginButtonClick(ActionEvent event) throws IOException {
+        email.setText("jaro.jenaro@speaker.de");
+        password.setText("1234");
+        loginAuthorized(event);
+    }
 }
 
 

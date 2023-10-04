@@ -7,6 +7,8 @@ import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.TimeSlotService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +47,22 @@ public class TimeSlotsController {
     }
 
     public void onEditTimeSlotClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToTimeSlotEditController(event, loggedUser, lvTimeSlots.getSelectionModel().getSelectedItem());
+        if(lvTimeSlots.getSelectionModel().getSelectedItem() != null){
+            sceneSwitchService.switchToTimeSlotEditController(event, loggedUser, lvTimeSlots.getSelectionModel().getSelectedItem());
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Kein TimeSlot ausgewählt");
+            alert.setHeaderText("Siehe Details in Information Dialog");
+            alert.setContentText("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden.");
+            alert.showAndWait().ifPresent(rs -> {
+                if (rs == ButtonType.OK) {
+                    LOG.info("Pressed OK.");
+                }
+            });
+
+        }
+
     }
 
     public void onDeleteTimeSlotClick() {

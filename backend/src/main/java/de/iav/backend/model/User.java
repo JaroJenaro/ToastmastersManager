@@ -29,12 +29,9 @@ public class User implements UserDetails {
     String role;
 
 
-    public User withId(String newId) {
-        return new User(newId, this.firstName, this.lastName, this.email, this.password, this.role);
-    }
 
-    public UserWithoutUserDetails getUserWithoutUserDetails() {
-        return new UserWithoutUserDetails(this.getId(), this.getFirstName(), this.getLastName(), this.getEmail(), this.getRole());
+    public UserResponseDTO getUserWithoutUserDetails() {
+        return new UserResponseDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getEmail(), this.getRole());
     }
 
     @Override
