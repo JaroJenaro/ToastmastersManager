@@ -58,7 +58,7 @@ class NewUserControllerIntegrationTest {
     void getAllUsersByFirstName_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
 
         mockMvc.perform(get(BASE_URL + "?firstname=" + user1.firstName()))
-                .andExpect(jsonPath("[0].title").value(user1.firstName()))
+                .andExpect(jsonPath("[0].firstname").value(user1.firstName()))
                 .andExpect(jsonPath("$", hasSize(1)))
         ;
     }
@@ -66,7 +66,7 @@ class NewUserControllerIntegrationTest {
     @Test
     void getAllUsersByLastName_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
         mockMvc.perform(get(BASE_URL + "?lastname=" + user1.lastName()))
-                .andExpect(jsonPath("[0].description").value(user1.lastName()))
+                .andExpect(jsonPath("[0].lastname").value(user1.lastName()))
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
