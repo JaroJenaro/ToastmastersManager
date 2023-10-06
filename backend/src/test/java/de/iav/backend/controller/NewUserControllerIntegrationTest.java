@@ -48,43 +48,43 @@ class NewUserControllerIntegrationTest {
     void getAllUsers_shouldReturnAllEntries_whenTwoEntriesAreSavedAndNoSearchParamsAreDefined() throws Exception {
 
         mockMvc.perform(get(BASE_URL))
-                //.andExpect(jsonPath("[0].id").isNotEmpty())
-                .andExpect(jsonPath("[0].firstname").value(user1.firstName()))
-                //.andExpect(jsonPath("[1].id").isNotEmpty())
-                .andExpect(jsonPath("[1].firstname").value(user2.firstName()));
+                .andExpect(jsonPath("[0].id").isNotEmpty())
+                .andExpect(jsonPath("[0].firstName").value(user1.firstName()))
+                .andExpect(jsonPath("[1].id").isNotEmpty())
+                .andExpect(jsonPath("[1].firstName").value(user2.firstName()));
     }
 
     @Test
     void getAllUsersByFirstName_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
 
-        mockMvc.perform(get(BASE_URL + "?firstname=" + user1.firstName()))
-                .andExpect(jsonPath("[0].firstname").value(user1.firstName()))
+        mockMvc.perform(get(BASE_URL + "?firstName=" + user1.firstName()))
+                .andExpect(jsonPath("[0].firstName").value(user1.firstName()))
                 .andExpect(jsonPath("$", hasSize(1)))
         ;
     }
 
     @Test
     void getAllUsersByLastName_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
-        mockMvc.perform(get(BASE_URL + "?lastname=" + user1.lastName()))
-                .andExpect(jsonPath("[0].lastname").value(user1.lastName()))
+        mockMvc.perform(get(BASE_URL + "?lastName=" + user1.lastName()))
+                .andExpect(jsonPath("[0].lastName").value(user1.lastName()))
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
 
 
     @Test
-    void searchTimeslot_ByTitleAndDescription() throws Exception {
-        mockMvc.perform(get(BASE_URL + "/search?firstname=" + user1.firstName() + "&lastname=" + user1.lastName()))
+    void searchUser_ByFirstNameAndLastName() throws Exception {
+        mockMvc.perform(get(BASE_URL + "/search?firstName=" + user1.firstName() + "&lastName=" + user1.lastName()))
                 .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("firstname").value(user1.firstName()))
-                .andExpect(jsonPath("lastname").value(user1.lastName()));
+                .andExpect(jsonPath("firstName").value(user1.firstName()))
+                .andExpect(jsonPath("lastName").value(user1.lastName()));
     }
 
     @Test
-    void searchTimeslot_ByTitleAndRed() throws Exception {
-        mockMvc.perform(get(BASE_URL + "/search2?firstname=" + user1.firstName() + "&email=" + user1.email()))
+    void searchUser_ByFirstNameAndEmail() throws Exception {
+        mockMvc.perform(get(BASE_URL + "/search2?firstName=" + user1.firstName() + "&email=" + user1.email()))
                 .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("firstname").value(user1.firstName()))
+                .andExpect(jsonPath("firstName").value(user1.firstName()))
                 .andExpect(jsonPath("email").value(user1.email()));
     }
 
@@ -103,14 +103,14 @@ class NewUserControllerIntegrationTest {
 
     @Test
     void addUser_shouldCreateNewUserWithId_whenValidDataIsProvided() throws Exception {
-        NewAppUser user3 = new NewAppUser("Hansi", "Hans", "David", "1234", "hans.david@rcm.de");
+        NewAppUser user3 = new NewAppUser("test", "Hans", "David", "1234", "hans.david@rcm.de");
 
         mockMvc.perform(post(BASE_URL)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user3)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("title").value(user3.firstName())
+                .andExpect(jsonPath("firstName").value(user3.firstName())
                 );
     }
 
@@ -132,7 +132,6 @@ class NewUserControllerIntegrationTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(userLastName)))
                 .andExpect(status().isBadRequest());
-
 
         mockMvc.perform(post(BASE_URL)
                         .contentType("application/json")
@@ -156,8 +155,8 @@ class NewUserControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(updatedFirstUser)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(originalUser.getId()))
-                .andExpect(jsonPath("firstname").value(updatedFirstUser.getFirstName()))
-                .andExpect(jsonPath("lastname").value(updatedFirstUser.getLastName())
+                .andExpect(jsonPath("firstName").value(updatedFirstUser.getFirstName()))
+                .andExpect(jsonPath("lastName").value(updatedFirstUser.getLastName())
                 );
     }
 
@@ -200,9 +199,9 @@ class NewUserControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @WithMockUser(username = "admin",  roles = {"ADMIN"})
     @Test
-    void deleteUser_shouldDeleteUserById_whenUserExistsAndUserHasAdminRole() throws Exception {
+    void deleteUser_shouldDeleteUserById_whenUserToDeleteExistsAndUserHasAdminRole() throws Exception {
         String usersListAsString = mockMvc.perform(get(BASE_URL))
                 .andReturn().getResponse().getContentAsString();
 

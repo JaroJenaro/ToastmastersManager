@@ -1,23 +1,14 @@
 package de.iav.backend.controller;
 
-import de.iav.backend.exception.TimeSlotNotFoundException;
 import de.iav.backend.model.TimeSlotResponseDTO;
 import de.iav.backend.model.TimeSlotWithoutIdDTO;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
-
 import de.iav.backend.model.TimeSlot;
 import de.iav.backend.service.TimeSlotService;
-
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/toastMasterManager/timeslots")
@@ -64,7 +55,7 @@ public class TimeSlotController {
     }
 
     @GetMapping("/search")
-    public TimeSlotResponseDTO searchTimeSlotTitleAndDescription(
+    public TimeSlotResponseDTO searchTimeSlotByTitleAndDescription(
             @RequestParam String title,
             @RequestParam String description
     ) {
@@ -72,7 +63,7 @@ public class TimeSlotController {
     }
 
     @GetMapping("/search2")
-    public TimeSlotResponseDTO searchTimeSlotTitleAndRed(
+    public TimeSlotResponseDTO searchTimeSlotByTitleAndRed(
             @RequestParam String title,
             @RequestParam String red
     ) {
@@ -102,26 +93,5 @@ public class TimeSlotController {
         timeSlotService.deleteTimeSlot(id);
     }
 
-
-    @ExceptionHandler(TimeSlotNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleTimeSlotNotFoundException(TimeSlotNotFoundException exception) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("error", exception.getMessage());
-        body.put("timestamp", Instant.now().toString());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(BindException.class)
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> handleValidationException(BindException ex) {
-        Map<String, Object> responseBody = new HashMap<>();
-
-        for (FieldError error : ex.getFieldErrors()) {
-            responseBody.put(error.getField(), error.getDefaultMessage());
-            responseBody.put("timestamp", Instant.now());
-        }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
-    }
 }
 

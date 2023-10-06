@@ -20,7 +20,7 @@ public class TimeSlotService {
     private static TimeSlotService instance;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    private static final String BACKEND_AUTH_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/timeslots";
+    private static final String BACKEND_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/timeslots";
     private static final String APPLICATION_JSON = "application/json";
     private static final String JSESSIONID_IS_EQUAL ="JSESSIONID=";
     private static final String COOKIE = "Cookie";
@@ -39,7 +39,7 @@ public class TimeSlotService {
     public List<TimeSlot> getAllTimeSlots() {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(BACKEND_AUTH_URL))
+                .uri(URI.create(BACKEND_URL))
                 .build();
 
         return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
@@ -63,7 +63,7 @@ public class TimeSlotService {
         try {
             String requestBody = objectMapper.writeValueAsString(timeSlot);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BACKEND_AUTH_URL))
+                    .uri(URI.create(BACKEND_URL))
                     .header("Content-Type", APPLICATION_JSON)
                     .header("Accept", APPLICATION_JSON)
                     .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
@@ -82,7 +82,7 @@ public class TimeSlotService {
         try {
             String requestBody = objectMapper.writeValueAsString(timeSlot);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BACKEND_AUTH_URL + "/" + timeSlot.id()))
+                    .uri(URI.create(BACKEND_URL + "/" + timeSlot.id()))
                     .header("Content-Type", APPLICATION_JSON)
                     .header("Accept", APPLICATION_JSON)
                     .header(COOKIE, JSESSIONID_IS_EQUAL+ sessionId)
@@ -108,7 +108,7 @@ public class TimeSlotService {
     public void deleteTimeSlot(String idToDelete, ListView<TimeSlot> listView, String sessionId ) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BACKEND_AUTH_URL + "/" + idToDelete))
+                .uri(URI.create(BACKEND_URL + "/" + idToDelete))
                 .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
                 .DELETE()
                 .build();

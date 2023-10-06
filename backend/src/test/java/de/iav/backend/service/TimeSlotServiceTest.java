@@ -3,8 +3,10 @@ package de.iav.backend.service;
 import de.iav.backend.exception.TimeSlotNotFoundException;
 import de.iav.backend.model.TimeSlot;
 import de.iav.backend.model.TimeSlotResponseDTO;
+import de.iav.backend.model.TimeSlotWithoutIdDTO;
 import de.iav.backend.repository.TimeSlotRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -94,18 +96,90 @@ class TimeSlotServiceTest {
         assertThrows(TimeSlotNotFoundException.class, () -> timeSlotService.getTimeSlotById(id));
         verify(timeSlotRepository).findById(id);
     }
-/*
+    @Test
+    void testAddTimeSlot() {
+        TimeSlotWithoutIdDTO timeSlotWithoutIdDTO = new TimeSlotWithoutIdDTO("1 Speaker", "Erste vorbereitete Rede", "4:00", "5:00", "6:00");
+
+        // Argument-Captor erstellen, um die Argumente zu erfassen
+        ArgumentCaptor<TimeSlot> timeSlotCaptor = ArgumentCaptor.forClass(TimeSlot.class);
+
+        // Mocking data for repository
+        when(timeSlotRepository.save(timeSlotCaptor.capture())).thenReturn(new TimeSlot());
+
+        TimeSlotResponseDTO result = timeSlotService.addTimeSlot(timeSlotWithoutIdDTO);
+
+        assertNotNull(result);
+
+        // Überprüfen Sie die erfassten Argumente
+        TimeSlot capturedTimeSlot = timeSlotCaptor.getValue();
+        assertEquals("1 Speaker", capturedTimeSlot.getTitle());
+        assertEquals("Erste vorbereitete Rede", capturedTimeSlot.getDescription());
+        assertEquals("4:00", capturedTimeSlot.getGreen());
+        assertEquals("5:00", capturedTimeSlot.getAmber());
+        assertEquals("6:00", capturedTimeSlot.getRed());
+        //assertNotNull(capturedTimeSlot.getId());
+    }
+
+
+
+
+
+
     @Test
     void addTimeSlot_whenCalled_thenSaveAndReturnTimeSlot() {
         // GIVEN
-        TimeSlotWithoutIdDTO expected = new TimeSlotWithoutIdDTO("1 Speaker", "Erste vorbereitete Rede", "4:00", "5:00", "6:00");
+        TimeSlot expected = new TimeSlot("1","1 Speaker", "Erste vorbereitete Rede", "4:00", "5:00", "6:00");
+
+        TimeSlot timeSlotWithoutId = TimeSlot.builder()
+                .title(expected.getTitle())
+                .description(expected.getDescription())
+                .green(expected.getGreen())
+                .amber(expected.getAmber())
+                .red(expected.getRed())
+                .build();
+        TimeSlotWithoutIdDTO expectedWithoutIdDTO = TimeSlotWithoutIdDTO.builder()
+                .title(expected.getTitle())
+                .description(expected.getDescription())
+                .green(expected.getGreen())
+                .amber(expected.getAmber())
+                .red(expected.getRed())
+                .build();
+
+        ArgumentCaptor<TimeSlot> timeSlotCaptor = ArgumentCaptor.forClass(TimeSlot.class);
         // WHEN
-        when(timeSlotRepository.save(expected)).thenReturn(expected);
-        TimeSlot actual = timeSlotService.addTimeSlot(expected);
+
+        when(timeSlotRepository.save(timeSlotCaptor.capture())).thenReturn(new TimeSlot());
+
+
+        TimeSlotResponseDTO actualResponseDTO = timeSlotService.addTimeSlot(expectedWithoutIdDTO);
+
         // THEN
-        assertEquals(expected, actual);
-        verify(timeSlotRepository).save(expected);
+        //assertEquals(expected, actual);
+        assertNotNull(actualResponseDTO);
+        verify(timeSlotRepository).save(timeSlotWithoutId);
+        //TimeSlot capturedTimeSlot = timeSlotCaptor.getValue();
+        TimeSlot capturedTimeSlot = timeSlotCaptor.getValue();
+        assertEquals("1 Speaker", capturedTimeSlot.getTitle());
+        assertEquals("Erste vorbereitete Rede", capturedTimeSlot.getDescription());
+        assertEquals("4:00", capturedTimeSlot.getGreen());
+        assertEquals("5:00", capturedTimeSlot.getAmber());
+        assertEquals("6:00", capturedTimeSlot.getRed());
+
     }
+
+    /*
+    @Test
+    void deleteTimeSlot_whenTimeSlotWithGivenIdNotExist_thenThrowTimeSlotNotFoundException() {
+        // GIVEN
+        String id = "2";
+        TimeSlot expected = new TimeSlot("1","1 Speaker", "Erste vorbereitete Rede", "4:00", "5:00", "6:00");
+        // WHEN
+        doThrow(TimeSlotNotFoundException.class).when(timeSlotRepository).delete(expected);
+        // THEN
+        assertThrows(TimeSlotNotFoundException.class, () -> timeSlotService.deleteTimeSlot(id));
+        verify(timeSlotRepository).delete(expected);
+    }
+
 
     @Test
     void deleteTimeSlot_whenTimeSlotWithGivenIdExist_thenDeleteTimeSlotAndNoReturn() {
@@ -121,16 +195,7 @@ class TimeSlotServiceTest {
         verify(timeSlotRepository).deleteById(id);
     }
 
-    @Test
-    void deleteTimeSlot_whenTimeSlotWithGivenIdNotExist_thenThrowTimeSlotNotFoundException() {
-        // GIVEN
-        String id = "1";
-        // WHEN
-        doThrow(TimeSlotNotFoundException.class).when(timeSlotRepository).deleteById(id);
-        // THEN
-        assertThrows(TimeSlotNotFoundException.class, () -> timeSlotService.deleteTimeSlot(id));
-        verify(timeSlotRepository).deleteById(id);
-    }
+
 
     @Test
     void updateTimeSlot_whenTimeSlotExist_thenUpdateAndReturnTimeSlot() {
@@ -145,6 +210,6 @@ class TimeSlotServiceTest {
         assertEquals(expected, actual);
         verify(timeSlotRepository).save(expected);
     }
-*/
 
+*/
 }
