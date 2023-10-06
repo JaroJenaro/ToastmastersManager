@@ -77,8 +77,6 @@ class NewTimeSlotControllerIntegrationTest {
                 .andExpect(status().isNotFound());
         mockMvc.perform(get(BASE_URL + "?red= gibtEsNicht"))
                 .andExpect(status().isNotFound());
-        ;
-
     }
     @Test
     void getAllTimeSlotsByDescription_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {

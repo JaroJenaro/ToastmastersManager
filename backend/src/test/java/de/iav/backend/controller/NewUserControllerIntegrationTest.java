@@ -90,7 +90,6 @@ class NewUserControllerIntegrationTest {
 
         mockMvc.perform(get(BASE_URL + "?email=gibtEsNicht"))
                 .andExpect(status().isNotFound());
-        ;
     }
 
     @Test
@@ -105,7 +104,6 @@ class NewUserControllerIntegrationTest {
 
         mockMvc.perform(get(BASE_URL + "?role=gibtEsNicht"))
                 .andExpect(status().isNotFound());
-        ;
     }
 
     @Test
