@@ -20,8 +20,6 @@ public class AppUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userEmail+ "  not found"));
-
-
     }
 
     public UserResponseDTO register(NewAppUser newAppUser) {
