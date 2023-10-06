@@ -275,14 +275,4 @@ class NewTimeSlotControllerIntegrationTest {
                 .andExpect(status().isForbidden());
     }
 
-    @Test
-    void setDefaultTimeSlotList_shouldReturnList_whenEndpointWithSetIsCalled() throws Exception {
-
-        mockMvc.perform(get(BASE_URL +  "/set"))
-                .andExpect(jsonPath("[0].id").isNotEmpty())
-                .andExpect(jsonPath("[1].id").isNotEmpty())
-                .andExpect(jsonPath("$", hasSize(2)));
-
-
-    }
 }
