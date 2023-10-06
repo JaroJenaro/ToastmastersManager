@@ -6,13 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 public class TimeSlotWithoutIdDTO {
-
     @NotNull
     @NotBlank(message = "title is required")
     @Size(min = 2, message = "title must be at least 2 characters long")
@@ -24,7 +22,6 @@ public class TimeSlotWithoutIdDTO {
     String description;
 
     String green;
-
     String amber;
 
     @NotNull

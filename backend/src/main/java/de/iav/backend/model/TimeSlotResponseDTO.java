@@ -10,14 +10,10 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class TimeSlotResponseDTO {
-
-
-
     String id;
     String title;
     String description;
     String green;
     String amber;
     String red;
-
 }

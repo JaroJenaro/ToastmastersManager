@@ -2,7 +2,6 @@ package de.iav.backend.controller;
 
 import de.iav.backend.model.TimeSlotResponseDTO;
 import de.iav.backend.model.TimeSlotWithoutIdDTO;
-import de.iav.backend.model.TimeSlot;
 import de.iav.backend.service.TimeSlotService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -60,11 +59,6 @@ public class TimeSlotController {
             @RequestParam String red
     ) {
         return timeSlotService.getTimeSlotByTitleAndRed(title, red);}
-
-    @GetMapping("/set")
-    public List<TimeSlot> setDefaultTimeSlots() {
-        return timeSlotService.setTimeSlotRepository();
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

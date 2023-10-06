@@ -31,11 +31,6 @@ public class User implements UserDetails {
     String role;
 
 
-
-    public UserResponseDTO getUserWithoutUserDetails() {
-        return new UserResponseDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getEmail(), this.getRole());
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
