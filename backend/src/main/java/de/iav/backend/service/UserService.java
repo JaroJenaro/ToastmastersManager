@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 
 
@@ -24,12 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private static final String WAS_NOT_FOUND = " was not found.";
-    public final List<User> tempUsers = new ArrayList<>(Arrays.asList(
-            new User(null, "Erum", "Schuakat", "erum.schaukat@iav.de", "12345", "USER"),
-            new User(null, "Houman", "Mohammadi", "houman.mohammadi@iav.de", "23456", "USER"),
-            new User(null, "Jaroslaw", "Placzek", "jaroslaw.placzek@iav.de", "34567", "USER")
-    ));
-    private final UserRepository userRepository;
+       private final UserRepository userRepository;
 
 
     public List<UserResponseDTO> getAllUsers() {
@@ -49,6 +41,7 @@ public class UserService {
         User user = userRepository.
                 findById(id).
                 orElseThrow(() -> new TimeSlotNotFoundException("USER with id " + id + WAS_NOT_FOUND));
+
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -110,23 +103,30 @@ public class UserService {
                 .build();
     }
 
-    public List<User> setUserByRepository() {
-        if (userRepository.findAll().isEmpty())
-            return fillDataWithUsers();
-        else
-            return userRepository.findAll();
-    }
+    public UserResponseDTO getUserByEmail(String email) {
 
-    private List<User> fillDataWithUsers() {
-        return userRepository.saveAll(tempUsers);
-    }
+        User user = userRepository.
+                findByEmail(email).
+                orElseThrow(() -> new TimeSlotNotFoundException("USER with email " + email + WAS_NOT_FOUND));
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
 
-    public Optional<UserResponseDTO> getUserByEmail(String email) {
-        return Optional.ofNullable(userRepository.findByEmail(email).getUserWithoutUserDetails());
     }
 
     public List<UserResponseDTO> getUsersByFirstName(String searchString) {
-        return userRepository.findAllByFirstNameEqualsIgnoreCase(searchString)
+
+        List<User> users = userRepository
+                .findAllByFirstNameEqualsIgnoreCase(searchString);
+
+        if (users.isEmpty())
+            throw new TimeSlotNotFoundException("Users with FirstName: " + searchString + WAS_NOT_FOUND);
+
+        return users
                 .stream()
                 .map(user -> UserResponseDTO.builder()
                         .id(user.getId())
@@ -139,7 +139,13 @@ public class UserService {
     }
 
     public List<UserResponseDTO> getUsersByLastName(String searchString) {
-        return userRepository.findAllByLastNameEqualsIgnoreCase(searchString)
+        List<User> users = userRepository
+                .findAllByLastNameEqualsIgnoreCase(searchString);
+
+        if (users.isEmpty())
+            throw new TimeSlotNotFoundException("Users with LastName: " + searchString + WAS_NOT_FOUND);
+
+        return users
                 .stream()
                 .map(user -> UserResponseDTO.builder()
                         .id(user.getId())
@@ -151,7 +157,11 @@ public class UserService {
                 .toList();
     }
     public List<UserResponseDTO> getUsersByEmail(String searchString) {
-        return userRepository.findAllByEmailEqualsIgnoreCase(searchString)
+        List<User> users = userRepository
+                .findAllByEmailEqualsIgnoreCase(searchString);
+        if (users.isEmpty())
+            throw new TimeSlotNotFoundException("Users with Email: " + searchString + WAS_NOT_FOUND);
+        return users
                 .stream()
                 .map(user -> UserResponseDTO.builder()
                         .id(user.getId())
@@ -163,7 +173,11 @@ public class UserService {
                 .toList();
     }
     public List<UserResponseDTO> getUsersByRole(String searchString) {
-        return userRepository.findAllByRoleEqualsIgnoreCase(searchString)
+        List<User> users = userRepository
+                .findAllByRoleEqualsIgnoreCase(searchString);
+        if (users.isEmpty())
+            throw new TimeSlotNotFoundException("Users with Role: " + searchString + WAS_NOT_FOUND);
+        return users
                 .stream()
                 .map(user -> UserResponseDTO.builder()
                         .id(user.getId())
@@ -176,7 +190,6 @@ public class UserService {
     }
 
     public UserResponseDTO getUserByFirstNameAndLastName(String firstName, String lastName) {
-
         User user = userRepository.
                 findUserByFirstNameEqualsIgnoreCaseAndLastNameEqualsIgnoreCase(firstName, lastName).
                 orElseThrow(() -> new TimeSlotNotFoundException("USER with firstName " + firstName  + " and  lastName " + lastName +  WAS_NOT_FOUND));

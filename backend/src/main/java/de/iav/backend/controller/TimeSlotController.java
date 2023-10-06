@@ -29,25 +29,17 @@ public class TimeSlotController {
                                                                  @RequestParam(required = false) String red) {
 
         if (title != null) {
-            return timeSlotService.getTimeSlotsByTitle(title);
-        } else if (description != null) {
-            return timeSlotService.getTimeSlotsByDescription(description);
-        } else if (green != null) {
-            return timeSlotService.getTimeSlotsByGreen(green);
-        }
+            return timeSlotService.getTimeSlotsByTitle(title);}
+        else if (description != null) {
+            return timeSlotService.getTimeSlotsByDescription(description);}
+        else if (green != null) {
+            return timeSlotService.getTimeSlotsByGreen(green);}
         else if (amber != null) {
-            return timeSlotService.getTimeSlotsByAmber(amber);
-        }
+            return timeSlotService.getTimeSlotsByAmber(amber);}
         else if (red != null) {
-            return timeSlotService.getTimeSlotsByRed(red);
-        }
-
+            return timeSlotService.getTimeSlotsByRed(red);}
         return timeSlotService.getAllTimeSlots();
     }
-
-
-
-
 
     @GetMapping("/{id}")
     public TimeSlotResponseDTO getTimeSlotById(@PathVariable String id) {
@@ -67,8 +59,7 @@ public class TimeSlotController {
             @RequestParam String title,
             @RequestParam String red
     ) {
-        return timeSlotService.getTimeSlotByTitleAndRed(title, red);
-    }
+        return timeSlotService.getTimeSlotByTitleAndRed(title, red);}
 
     @GetMapping("/set")
     public List<TimeSlot> setDefaultTimeSlots() {
@@ -79,7 +70,6 @@ public class TimeSlotController {
     @ResponseStatus(HttpStatus.CREATED)
     public TimeSlotResponseDTO createTimeSlot(@Valid @RequestBody TimeSlotWithoutIdDTO timeSlotWithoutIdDTO) {
         return timeSlotService.addTimeSlot(timeSlotWithoutIdDTO);
-
     }
 
     @PutMapping("/{id}")

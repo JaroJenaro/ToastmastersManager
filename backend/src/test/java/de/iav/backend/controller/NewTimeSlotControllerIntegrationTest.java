@@ -30,7 +30,7 @@ class NewTimeSlotControllerIntegrationTest {
     private final static String BASE_URL = "/api/toastMasterManager/timeslots";
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TimeSlotWithoutIdDTO timeSlot1 = new TimeSlotWithoutIdDTO("Rede1", "Rede 1 154 vorbereitet", "1:00", "1:30", "2:00");
-    private final TimeSlotWithoutIdDTO timeSlot2 = new TimeSlotWithoutIdDTO("Rede2", "Rede 2 226 vorbereitet", "1:00", "1:30", "2:00");
+    private final TimeSlotWithoutIdDTO timeSlot2 = new TimeSlotWithoutIdDTO("Rede2", "Rede 2 226 vorbereitet", "4:00", "5:30", "6:00");
 
     @BeforeEach
     void insertTestTimeSlots() throws Exception {
@@ -51,11 +51,12 @@ class NewTimeSlotControllerIntegrationTest {
                 .andExpect(jsonPath("[0].id").isNotEmpty())
                 .andExpect(jsonPath("[0].title").value(timeSlot1.getTitle()))
                 .andExpect(jsonPath("[1].id").isNotEmpty())
-                .andExpect(jsonPath("[1].title").value(timeSlot2.getTitle()));
+                .andExpect(jsonPath("[1].title").value(timeSlot2.getTitle()))
+                .andExpect(status().isOk());
     }
 
     @Test
-    void getAllTimeSlotsByTitle_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
+    void getTimeSlotsByTitle_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
 
         mockMvc.perform(get(BASE_URL + "?title=" + timeSlot1.getTitle()))
                 .andExpect(jsonPath("[0].title").value(timeSlot1.getTitle()))
@@ -64,6 +65,22 @@ class NewTimeSlotControllerIntegrationTest {
     }
 
     @Test
+    void getNoTimeSlotsBySearchAttribut_shouldReturnReturn404_whenOneFittingEntryNotExists() throws Exception {
+
+        mockMvc.perform(get(BASE_URL + "?title= gibtEsNicht"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(get(BASE_URL + "?description= gibtEsNicht"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(get(BASE_URL + "?green= gibtEsNicht"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(get(BASE_URL + "?amber= gibtEsNicht"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(get(BASE_URL + "?red= gibtEsNicht"))
+                .andExpect(status().isNotFound());
+        ;
+
+    }
+    @Test
     void getAllTimeSlotsByDescription_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
         mockMvc.perform(get(BASE_URL + "?description=" + timeSlot1.getDescription()))
                 .andExpect(jsonPath("[0].description").value(timeSlot1.getDescription()))
@@ -71,6 +88,27 @@ class NewTimeSlotControllerIntegrationTest {
     }
 
 
+    @Test
+    void getAllTimeSlotsByGreen_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
+        mockMvc.perform(get(BASE_URL + "?green=" + timeSlot1.getGreen()))
+                .andExpect(jsonPath("[0].green").value(timeSlot1.getGreen()))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+
+    @Test
+    void getAllTimeSlotsByAmber_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
+        mockMvc.perform(get(BASE_URL + "?amber=" + timeSlot1.getAmber()))
+                .andExpect(jsonPath("[0].amber").value(timeSlot1.getAmber()))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    void getAllTimeSlotsByRed_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
+        mockMvc.perform(get(BASE_URL + "?red=" + timeSlot1.getRed()))
+                .andExpect(jsonPath("[0].red").value(timeSlot1.getRed()))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
 
     @Test
     void searchTimeslot_ByTitleAndDescription() throws Exception {
@@ -237,5 +275,16 @@ class NewTimeSlotControllerIntegrationTest {
 
         mockMvc.perform(delete(BASE_URL + "/" + originalTimeSlot.getId()))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void setDefaultTimeSlotList_shouldReturnList_whenEndpointWithSetIsCalled() throws Exception {
+
+        mockMvc.perform(get(BASE_URL +  "/set"))
+                .andExpect(jsonPath("[0].id").isNotEmpty())
+                .andExpect(jsonPath("[1].id").isNotEmpty())
+                .andExpect(jsonPath("$", hasSize(2)));
+
+
     }
 }

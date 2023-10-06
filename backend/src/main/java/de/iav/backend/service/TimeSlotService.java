@@ -205,7 +205,12 @@ public class TimeSlotService {
     }
 
     public List<TimeSlotResponseDTO> getTimeSlotsByTitle(String titel) {
-        return timeSlotRepository.findAllByTitleEqualsIgnoreCase(titel)
+        List<TimeSlot> timeSlots = timeSlotRepository
+                .findAllByTitleEqualsIgnoreCase(titel);
+        if (timeSlots.isEmpty())
+            throw new TimeSlotNotFoundException("TimeSlots with Titel " + titel + WAS_NOT_FOUND);
+
+        return timeSlots
                 .stream()
                 .map(timeSlot -> TimeSlotResponseDTO.builder()
                         .id(timeSlot.getId())
@@ -219,7 +224,12 @@ public class TimeSlotService {
     }
 
     public List<TimeSlotResponseDTO> getTimeSlotsByDescription(String description) {
-        return timeSlotRepository.findAllByDescriptionEqualsIgnoreCase(description)
+       List<TimeSlot> timeSlots = timeSlotRepository
+                .findAllByDescriptionEqualsIgnoreCase(description);
+        if (timeSlots.isEmpty())
+            throw new TimeSlotNotFoundException("TimeSlots with description " + description + WAS_NOT_FOUND);
+
+        return timeSlots
                 .stream()
                 .map(timeSlot -> TimeSlotResponseDTO.builder()
                         .id(timeSlot.getId())
@@ -233,7 +243,12 @@ public class TimeSlotService {
     }
 
     public List<TimeSlotResponseDTO> getTimeSlotsByGreen(String green) {
-        return timeSlotRepository.findAllByGreenEqualsIgnoreCase(green)
+        List<TimeSlot> timeSlots = timeSlotRepository
+                .findAllByGreenEqualsIgnoreCase(green);
+        if (timeSlots.isEmpty())
+            throw new TimeSlotNotFoundException("TimeSlots with green " + green + WAS_NOT_FOUND);
+
+        return timeSlots
                 .stream()
                 .map(timeSlot -> TimeSlotResponseDTO.builder()
                         .id(timeSlot.getId())
@@ -248,7 +263,12 @@ public class TimeSlotService {
     }
 
     public List<TimeSlotResponseDTO> getTimeSlotsByAmber(String amber) {
-        return timeSlotRepository.findAllByAmberEqualsIgnoreCase(amber)
+        List<TimeSlot> timeSlots = timeSlotRepository
+                .findAllByAmberEqualsIgnoreCase(amber);
+        if (timeSlots.isEmpty())
+            throw new TimeSlotNotFoundException("TimeSlots with amber " + amber + WAS_NOT_FOUND);
+
+        return timeSlots
                 .stream()
                 .map(timeSlot -> TimeSlotResponseDTO.builder()
                         .id(timeSlot.getId())
@@ -262,7 +282,13 @@ public class TimeSlotService {
     }
 
     public List<TimeSlotResponseDTO> getTimeSlotsByRed(String red) {
-        return timeSlotRepository.findAllByRedEqualsIgnoreCase(red)
+        List<TimeSlot> timeSlots = timeSlotRepository
+                .findAllByRedEqualsIgnoreCase(red);
+        if (timeSlots.isEmpty())
+            throw new TimeSlotNotFoundException("TimeSlots with red " + red + WAS_NOT_FOUND);
+
+        return timeSlots
+
                 .stream()
                 .map(timeSlot -> TimeSlotResponseDTO.builder()
                         .id(timeSlot.getId())

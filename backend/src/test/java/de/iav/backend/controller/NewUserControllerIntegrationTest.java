@@ -62,6 +62,14 @@ class NewUserControllerIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(1)))
         ;
     }
+    @Test
+    void getAllUsersBySearch_shouldReturn404_whenOneFittingEntryExists() throws Exception {
+
+        mockMvc.perform(get(BASE_URL + "?firstName=gibtEsNicht"))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(get(BASE_URL + "?lastName=gibtEsNicht"))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void getAllUsersByLastName_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
@@ -71,6 +79,34 @@ class NewUserControllerIntegrationTest {
     }
 
 
+    @Test
+    void getAllUsersByEmail_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
+        mockMvc.perform(get(BASE_URL + "?email=" + user1.email()))
+                .andExpect(jsonPath("[0].email").value(user1.email()))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+    @Test
+    void getAllUsersByEmail_shouldReturn404_whenOneFittingEntryExists() throws Exception {
+
+        mockMvc.perform(get(BASE_URL + "?email=gibtEsNicht"))
+                .andExpect(status().isNotFound());
+        ;
+    }
+
+    @Test
+    void getAllUsersByRole_shouldReturnOneEntry_whenOneFittingEntryExists() throws Exception {
+        mockMvc.perform(get(BASE_URL + "?role=USER" ))
+                .andExpect(jsonPath("[0].role").value("USER"))
+                .andExpect(jsonPath("[1].role").value("USER"))
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
+    @Test
+    void getAllUsersByRole_shouldReturn404_whenOneFittingEntryExists() throws Exception {
+
+        mockMvc.perform(get(BASE_URL + "?role=gibtEsNicht"))
+                .andExpect(status().isNotFound());
+        ;
+    }
 
     @Test
     void searchUser_ByFirstNameAndLastName() throws Exception {
@@ -81,11 +117,29 @@ class NewUserControllerIntegrationTest {
     }
 
     @Test
+    void searchUser_ByFirstNameAndLastName_NotFound() throws Exception {
+        mockMvc.perform(get(BASE_URL + "/search?firstName=" + user1.firstName() + "&lastName=" + user2.lastName()))
+                .andExpect(status().isNotFound());
+    }
+    @Test
     void searchUser_ByFirstNameAndEmail() throws Exception {
         mockMvc.perform(get(BASE_URL + "/search2?firstName=" + user1.firstName() + "&email=" + user1.email()))
                 .andExpect(jsonPath("id").isNotEmpty())
                 .andExpect(jsonPath("firstName").value(user1.firstName()))
                 .andExpect(jsonPath("email").value(user1.email()));
+    }
+
+    @Test
+    void searchUser_ByFirstNameAndEmail_NotFound() throws Exception {
+        mockMvc.perform(get(BASE_URL + "/search2?firstName=" + user1.firstName() + "&email=" + user2.email()))
+                .andExpect(status().isNotFound());
+    }
+    @Test
+    void searchUser_ByEmail() throws Exception {
+        mockMvc.perform(get(BASE_URL + "/email/" + user1.email()))
+                .andExpect(jsonPath("id").isNotEmpty())
+                .andExpect(jsonPath("email").value(user1.email()))
+                .andExpect(status().isOk());
     }
 
     @Test

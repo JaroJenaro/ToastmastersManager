@@ -1,6 +1,5 @@
 package de.iav.backend.controller;
 
-import de.iav.backend.model.User;
 import de.iav.backend.model.UserResponseDTO;
 
 import de.iav.backend.security.NewAppUser;
@@ -30,15 +29,13 @@ public class UserController {
                                                      @RequestParam(required = false) String role) {
 
         if (firstName != null) {
-            return userService.getUsersByFirstName(firstName);
-        } else if (lastName != null) {
-            return userService.getUsersByLastName(lastName);
-        } else if (email != null) {
-            return userService.getUsersByEmail(email);
-        }
+            return userService.getUsersByFirstName(firstName);}
+        else if (lastName != null) {
+            return userService.getUsersByLastName(lastName);}
+        else if (email != null) {
+            return userService.getUsersByEmail(email);}
         else if (role != null) {
-            return userService.getUsersByRole(role);
-        }
+            return userService.getUsersByRole(role);}
         return userService.getAllUsers();
     }
 
@@ -52,40 +49,33 @@ public class UserController {
     @GetMapping("/search")
     public UserResponseDTO searchUserByFirstNameAndLastName(
             @RequestParam String firstName,
-            @RequestParam String lastName
-    ) {
+            @RequestParam String lastName) {
         return userService.getUserByFirstNameAndLastName(firstName, lastName);
     }
 
     @GetMapping("/search2")
     public UserResponseDTO searchUserByFirstNameAndEmail(
             @RequestParam String firstName,
-            @RequestParam String email
-    ) {
+            @RequestParam String email) {
         return userService.getUserByFirstNameAndEmail(firstName, email);
     }
-    @GetMapping("email/{email}")
-    public Optional<UserResponseDTO> getUserByEmail(@PathVariable String email) {
+    @GetMapping("/email/{email}")
+    public UserResponseDTO getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
-
-    @GetMapping("/set")
-    public List<User> setDefaultUsers() {
-        return userService.setUserByRepository();
-    }
-
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody NewAppUser newAppUser) {
         UserResponseDTO createdUser = userService.register(newAppUser);
         return ResponseEntity.created(URI.create("/users/" + createdUser.getId())).body(createdUser);
-
     }
+
     @PutMapping("/{id}")
     public UserResponseDTO updateUser(@PathVariable String id, @Valid @RequestBody NewAppUser user) {
         return userService.updateUser(id, user);
     }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable String id){
