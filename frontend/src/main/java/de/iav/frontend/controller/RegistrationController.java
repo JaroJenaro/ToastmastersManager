@@ -58,24 +58,50 @@ public class RegistrationController {
 
     public void register(ActionEvent event) throws IOException {
 
-        AppUserRequest appUserRequest = new AppUserRequest(
-                firstName.getText(),
-                lastName.getText(),
-                email.getText(),
-                password.getText()
-        );
+        if (isRegisterDataValid()) {
 
-        if (authService.registerAppUser(appUserRequest)) {
-            sceneSwitchService.switchToLoginController(event);
-            LOG.info(appUserRequest);
+            AppUserRequest appUserRequest = new AppUserRequest(
+                    firstName.getText(),
+                    lastName.getText(),
+                    email.getText(),
+                    password.getText()
+            );
 
-
-        } else {
-            errorLabel.setText(authService.getErrorMessage());
+            if (authService.registerAppUser(appUserRequest)) {
+                sceneSwitchService.switchToLoginController(event);
+                LOG.info(appUserRequest);
+            } else {
+                errorLabel.setText(authService.getErrorMessage());
+            }
+        }
+        else {
+            errorLabel.setText("Bitte alle Felder ausfüllen" );
         }
     }
 
-
+    private boolean isRegisterDataValid(){
+        if (firstName.getText().isEmpty() || lastName.getText().isEmpty()||
+                email.getText().isEmpty() || password.getText().isEmpty()) {
+            return false;
+        }
+        else{
+            if (!email.getText().contains("@"))
+                return false;
+            else if (email.getText().length() < 4) {
+                return false;
+            }
+            else if (firstName.getText().length() < 4) {
+                return false;
+            }
+            else if (lastName.getText().length() < 4) {
+                return false;
+            }
+            else if (password.getText().length() < 4) {
+                return false;
+            }
+            else return email.getText().contains(".");
+        }
+    }
 }
 
 

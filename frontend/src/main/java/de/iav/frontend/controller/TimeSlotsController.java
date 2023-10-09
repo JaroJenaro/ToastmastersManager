@@ -47,30 +47,57 @@ public class TimeSlotsController {
     }
 
     public void onEditTimeSlotClick(ActionEvent event) throws IOException {
-        if(lvTimeSlots.getSelectionModel().getSelectedItem() != null){
-            sceneSwitchService.switchToTimeSlotEditController(event, loggedUser, lvTimeSlots.getSelectionModel().getSelectedItem());
-        }
-        else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Kein TimeSlot ausgewählt");
-            alert.setHeaderText("Siehe Details in Information Dialog");
-            alert.setContentText("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden.");
-            alert.showAndWait().ifPresent(rs -> {
-                if (rs == ButtonType.OK) {
-                    LOG.info("Pressed OK.");
-                }
-            });
+        try
+        {
+            if(lvTimeSlots.getSelectionModel().getSelectedItem() != null){
+                sceneSwitchService.switchToTimeSlotEditController(event, loggedUser, lvTimeSlots.getSelectionModel().getSelectedItem());
+            }
+            else {
+                noTimeSlotIsSelectedMessageBox("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden.");
 
+            }
         }
+        catch(Exception e)
+        {
+            noTimeSlotIsSelectedMessageBox("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden." +e.getMessage());
+        }
+
 
     }
 
     public void onDeleteTimeSlotClick() {
-        timeSlotService.deleteTimeSlot(lvTimeSlots.getSelectionModel().getSelectedItem().id(), lvTimeSlots, authService.getSessionId());
+        try
+        {
+            if(lvTimeSlots.getSelectionModel().getSelectedItem() != null){
+                timeSlotService.deleteTimeSlot(lvTimeSlots.getSelectionModel().getSelectedItem().id(), lvTimeSlots, authService.getSessionId());
+            }
+            else {
+                noTimeSlotIsSelectedMessageBox("Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden.");
+
+            }
+        }
+        catch(Exception e)
+        {
+            noTimeSlotIsSelectedMessageBox("Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden." +e.getMessage());
+        }
+
+
     }
 
     public void setUserToShow(User user) {
         loggedUser= user;
         lLoggedInUser.setText(user.toString());
+    }
+
+    private void noTimeSlotIsSelectedMessageBox(String contentText){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Kein TimeSlot ausgewählt");
+        alert.setHeaderText("Siehe Details in Information Dialog");
+        alert.setContentText(contentText);
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+                LOG.info("Pressed OK.");
+            }
+        });
     }
 }

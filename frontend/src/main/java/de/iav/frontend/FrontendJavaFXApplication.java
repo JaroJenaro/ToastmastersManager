@@ -1,4 +1,4 @@
-package de.iav.frontend.controller;
+package de.iav.frontend;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ import java.io.IOException;
 public class FrontendJavaFXApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(FrontendJavaFXApplication.class.getResource("Login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(FrontendJavaFXApplication.class.getResource("/de/iav/frontend/controller/Login.fxml"));
         //prefHeight="232.0" prefWidth="408.0"
         Scene scene = new Scene(fxmlLoader.load(), 420, 250);
         stage.setTitle("ToastMasters");

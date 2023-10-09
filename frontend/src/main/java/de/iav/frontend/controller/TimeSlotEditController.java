@@ -51,20 +51,23 @@ public class TimeSlotEditController {
     @FXML
     public void onSaveButtonClick(ActionEvent event) throws IOException {
 
-        TimeSlot timeSlotToSave = getNewDataOfTimeSlot();
-        TimeSlot savedTimeSlot;
-        if (timeSlotToSave.id().isEmpty())
-        {
-            LOG.error("Versuch zu createn: {}", timeSlotToSave);
-            savedTimeSlot = timeSlotService.createTimeSlot(timeSlotToSave, authService.getSessionId());
-        }
-        else{
-            LOG.error("Versuch zu updaten: {}", timeSlotToSave);
-            savedTimeSlot = timeSlotService.updateTimeSlot(timeSlotToSave, authService.getSessionId());
-        }
+        if(isTimeSlotDataValid()) {
+            TimeSlot timeSlotToSave = getNewDataOfTimeSlot();
+            TimeSlot savedTimeSlot;
+            if (timeSlotToSave.id().isEmpty()) {
+                LOG.error("Versuch neu zur erstellen: {}", timeSlotToSave);
+                savedTimeSlot = timeSlotService.createTimeSlot(timeSlotToSave, authService.getSessionId());
+            } else {
+                LOG.error("Versuch zu updaten: {}", timeSlotToSave);
+                savedTimeSlot = timeSlotService.updateTimeSlot(timeSlotToSave, authService.getSessionId());
+            }
 
-        LOG.info("Gespeicherte timeSlot {}", savedTimeSlot);
-        sceneSwitchService.switchToTimeSlotsController(event, loggedUser);
+            LOG.info("Gespeicherte timeSlot {}", savedTimeSlot);
+            sceneSwitchService.switchToTimeSlotsController(event, loggedUser);
+        }
+        else {
+            lLoggedInUser.setText("Ungültige Daten");
+        }
     }
 
     @FXML
@@ -97,5 +100,29 @@ public class TimeSlotEditController {
     private TimeSlot getNewDataOfTimeSlot() {
        return new TimeSlot(lId.getText(), tfTitle.getText(), tfDescription.getText(),
                 tfGreen.getText(), tfAmber.getText(), tfRed.getText());
+    }
+
+    private boolean isTimeSlotDataValid(){
+        if (tfTitle.getText().isEmpty() || tfDescription.getText().isEmpty()||
+                tfRed.getText().isEmpty()){
+            return false;
+        }
+        else{
+            if (!tfRed.getText().contains(":"))
+                return false;
+            else if (tfRed.getText().length() < 4) {
+                return false;
+            }
+            else if (tfTitle.getText().length() < 4) {
+                return false;
+            }
+            else if (tfDescription.getText().length() < 10) {
+                return false;
+            }
+            else if (!tfGreen.getText().isEmpty() && (tfGreen.getText().length()< 4)) {
+                return false;
+            }
+            else return (!tfAmber.getText().isEmpty() && (tfAmber.getText().length()< 4)) ;
+        }
     }
 }

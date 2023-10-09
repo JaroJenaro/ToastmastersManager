@@ -40,15 +40,21 @@ public class LoginController {
     }
 
     private void loginAuthorized(ActionEvent actionEvent) throws IOException {
-        LOG.info("loginVersuch");
-        if (authService.login(email.getText(), password.getText())) {
-            informationForUser.setText("login successfully");
-            User logInUser = userService.getUserByEmail(email.getText());
-            LOG.info("logInUser: {}" , logInUser);
-            sceneSwitchService.switchToTimeSlotsController(actionEvent, logInUser);
-            LOG.info("scene Switch : {}",  logInUser);
-        } else {
-            informationForUser.setText("login unsuccessfully");
+
+        if(isLoginDataValid()){
+            LOG.info("loginVersuch");
+            if (authService.login(email.getText(), password.getText())) {
+                informationForUser.setText("login successfully");
+                User logInUser = userService.getUserByEmail(email.getText());
+                LOG.info("logInUser: {}" , logInUser);
+                sceneSwitchService.switchToTimeSlotsController(actionEvent, logInUser);
+                LOG.info("scene Switch : {}",  logInUser);
+            } else {
+                informationForUser.setText("login unsuccessfully");
+            }
+        }
+        else {
+            informationForUser.setText("login Daten ungültig");
         }
 
     }
@@ -66,8 +72,6 @@ public class LoginController {
                 LOG.info("User existiert NICHT und kann mit der mail registriert werden");
                 UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
                 sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
-
-
             }
         }
         catch (RuntimeException e) {
@@ -76,10 +80,6 @@ public class LoginController {
             UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
             sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
         }
-    }
-
-    public void deleteUser() {
-        // Wird später umgesetzt
     }
 
 
@@ -92,6 +92,23 @@ public class LoginController {
         email.setText("jaro.jenaro@speaker.de");
         password.setText("1234");
         loginAuthorized(event);
+    }
+
+    private boolean isLoginDataValid(){
+        if (email.getText().isEmpty() || password.getText().isEmpty()) {
+            return false;
+        }
+        else{
+            if (!email.getText().contains("@"))
+                return false;
+            else if (email.getText().length() < 4) {
+                return false;
+            }
+            else if (password.getText().length() < 4) {
+                return false;
+            }
+            else return email.getText().contains(".");
+        }
     }
 }
 

@@ -58,7 +58,7 @@ public class UserService {
         try {
             return objectMapper.readValue(json, User.class);
         } catch (JsonProcessingException e) {
-            throw new MappingRuntimeException("Failed to map User" + e.getMessage());
+             throw new MappingRuntimeException("Failed to map User" + e.getMessage());
         }
     }
 
