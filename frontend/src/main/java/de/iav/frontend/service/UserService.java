@@ -41,7 +41,7 @@ public class UserService {
                 .build();
         return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenApply(this::mapToUserList) // .thenApply(responseBody -> mapToStudent(responseBody))
+                .thenApply(this::mapToUserList)
                 .join();
     }
 
@@ -62,7 +62,6 @@ public class UserService {
         }
     }
 
-
     public User getUserByEmail(String email) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
@@ -71,7 +70,7 @@ public class UserService {
 
         User respondedUser = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenApply(this::mapToUser) // .thenApply(responseBody -> mapToStudent(responseBody))
+                .thenApply(this::mapToUser)
                 .join();
         LOG.info("respondedUser: {}", respondedUser);
         return respondedUser;

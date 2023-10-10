@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/toastMasterManager/auth")
+@RequestMapping("/api/toast-master-manager/auth")
 @RequiredArgsConstructor
 public class AuthController {
 

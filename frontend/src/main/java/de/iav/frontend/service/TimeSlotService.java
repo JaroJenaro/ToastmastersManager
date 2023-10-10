@@ -44,7 +44,7 @@ public class TimeSlotService {
 
         return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenApply(this::mapToTimeSlotList) // .thenApply(responseBody -> mapToStudent(responseBody))
+                .thenApply(this::mapToTimeSlotList)
                 .join();
     }
 

@@ -116,13 +116,16 @@ public class TimeSlotEditController {
             else if (tfTitle.getText().length() < 4) {
                 return false;
             }
-            else if (tfDescription.getText().length() < 10) {
-                return false;
-            }
-            else if (!tfGreen.getText().isEmpty() && (tfGreen.getText().length()< 4)) {
-                return false;
-            }
-            else return (!tfAmber.getText().isEmpty() && (tfAmber.getText().length()< 4)) ;
+            else return tfDescription.getText().length() >= 10;
         }
+    }
+
+    public void setTimeSlotTemplate() {
+
+        tfTitle.setText("mind. 4 Zeichen");
+        tfDescription.setText("mind. 10 Zeichen");
+        tfGreen.setText("0:00, darf auch leer sein");
+        tfAmber.setText("0:00, darf auch leer sein");
+        tfRed.setText("1:00, mindestens 4 Zeichen Zeitangabe");
     }
 }

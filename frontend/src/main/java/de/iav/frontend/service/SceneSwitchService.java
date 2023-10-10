@@ -78,6 +78,8 @@ public class SceneSwitchService {
         TimeSlotEditController newTimeSlotEditController = loader.getController();
         LOG.info("  ----> public void switchToTimeSlotEditController(ActionEvent actionEvent, User user) throws IOException {} ", user);
         newTimeSlotEditController.setUserToShow(user);
+        newTimeSlotEditController.setTimeSlotTemplate();
+
 
 
         Scene scene = new Scene(root);

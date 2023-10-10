@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/toastMasterManager/timeslots")
+@RequestMapping("/api/toast-master-manager/timeslots")
 public class TimeSlotController {
 
     private final TimeSlotService timeSlotService;

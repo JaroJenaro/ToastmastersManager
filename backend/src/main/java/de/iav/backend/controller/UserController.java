@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/toastMasterManager/users")
+@RequestMapping("/api/toast-master-manager/users")
 public class UserController {
     private final UserService userService;
 
