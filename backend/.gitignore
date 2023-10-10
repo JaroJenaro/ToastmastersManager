@@ -34,3 +34,4 @@ build/
 /.mvn/
 /mvnw
 /mvnw.cmd
+/src/test/java/de/iav/backend/Zwischenablage.txt

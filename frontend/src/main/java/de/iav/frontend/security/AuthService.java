@@ -2,7 +2,9 @@ package de.iav.frontend.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.iav.frontend.model.User;
+import de.iav.frontend.exception.MappingRuntimeException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.net.URI;
@@ -15,15 +17,25 @@ import java.util.Base64;
 public class AuthService {
 
     private String email;
+
     private String sessionId;
     private String errorMessage;
+
+    private static final Logger LOG = LogManager.getLogger();
 
     public void setEmail(String email) {
         this.email = email;
     }
+    public String getEmail() {
+        return this.email;
+    }
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 
     public void setErrorMessage(String errorMessage) {
@@ -38,10 +50,9 @@ public class AuthService {
     private static AuthService instance;
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
-    //private static final String BACKEND_AUTH_URL = "http://localhost:8080/api/auth";
-    //private static final String BACKEND_AUTH_URL = "http://localhost:8080/api/toastMasterManager/users";
-    private static final String BACKEND_AUTH_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/users";
-   // private String STUDENTS_URL_BACKEND = System.getenv("BACKEND_TOASTMASTER_URI");
+
+    private static final String BACKEND_AUTH_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/auth";
+
 
     private AuthService() {
     }
@@ -55,11 +66,11 @@ public class AuthService {
 
     public boolean registerAppUser(AppUserRequest appUserRequest) {
 
-        System.out.println("1:" + appUserRequest);
-        System.out.println("1a: " + BACKEND_AUTH_URL + "/register");
+        LOG.info("1: {}", appUserRequest);
+        LOG.info("1a: {}/register", BACKEND_AUTH_URL);
         try {
             String requestBody = objectMapper.writeValueAsString(appUserRequest);
-            System.out.println("2a:" + appUserRequest);
+            LOG.info("2a: {}", appUserRequest);
 
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -69,9 +80,9 @@ public class AuthService {
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
-            System.out.println("2:" + appUserRequest);
+            LOG.info("2: {}", appUserRequest);
             var response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("3:" + response);
+            LOG.info("3: {}", response);
 
             int statusCode = response.join().statusCode();
 
@@ -81,22 +92,14 @@ public class AuthService {
                 setErrorMessage("Registration failed. Email or Username duplicate?");
                 return false;
             }
-            //return statusCode == 201;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
-
-
-    }
-
-
-    private User mapToUser(String json) {
-        try {
-            return objectMapper.readValue(json, User.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to map stock", e);
+        catch (JsonProcessingException e) {
+            throw new MappingRuntimeException("Failed to register User" + e.getMessage());
         }
     }
+
+
+
 
     public boolean login(String email, String password) {
         HttpRequest request = HttpRequest.newBuilder()
@@ -151,7 +154,7 @@ public class AuthService {
         int statusCode = response.join().statusCode();
 
         if (statusCode == 200) {
-            return response.join().body();
+            return response.join().body() + getEmail();
         } else {
             setErrorMessage("Logout failed");
             return "Kein User ist eingeloggt";

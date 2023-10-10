@@ -2,6 +2,7 @@ package de.iav.backend.model;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Document(collection = "users")
+@Builder
 public class User implements UserDetails {
     @MongoId
     String id;
@@ -28,26 +30,6 @@ public class User implements UserDetails {
     String password;
     String role;
 
-
-    public User withId(String newId) {
-        //return new User(newId, this.firstName, this.lastName, this.email, this.password, this.portfolio, this.moneyAccount);
-        return new User(newId, this.firstName, this.lastName, this.email, this.password, this.role);
-
-    }
-
-    /*
-        public NewAppUser getNewAppUser() {
-                    return new NewAppUser(null, this.firstName, this.lastName, this.email, this.password);
-        }
-
-        public UserWithoutUserDetails getUserWithoutUserDetails() {
-        return new UserWithoutUserDetails(this.id, this.firstName, this.lastName, this.email, this.role);
-    }
-    */
-
-    public UserWithoutUserDetails getUserWithoutUserDetails() {
-        return new UserWithoutUserDetails(this.getId(), this.getFirstName(), this.getLastName(), this.getEmail(), this.getRole());
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,6 +1,7 @@
 package de.iav.backend.security;
 
 
+import de.iav.backend.model.UserResponseDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/toastMasterManager/users")
+@RequestMapping("/api/toast-master-manager/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -31,7 +32,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public AppUserResponse register(@RequestBody NewAppUser newAppUser) {
+    public UserResponseDTO register(@RequestBody NewAppUser newAppUser) {
 
         return appUserService.register(newAppUser);
     }

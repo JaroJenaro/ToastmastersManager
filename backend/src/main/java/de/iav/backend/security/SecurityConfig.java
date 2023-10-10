@@ -27,9 +27,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(c -> {
-                    c.requestMatchers(HttpMethod.POST, "/api/toastMasterManager").authenticated();
-                    c.requestMatchers(HttpMethod.PUT, "/api/toastMasterManager/**").authenticated();
-                    c.requestMatchers(HttpMethod.DELETE, "/api/toastMasterManager/**").hasRole("ADMIN");
+                    c.requestMatchers(HttpMethod.POST, "/api/toast-master-manager").authenticated();
+                    c.requestMatchers(HttpMethod.PUT, "/api/toast-master-manager/**").authenticated();
+                    c.requestMatchers(HttpMethod.DELETE, "/api/toast-master-manager/**").hasRole("ADMIN");
                     c.anyRequest().permitAll();
                 })
                 .httpBasic(Customizer.withDefaults())
@@ -37,11 +37,4 @@ public class SecurityConfig {
                 .logout(Customizer.withDefaults())
                 .build();
     }
-    //Beispiel Argon-Eintrag in Mongo DB
-    //$argon2id$v=19$m=16384,t=2,p=
-    // 1$7E xYkb Ir5J 5MvG
-    // XjAH m54Q $SWA w0qP
-    // Kvqz r7B5 Cifd U8FK
-    // rg5Z uxb3 yxFw H53i
-    // 3Eac
 }

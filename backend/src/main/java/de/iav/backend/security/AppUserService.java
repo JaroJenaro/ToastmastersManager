@@ -1,6 +1,7 @@
 package de.iav.backend.security;
 
 import de.iav.backend.model.User;
+import de.iav.backend.model.UserResponseDTO;
 import de.iav.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,16 +17,12 @@ public class AppUserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    //public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    //AppUser appUser = appUserRepository.findAppUserByUsername(username)
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userEmail+ "  not found"));
     }
 
-    public AppUserResponse register(NewAppUser newAppUser) {
+    public UserResponseDTO register(NewAppUser newAppUser) {
 
         Argon2PasswordEncoder passwordEncoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
 
@@ -38,8 +35,13 @@ public class AppUserService implements UserDetailsService {
                 "USER"
         );
         User savedUser = userRepository.save(user);
-        return new AppUserResponse(savedUser.getId(),
-                savedUser.getFirstName(), savedUser.getLastName(),
-                savedUser.getEmail(), savedUser.getRole());
+
+        return UserResponseDTO.builder()
+                .id(savedUser.getId())
+                .firstName(savedUser.getFirstName())
+                .lastName(savedUser.getLastName())
+                .email(savedUser.getEmail())
+                .role(savedUser.getRole())
+                .build();
     }
 }

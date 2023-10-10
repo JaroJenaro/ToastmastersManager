@@ -3,8 +3,10 @@ package de.iav.frontend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.iav.frontend.exception.MappingRuntimeException;
 import de.iav.frontend.model.User;
-import de.iav.frontend.model.UserWithoutIdDto;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -16,9 +18,8 @@ public class UserService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
-    //private static final String BACKEND_AUTH_URL = "http://localhost:8080/api/toastMasterManager/usersData";
-
-    private static final String BACKEND_AUTH_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/usersData";
+    private static final Logger LOG = LogManager.getLogger();
+    private static final String BACKEND_USR_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/users";
 
     public UserService() {
         this.httpClient = HttpClient.newHttpClient();
@@ -36,30 +37,12 @@ public class UserService {
     public List<User> getAllUsers() {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(BACKEND_AUTH_URL))
+                .uri(URI.create(BACKEND_USR_URL))
                 .build();
         return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenApply(this::mapToUserList) // .thenApply(responseBody -> mapToStudent(responseBody))
+                .thenApply(this::mapToUserList)
                 .join();
-    }
-
-    public User addUser(UserWithoutIdDto userWithoutIdDto) {
-        try {
-            String requestBody = objectMapper.writeValueAsString(userWithoutIdDto);
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BACKEND_AUTH_URL))
-                    .header("Content-Type", "application/json")
-                    .header("Accept", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                    .build();
-            return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body)
-                    .thenApply(this::mapToUser)
-                    .join();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private List<User> mapToUserList(String responseBody) {
@@ -67,7 +50,7 @@ public class UserService {
             return objectMapper.readValue(responseBody, new TypeReference<>() {
             });
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to map users List", e);
+            throw new MappingRuntimeException("Failed to map UserLIst" + e.getMessage());
         }
     }
 
@@ -75,22 +58,21 @@ public class UserService {
         try {
             return objectMapper.readValue(json, User.class);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to map User", e);
+             throw new MappingRuntimeException("Failed to map User" + e.getMessage());
         }
     }
-
 
     public User getUserByEmail(String email) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(BACKEND_AUTH_URL + "/email/" + email))
+                .uri(URI.create(BACKEND_USR_URL + "/email/" + email))
                 .build();
 
         User respondedUser = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenApply(this::mapToUser) // .thenApply(responseBody -> mapToStudent(responseBody))
+                .thenApply(this::mapToUser)
                 .join();
-        System.out.println("respondedUser: " + respondedUser);
+        LOG.info("respondedUser: {}", respondedUser);
         return respondedUser;
     }
 }

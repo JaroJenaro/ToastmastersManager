@@ -18,6 +18,6 @@
         prefHeight="25.0" prefWidth="80.0" text="Sign Up"/>
 <Button layoutX="479.0" layoutY="289.0" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="25.0"
         prefWidth="80.0" text="Back"/>
-<Label fx:id="errorLabel" layoutX="50.0" layoutY="261.0" text="Label"/>
+<Label fx:id="errorLabel" layoutX="50.0" layoutY="261.0" text=" "/>
 
 </AnchorPane>
