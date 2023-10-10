@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NewUserControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
-    private final static String BASE_URL = "/api/toastMasterManager/users";
+    private final static String BASE_URL = "/api/toast-master-manager/users";
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final NewAppUser user1 = new NewAppUser("Putin", "Wladimir", "Putin", "1234", "wladimir.putin@udssr.ru");
     private final NewAppUser user2 = new NewAppUser("Trump", "Donald", "Trump", "1234", "donald.trump@usa.us");

@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NewTimeSlotControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
-    private final static String BASE_URL = "/api/toastMasterManager/timeslots";
+    private final static String BASE_URL = "/api/toast-master-manager/timeslots";
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TimeSlotWithoutIdDTO timeSlot1 = new TimeSlotWithoutIdDTO("Rede1", "Rede 1 154 vorbereitet", "1:00", "1:30", "2:00");
     private final TimeSlotWithoutIdDTO timeSlot2 = new TimeSlotWithoutIdDTO("Rede2", "Rede 2 226 vorbereitet", "4:00", "5:30", "6:00");

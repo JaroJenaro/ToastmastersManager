@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
-    private final static String BASE_URL = "/api/toastMasterManager/auth";
+    private final static String BASE_URL = "/api/toast-master-manager/auth";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
