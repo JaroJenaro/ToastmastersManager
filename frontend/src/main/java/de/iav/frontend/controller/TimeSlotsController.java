@@ -100,4 +100,8 @@ public class TimeSlotsController {
             }
         });
     }
+
+    public void onUsersDataButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToUsersController(event, loggedUser);
+    }
 }

@@ -1,9 +1,11 @@
-package de.iav.frontend.security;
+package de.iav.frontend.model;
 
-public record AppUserRequest(
+
+public record UserRequestDto(
         String firstName,
         String lastName,
         String email,
         String password
+
 ) {
 }

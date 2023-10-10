@@ -3,8 +3,11 @@ package de.iav.frontend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.iav.frontend.exception.DeletingRuntimeException;
 import de.iav.frontend.exception.MappingRuntimeException;
 import de.iav.frontend.model.User;
+import javafx.application.Platform;
+import javafx.scene.control.ListView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +23,9 @@ public class UserService {
 
     private static final Logger LOG = LogManager.getLogger();
     private static final String BACKEND_USR_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/users";
+
+    private static final String JSESSIONID_IS_EQUAL ="JSESSIONID=";
+    private static final String COOKIE = "Cookie";
 
     public UserService() {
         this.httpClient = HttpClient.newHttpClient();
@@ -74,5 +80,27 @@ public class UserService {
                 .join();
         LOG.info("respondedUser: {}", respondedUser);
         return respondedUser;
+    }
+
+    public void deleteUser(String idToDelete, ListView<User> lvUsers, String sessionId) {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BACKEND_USR_URL + "/" + idToDelete))
+                .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
+                .DELETE()
+                .build();
+
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenAccept(response -> {
+                    if (response.statusCode() == 204) {
+                        Platform.runLater(() -> {
+                            lvUsers.getItems().removeIf(timeSlot -> timeSlot.id().equals(idToDelete));
+                            lvUsers.refresh();
+                        });
+                    } else {
+                        throw new DeletingRuntimeException("Fehler beim Löschen des Users mit der id " + idToDelete);
+                    }
+                })
+                .join();
     }
 }

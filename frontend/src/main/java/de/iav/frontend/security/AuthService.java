@@ -3,6 +3,7 @@ package de.iav.frontend.security;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.iav.frontend.exception.MappingRuntimeException;
+import de.iav.frontend.model.UserRequestDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,7 +65,7 @@ public class AuthService {
         return instance;
     }
 
-    public boolean registerAppUser(AppUserRequest appUserRequest) {
+    public boolean registerAppUser(UserRequestDto appUserRequest) {
 
         LOG.info("1: {}", appUserRequest);
         LOG.info("1a: {}/register", BACKEND_AUTH_URL);

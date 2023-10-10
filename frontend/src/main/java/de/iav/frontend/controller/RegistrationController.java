@@ -1,7 +1,6 @@
 package de.iav.frontend.controller;
 
-import de.iav.frontend.model.UserWithoutIdDto;
-import de.iav.frontend.security.AppUserRequest;
+import de.iav.frontend.model.UserRequestDto;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
 import javafx.event.ActionEvent;
@@ -43,15 +42,15 @@ public class RegistrationController {
         sceneSwitchService.switchToLoginController(actionEvent);
     }
 
-    public void setUserWithoutIdDtoForSignIn(UserWithoutIdDto userWithoutIdDto) {
+    public void setUserWithoutIdDtoForSignIn(UserRequestDto userRequestDto) {
         LOG.info("setUserWithoutIdDtoForSignIn drin");
-        email.setText(userWithoutIdDto.email());
+        email.setText(userRequestDto.email());
         LOG.info("setUserWithoutIdDtoForSignIn mail");
-        password.setText(userWithoutIdDto.password());
+        password.setText(userRequestDto.password());
         LOG.info("setUserWithoutIdDtoForSignIn password");
-        firstName.setText(userWithoutIdDto.firstName());
+        firstName.setText(userRequestDto.firstName());
         LOG.info("setUserWithoutIdDtoForSignIn firstname");
-        lastName.setText(userWithoutIdDto.lastName());
+        lastName.setText(userRequestDto.lastName());
         LOG.info("setUserWithoutIdDtoForSignIn lastname");
     }
 
@@ -60,7 +59,7 @@ public class RegistrationController {
 
         if (isRegisterDataValid()) {
 
-            AppUserRequest appUserRequest = new AppUserRequest(
+            UserRequestDto appUserRequest = new UserRequestDto(
                     firstName.getText(),
                     lastName.getText(),
                     email.getText(),

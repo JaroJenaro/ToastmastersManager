@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -11,22 +12,27 @@
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
+   <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <children>
+         <Button fx:id="bUserData" layoutX="324.0" mnemonicParsing="false" onAction="#onUsersDataButtonClick" prefHeight="25.0" prefWidth="109.0" text="Users Verwalten" AnchorPane.leftAnchor="324.0" AnchorPane.rightAnchor="0.0" />
+      </children>
+   </AnchorPane>
    <Label fx:id="lLoggedInUser" text="Label" />
 
     <HBox prefHeight="100.0" prefWidth="200.0">
         <Button onAction="#onNewTimeSlotClick" text="neuen timeSlot anlegen">
             <HBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>
         </Button>
         <Button onAction="#onEditTimeSlotClick" text="timeSlot bearbeiten">
             <HBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>
         </Button>
         <Button onAction="#onDeleteTimeSlotClick" text="timeSlot löschen">
            <HBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
            </HBox.margin>
         </Button>
     </HBox>
