@@ -26,6 +26,8 @@ public class TimeSlotsController {
     public Label lLoggedInUser;
     @FXML
     public Button bUserData;
+    @FXML
+    public Button bLogout;
     private User loggedUser;
 
     public void initialize() {
@@ -102,5 +104,13 @@ public class TimeSlotsController {
 
     public void onUsersDataButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToUsersController(event, loggedUser);
+    }
+
+    public void onLogoutButtonClick(ActionEvent event) throws IOException {
+        if(authService.logout())
+        {sceneSwitchService.switchToLoginController(event);}
+        else
+            noTimeSlotIsSelectedMessageBox("logout nicht erfolgreich");
+
     }
 }
