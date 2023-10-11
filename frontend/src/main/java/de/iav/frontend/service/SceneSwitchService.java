@@ -3,7 +3,7 @@ package de.iav.frontend.service;
 import de.iav.frontend.controller.*;
 import de.iav.frontend.model.TimeSlot;
 import de.iav.frontend.model.User;
-import de.iav.frontend.model.UserWithoutIdDto;
+import de.iav.frontend.model.UserRequestDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -37,15 +37,31 @@ public class SceneSwitchService {
         stage.show();
     }
 
-    public void switchToRegisterController(ActionEvent actionEvent, UserWithoutIdDto userWithoutIdDto) throws IOException {
+    public void switchToRegisterController(ActionEvent actionEvent, UserRequestDto userRequestDto) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/Registration.fxml"));
         Parent root = loader.load();
 
 
         RegistrationController registrationController = loader.getController();
-        LOG.info("  ----> public void switchToUserController(ActionEvent actionEvent, UserWithoutIdDto userWithoutIdDto) throws IOException {}", userWithoutIdDto);
-        registrationController.setUserWithoutIdDtoForSignIn(userWithoutIdDto);
+        LOG.info("  ----> public void switchToUserController(ActionEvent actionEvent, UserWithoutIdDto userWithoutIdDto) throws IOException {}", userRequestDto);
+        registrationController.setUserWithoutIdDtoForSignIn(userRequestDto);
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void switchToUserEditController(ActionEvent actionEvent, User loggedUser, User selectedItem) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/Registration.fxml"));
+        Parent root = loader.load();
+
+
+        RegistrationController registrationController = loader.getController();
+        LOG.info("  ----> public void switchToUserEditController(ActionEvent actionEvent, User user) throws IOException {}", loggedUser);
+        registrationController.setUserToUpdate(loggedUser, selectedItem);
 
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -78,9 +94,6 @@ public class SceneSwitchService {
         TimeSlotEditController newTimeSlotEditController = loader.getController();
         LOG.info("  ----> public void switchToTimeSlotEditController(ActionEvent actionEvent, User user) throws IOException {} ", user);
         newTimeSlotEditController.setUserToShow(user);
-        newTimeSlotEditController.setTimeSlotTemplate();
-
-
 
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -104,4 +117,19 @@ public class SceneSwitchService {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void switchToUsersController(ActionEvent actionEvent, User user) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/UsersData.fxml"));
+        Parent root = loader.load();
+
+        UsersController usersController = loader.getController();
+        LOG.info("  ----> public void switchToUsersController(ActionEvent actionEvent, User user) throws IOException {} ", user);
+        usersController.setUserToShow(user);
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
 }

@@ -1,21 +1,19 @@
-
 package de.iav.frontend.controller;
 
-        import de.iav.frontend.model.User;
-        import de.iav.frontend.model.UserWithoutIdDto;
-        import de.iav.frontend.security.AuthService;
-        import de.iav.frontend.service.SceneSwitchService;
-        import de.iav.frontend.service.UserService;
-        import javafx.event.ActionEvent;
-        import javafx.fxml.FXML;
-        import javafx.scene.control.Button;
-        import javafx.scene.control.Label;
-        import javafx.scene.control.PasswordField;
-        import javafx.scene.control.TextField;
-        import org.apache.logging.log4j.LogManager;
-        import org.apache.logging.log4j.Logger;
-
-        import java.io.IOException;
+import de.iav.frontend.model.User;
+import de.iav.frontend.model.UserRequestDto;
+import de.iav.frontend.security.AuthService;
+import de.iav.frontend.service.SceneSwitchService;
+import de.iav.frontend.service.UserService;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import java.io.IOException;
 
 public class LoginController {
     private final UserService userService = UserService.getInstance();
@@ -28,8 +26,8 @@ public class LoginController {
     @FXML
     public Label informationForUser;
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
-    private static final String GET_FIRSTNAME = "get Firstname";
-    private static final String GET_LASTNAME = "get Lastname";
+    private static final String GET_FIRSTNAME = "";
+    private static final String GET_LASTNAME = "";
     @FXML
     public Button bSpecialLogin;
 
@@ -69,15 +67,15 @@ public class LoginController {
                 informationForUser.setText("This email already exists, sign in instead");
             } else {
                 LOG.info("User existiert NICHT und kann mit der mail registriert werden");
-                UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
-                sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
+                UserRequestDto userRequestDto = new UserRequestDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
+                sceneSwitchService.switchToRegisterController(actionEvent, userRequestDto);
             }
         }
         catch (RuntimeException e) {
             LOG.info("RuntimeException: {}", e.getMessage());
             LOG.info("User existiert NICHT und kann mit der mail registriert werden");
-            UserWithoutIdDto userWithoutIdDto = new UserWithoutIdDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
-            sceneSwitchService.switchToRegisterController(actionEvent, userWithoutIdDto);
+            UserRequestDto userRequestDto = new UserRequestDto( GET_FIRSTNAME, GET_LASTNAME, email.getText(), password.getText());
+            sceneSwitchService.switchToRegisterController(actionEvent, userRequestDto);
         }
     }
 

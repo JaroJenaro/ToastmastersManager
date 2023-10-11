@@ -3,6 +3,7 @@ package de.iav.frontend.security;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.iav.frontend.exception.MappingRuntimeException;
+import de.iav.frontend.model.UserRequestDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,9 +27,6 @@ public class AuthService {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getEmail() {
-        return this.email;
-    }
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
@@ -46,6 +44,9 @@ public class AuthService {
         return errorMessage;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
     private static AuthService instance;
     private final HttpClient client = HttpClient.newHttpClient();
@@ -64,7 +65,7 @@ public class AuthService {
         return instance;
     }
 
-    public boolean registerAppUser(AppUserRequest appUserRequest) {
+    public boolean registerAppUser(UserRequestDto appUserRequest) {
 
         LOG.info("1: {}", appUserRequest);
         LOG.info("1a: {}/register", BACKEND_AUTH_URL);
@@ -154,7 +155,7 @@ public class AuthService {
         int statusCode = response.join().statusCode();
 
         if (statusCode == 200) {
-            return response.join().body() + getEmail();
+            return "me :" + response.join().body() + "  auth: " + getEmail();
         } else {
             setErrorMessage("Logout failed");
             return "Kein User ist eingeloggt";
