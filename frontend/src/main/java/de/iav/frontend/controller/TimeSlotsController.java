@@ -7,10 +7,7 @@ import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.TimeSlotService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,11 +24,14 @@ public class TimeSlotsController {
     public ListView<TimeSlot> lvTimeSlots;
     @FXML
     public Label lLoggedInUser;
+    @FXML
+    public Button bUserData;
     private User loggedUser;
 
     public void initialize() {
         LOG.info("---->TimeSlotsController public void initialize");
         showAllTimeSlots();
+        lLoggedInUser.setText(authService.me());
     }
 
     private void showAllTimeSlots() {
@@ -46,7 +46,7 @@ public class TimeSlotsController {
         sceneSwitchService.switchToNewTimeSlotEditController(event, loggedUser);
     }
 
-    public void onEditTimeSlotClick(ActionEvent event) throws IOException {
+    public void onEditTimeSlotClick(ActionEvent event)  {
         try
         {
             if(lvTimeSlots.getSelectionModel().getSelectedItem() != null){
@@ -86,7 +86,6 @@ public class TimeSlotsController {
 
     public void setUserToShow(User user) {
         loggedUser= user;
-        lLoggedInUser.setText(user.toString());
     }
 
     private void noTimeSlotIsSelectedMessageBox(String contentText){

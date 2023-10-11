@@ -53,6 +53,22 @@ public class SceneSwitchService {
         stage.show();
     }
 
+    public void switchToUserEditController(ActionEvent actionEvent, User loggedUser, User selectedItem) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/Registration.fxml"));
+        Parent root = loader.load();
+
+
+        RegistrationController registrationController = loader.getController();
+        LOG.info("  ----> public void switchToUserEditController(ActionEvent actionEvent, User user) throws IOException {}", loggedUser);
+        registrationController.setUserToUpdate(loggedUser, selectedItem);
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void switchToTimeSlotsController(ActionEvent actionEvent, User user) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/TimeSlotsData.fxml"));
@@ -118,7 +134,5 @@ public class SceneSwitchService {
         stage.setScene(scene);
         stage.show();
     }
-    public void switchToUserEditController(ActionEvent event, User loggedUser, User selectedItem) {
-        // TODO document why this method is empty
-    }
+
 }

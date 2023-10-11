@@ -1,20 +1,30 @@
 package de.iav.frontend.controller;
 
+import de.iav.frontend.model.Role;
+import de.iav.frontend.model.User;
 import de.iav.frontend.model.UserRequestDto;
+import de.iav.frontend.model.WayToCreateOrEditUser;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
+import de.iav.frontend.service.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class RegistrationController {
+    @FXML
+    public Label lRole;
+    @FXML
+    public ComboBox<Role> cbRole;
+    @FXML
+    public Label lPassword;
+    @FXML
+    public Label lRegisterTitle;
+    WayToCreateOrEditUser wayToCreateOrEditUser;
     @FXML
     public TextField firstName;
     @FXML
@@ -30,19 +40,61 @@ public class RegistrationController {
 
 
     private final AuthService authService = AuthService.getInstance();
+    private final UserService userService = UserService.getInstance();
 
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
+
+    private User loggedUser;
+    private User userToUpdate;
+
     @FXML
     public void onSignUpButtonClick(ActionEvent event) throws IOException {
-      register(event);
+        if(wayToCreateOrEditUser==WayToCreateOrEditUser.REGISTER)
+            registerUser(event);
+        else if (wayToCreateOrEditUser==WayToCreateOrEditUser.UPDATE) {
+            updateUser(event);
+
+        }
     }
 
+    private void updateUser(ActionEvent event) throws IOException {
+
+        if (isUpdateDataValid()) {
+
+            User user = new User(
+                    userToUpdate.id(),
+                    firstName.getText(),
+                    lastName.getText(),
+                    email.getText(),
+                    cbRole.getValue()
+            );
+
+            if (isUserUpdateSuccessful(user,userService.updateUser(user, authService.getSessionId()))) {
+                sceneSwitchService.switchToUsersController(event, loggedUser);
+                LOG.info("updateUser: {}", user);
+            } else {
+                errorLabel.setText(authService.getErrorMessage());
+            }
+        }
+        else {
+            errorLabel.setText("Bitte alle Felder ausfüllen" );
+        }
+    }
+
+    private boolean isUserUpdateSuccessful(User userIn, User userOut)
+    {
+        return userIn.equals(userOut);
+    }
     public void backButtonPressed(ActionEvent actionEvent) throws IOException {
         sceneSwitchService.switchToLoginController(actionEvent);
     }
 
-    public void setUserWithoutIdDtoForSignIn(UserRequestDto userRequestDto) {
+    public void setUserWithoutIdDtoForSignIn(UserRequestDto userRequestDto ) {
+        this.wayToCreateOrEditUser = WayToCreateOrEditUser.REGISTER;
+
+
+
         LOG.info("setUserWithoutIdDtoForSignIn drin");
         email.setText(userRequestDto.email());
         LOG.info("setUserWithoutIdDtoForSignIn mail");
@@ -52,10 +104,15 @@ public class RegistrationController {
         LOG.info("setUserWithoutIdDtoForSignIn firstname");
         lastName.setText(userRequestDto.lastName());
         LOG.info("setUserWithoutIdDtoForSignIn lastname");
+        cbRole.setVisible(false);
+        lRole.setVisible(false);
+
+        signUp.setText("Sign Up");
+        lRegisterTitle.setText("Register User");
     }
 
 
-    public void register(ActionEvent event) throws IOException {
+    public void registerUser(ActionEvent event) throws IOException {
 
         if (isRegisterDataValid()) {
 
@@ -100,6 +157,48 @@ public class RegistrationController {
             }
             else return email.getText().contains(".");
         }
+    }
+
+    private boolean isUpdateDataValid(){
+        if (firstName.getText().isEmpty() || lastName.getText().isEmpty()||
+                email.getText().isEmpty()) {
+            return false;
+        }
+        else{
+            if (!email.getText().contains("@"))
+                return false;
+            else if (email.getText().length() < 4) {
+                return false;
+            }
+            else if (firstName.getText().length() < 4) {
+                return false;
+            }
+            else if (lastName.getText().length() < 4) {
+                return false;
+            }
+            else return email.getText().contains(".");
+        }
+    }
+
+    public void setUserToUpdate(User loggedUser, User user) {
+        this.wayToCreateOrEditUser = WayToCreateOrEditUser.UPDATE;
+        userToUpdate = user;
+        this.loggedUser = loggedUser;
+        LOG.info("setUserWithoutIdDtoForSignIn drin");
+        email.setText(user.email());
+        LOG.info("setUserWithoutIdDtoForSignIn mail");
+        firstName.setText(user.firstName());
+        LOG.info("setUserWithoutIdDtoForSignIn firstname");
+        lastName.setText(user.lastName());
+        LOG.info("setUserWithoutIdDtoForSignIn lastname");
+        cbRole.getItems().addAll(Role.USER, Role.ADMIN);
+        cbRole.setValue(user.role());
+        password.setVisible(false);
+        lPassword.setVisible(false);
+
+        signUp.setText("Update User");
+        lRegisterTitle.setText(loggedUser.toString());
+
     }
 }
 

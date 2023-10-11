@@ -23,7 +23,7 @@ public class UserService {
 
     private static final Logger LOG = LogManager.getLogger();
     private static final String BACKEND_USR_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/users";
-
+    private static final String APPLICATION_JSON = "application/json";
     private static final String JSESSIONID_IS_EQUAL ="JSESSIONID=";
     private static final String COOKIE = "Cookie";
 
@@ -102,5 +102,25 @@ public class UserService {
                     }
                 })
                 .join();
+    }
+
+    public User updateUser(User user, String sessionId) {
+
+        try {
+            String requestBody = objectMapper.writeValueAsString(user);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BACKEND_USR_URL + "/" + user.id()))
+                    .header("Content-Type", APPLICATION_JSON)
+                    .header("Accept", APPLICATION_JSON)
+                    .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
+                    .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+            return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenApply(this::mapToUser)
+                    .join();
+        } catch (JsonProcessingException e) {
+            throw new MappingRuntimeException("Failed to save User" + e.getMessage());
+        }
     }
 }

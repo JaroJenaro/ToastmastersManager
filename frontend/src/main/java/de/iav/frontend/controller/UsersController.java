@@ -82,7 +82,7 @@ public class UsersController {
 
     public void setUserToShow(User user) {
         loggedUser= user;
-        lLoggedInUser.setText(user.toString());
+        lLoggedInUser.setText(authService.me());
     }
 
     private void noUserIsSelectedMessageBox(String contentText){

@@ -27,9 +27,6 @@ public class AuthService {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getEmail() {
-        return this.email;
-    }
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
@@ -47,6 +44,9 @@ public class AuthService {
         return errorMessage;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
     private static AuthService instance;
     private final HttpClient client = HttpClient.newHttpClient();
@@ -155,7 +155,7 @@ public class AuthService {
         int statusCode = response.join().statusCode();
 
         if (statusCode == 200) {
-            return response.join().body() + getEmail();
+            return "me :" + response.join().body() + "  auth: " + getEmail();
         } else {
             setErrorMessage("Logout failed");
             return "Kein User ist eingeloggt";
