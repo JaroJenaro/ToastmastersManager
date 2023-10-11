@@ -14,16 +14,21 @@
    <Label fx:id="lLoggedInUser" text="Label" />
 
     <HBox prefHeight="100.0" prefWidth="200.0">
-        <Button onAction="#onEditUserClick" text="User bearbeiten">
-            <HBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </HBox.margin>
-        </Button>
         <Button onAction="#onDeleteUserClick" text="User löschen">
            <HBox.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
            </HBox.margin>
         </Button>
+        <Button onAction="#onEditUserClick" text="User bearbeiten">
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+        </Button>
+      <Button fx:id="bBack" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" text="Back">
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+      </Button>
     </HBox>
    <ListView fx:id="lvUsers" prefHeight="631.0" prefWidth="452.0" />
    <opaqueInsets>

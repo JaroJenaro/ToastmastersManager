@@ -15,12 +15,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
 import java.util.List;
 public class UserService {
     private static UserService instance;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-
     private static final Logger LOG = LogManager.getLogger();
     private static final String BACKEND_USR_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/users";
     private static final String APPLICATION_JSON = "application/json";
@@ -39,7 +39,6 @@ public class UserService {
         return instance;
     }
 
-    //wird später benötigt zur Darstellung alle User für den Admin
     public List<User> getAllUsers() {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
@@ -83,7 +82,6 @@ public class UserService {
     }
 
     public void deleteUser(String idToDelete, ListView<User> lvUsers, String sessionId) {
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BACKEND_USR_URL + "/" + idToDelete))
                 .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
@@ -93,7 +91,7 @@ public class UserService {
         httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenAccept(response -> {
                     if (response.statusCode() == 204) {
-                        Platform.runLater(() -> {
+                            Platform.runLater(() -> {
                             lvUsers.getItems().removeIf(timeSlot -> timeSlot.id().equals(idToDelete));
                             lvUsers.refresh();
                         });
@@ -105,7 +103,6 @@ public class UserService {
     }
 
     public User updateUser(User user, String sessionId) {
-
         try {
             String requestBody = objectMapper.writeValueAsString(user);
             HttpRequest request = HttpRequest.newBuilder()

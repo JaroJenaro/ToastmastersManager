@@ -6,25 +6,24 @@ import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 
 public class UsersController {
     private final UserService userService = UserService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private final AuthService authService = AuthService.getInstance();
-
-
     private static final Logger LOG = LogManager.getLogger();
+
     @FXML
     public ListView<User> lvUsers;
     @FXML
     public Label lLoggedInUser;
+    @FXML
+    public Button bBack;
     private User loggedUser;
 
     public void initialize() {
@@ -35,12 +34,9 @@ public class UsersController {
     private void showAllUsers() {
         lvUsers.getItems().clear();
         LOG.info("showAllUsers");
-
         lvUsers.getItems().addAll(userService.getAllUsers());
         LOG.info("showAllUsers durch");
     }
-
-
 
     public void onEditUserClick(ActionEvent event) {
         try
@@ -50,15 +46,12 @@ public class UsersController {
             }
             else {
                 noUserIsSelectedMessageBox("Damit ein User bearbeitet werden kann muss zunächst einer selektiert werden.");
-
             }
         }
         catch(Exception e)
         {
             noUserIsSelectedMessageBox("Damit ein User bearbeitet werden kann muss zunächst einer selektiert werden." +e.getMessage());
         }
-
-
     }
 
     public void onDeleteUserClick() {
@@ -69,15 +62,12 @@ public class UsersController {
             }
             else {
                 noUserIsSelectedMessageBox("Damit ein User gelöscht werden kann muss zunächst einer selektiert werden.");
-
             }
         }
         catch(Exception e)
         {
             noUserIsSelectedMessageBox("Damit ein User gelöscht werden kann muss zunächst einer selektiert werden." +e.getMessage());
         }
-
-
     }
 
     public void setUserToShow(User user) {
@@ -95,5 +85,9 @@ public class UsersController {
                 LOG.info("Pressed OK.");
             }
         });
+    }
+
+    public void onBackButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToTimeSlotsController(event,loggedUser);
     }
 }

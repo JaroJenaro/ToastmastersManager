@@ -38,15 +38,21 @@ public class RegistrationController {
     @FXML
     public Label errorLabel;
 
-
     private final AuthService authService = AuthService.getInstance();
     private final UserService userService = UserService.getInstance();
-
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
 
     private User loggedUser;
     private User userToUpdate;
+
+    public void initialize() {
+        firstName.setPromptText("Vorname mind 4 Zeichen Lang");
+        lastName.setPromptText("Nachname mind 4 Zeichen Lang");
+        password.setPromptText("Password mind 4 Zeichen Lang");
+        email.setPromptText("email mind 4 Zeichen Lang x@l.de");
+        LOG.info("---->RegistrationController public void initialize");
+    }
 
     @FXML
     public void onSignUpButtonClick(ActionEvent event) throws IOException {
@@ -54,14 +60,11 @@ public class RegistrationController {
             registerUser(event);
         else if (wayToCreateOrEditUser==WayToCreateOrEditUser.UPDATE) {
             updateUser(event);
-
         }
     }
 
     private void updateUser(ActionEvent event) throws IOException {
-
         if (isUpdateDataValid()) {
-
             User user = new User(
                     userToUpdate.id(),
                     firstName.getText(),
@@ -69,7 +72,6 @@ public class RegistrationController {
                     email.getText(),
                     cbRole.getValue()
             );
-
             if (isUserUpdateSuccessful(user,userService.updateUser(user, authService.getSessionId()))) {
                 sceneSwitchService.switchToUsersController(event, loggedUser);
                 LOG.info("updateUser: {}", user);
@@ -92,9 +94,6 @@ public class RegistrationController {
 
     public void setUserWithoutIdDtoForSignIn(UserRequestDto userRequestDto ) {
         this.wayToCreateOrEditUser = WayToCreateOrEditUser.REGISTER;
-
-
-
         LOG.info("setUserWithoutIdDtoForSignIn drin");
         email.setText(userRequestDto.email());
         LOG.info("setUserWithoutIdDtoForSignIn mail");
@@ -113,16 +112,13 @@ public class RegistrationController {
 
 
     public void registerUser(ActionEvent event) throws IOException {
-
         if (isRegisterDataValid()) {
-
             UserRequestDto appUserRequest = new UserRequestDto(
                     firstName.getText(),
                     lastName.getText(),
                     email.getText(),
                     password.getText()
             );
-
             if (authService.registerAppUser(appUserRequest)) {
                 sceneSwitchService.switchToLoginController(event);
                 LOG.info(appUserRequest);
@@ -198,11 +194,8 @@ public class RegistrationController {
 
         signUp.setText("Update User");
         lRegisterTitle.setText(loggedUser.toString());
-
     }
 }
-
-
 
 
 

@@ -17,9 +17,8 @@ public class TimeSlotsController {
     private final TimeSlotService timeSlotService = TimeSlotService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private final AuthService authService = AuthService.getInstance();
-
-
     private static final Logger LOG = LogManager.getLogger();
+
     @FXML
     public ListView<TimeSlot> lvTimeSlots;
     @FXML
@@ -48,49 +47,37 @@ public class TimeSlotsController {
         sceneSwitchService.switchToNewTimeSlotEditController(event, loggedUser);
     }
 
-    public void onEditTimeSlotClick(ActionEvent event)  {
-        try
-        {
-            if(lvTimeSlots.getSelectionModel().getSelectedItem() != null){
+    public void onEditTimeSlotClick(ActionEvent event) {
+        try {
+            if (lvTimeSlots.getSelectionModel().getSelectedItem() != null) {
                 sceneSwitchService.switchToTimeSlotEditController(event, loggedUser, lvTimeSlots.getSelectionModel().getSelectedItem());
-            }
-            else {
+            } else {
                 noTimeSlotIsSelectedMessageBox("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden.");
 
             }
+        } catch (Exception e) {
+            noTimeSlotIsSelectedMessageBox("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden." + e.getMessage());
         }
-        catch(Exception e)
-        {
-            noTimeSlotIsSelectedMessageBox("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden." +e.getMessage());
-        }
-
-
     }
 
     public void onDeleteTimeSlotClick() {
-        try
-        {
-            if(lvTimeSlots.getSelectionModel().getSelectedItem() != null){
+        try {
+            if (lvTimeSlots.getSelectionModel().getSelectedItem() != null) {
                 timeSlotService.deleteTimeSlot(lvTimeSlots.getSelectionModel().getSelectedItem().id(), lvTimeSlots, authService.getSessionId());
-            }
-            else {
+            } else {
                 noTimeSlotIsSelectedMessageBox("Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden.");
 
             }
+        } catch (Exception e) {
+            noTimeSlotIsSelectedMessageBox("Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden." + e.getMessage());
         }
-        catch(Exception e)
-        {
-            noTimeSlotIsSelectedMessageBox("Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden." +e.getMessage());
-        }
-
-
     }
 
     public void setUserToShow(User user) {
-        loggedUser= user;
+        loggedUser = user;
     }
 
-    private void noTimeSlotIsSelectedMessageBox(String contentText){
+    private void noTimeSlotIsSelectedMessageBox(String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Kein TimeSlot ausgewählt");
         alert.setHeaderText("Siehe Details in Information Dialog");
@@ -107,10 +94,9 @@ public class TimeSlotsController {
     }
 
     public void onLogoutButtonClick(ActionEvent event) throws IOException {
-        if(authService.logout())
-        {sceneSwitchService.switchToLoginController(event);}
-        else
+        if (authService.logout()) {
+            sceneSwitchService.switchToLoginController(event);
+        } else
             noTimeSlotIsSelectedMessageBox("logout nicht erfolgreich");
-
     }
 }

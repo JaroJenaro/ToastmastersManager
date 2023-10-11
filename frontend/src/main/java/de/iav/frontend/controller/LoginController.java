@@ -26,8 +26,8 @@ public class LoginController {
     @FXML
     public Label informationForUser;
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
-    private static final String GET_FIRSTNAME = "get Firstname";
-    private static final String GET_LASTNAME = "get Lastname";
+    private static final String GET_FIRSTNAME = "";
+    private static final String GET_LASTNAME = "";
     @FXML
     public Button bSpecialLogin;
 
