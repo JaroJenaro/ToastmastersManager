@@ -10,12 +10,10 @@ import de.iav.backend.repository.TimeSlotRepository;
 
 import java.util.*;
 
-
 @Service
 @RequiredArgsConstructor
 public class TimeSlotService {
     private static final String WAS_NOT_FOUND = " was not found.";
-
 
     public final TimeSlotRepository timeSlotRepository;
 
@@ -33,13 +31,11 @@ public class TimeSlotService {
                 .toList();
     }
 
-
     public TimeSlotResponseDTO getTimeSlotById(String id){
 
         TimeSlot timeSlot = timeSlotRepository.
                 findById(id).
-                orElseThrow(() -> new TimeSlotNotFoundException("TimeSlot with id " + id + WAS_NOT_FOUND));
-
+                orElseThrow(() -> new TimeSlotNotFoundException(id));
 
         return TimeSlotResponseDTO.builder()
                 .id(timeSlot.getId())
@@ -51,12 +47,7 @@ public class TimeSlotService {
                 .build();
     }
 
-
-
-
     public TimeSlotResponseDTO addTimeSlot(TimeSlotWithoutIdDTO timeSlotWithoutIdDTO) {
-
-
         TimeSlot timeSlot = TimeSlot.builder()
                 .title(timeSlotWithoutIdDTO.getTitle())
                 .description(timeSlotWithoutIdDTO.getDescription())
@@ -66,7 +57,6 @@ public class TimeSlotService {
                 .build();
 
         TimeSlot savedTimeSlot = timeSlotRepository.save(timeSlot);
-
 
         return TimeSlotResponseDTO.builder()
                 .id(savedTimeSlot.getId())
@@ -90,7 +80,6 @@ public class TimeSlotService {
 
         TimeSlot savedTimeSlot = timeSlotRepository.save(timeSlotToUpdate);
 
-
         return TimeSlotResponseDTO.builder()
                 .id(savedTimeSlot.getId())
                 .title(savedTimeSlot.getTitle())
@@ -113,7 +102,6 @@ public class TimeSlotService {
                 findByTitleAndRed(title, red).
                 orElseThrow(() -> new TimeSlotNotFoundException("TimeSlo with title " + title + " red time " + red + WAS_NOT_FOUND));
 
-
         return TimeSlotResponseDTO.builder()
                 .id(timeSlot.getId())
                 .title(timeSlot.getTitle())
@@ -125,11 +113,9 @@ public class TimeSlotService {
     }
 
     public TimeSlotResponseDTO getTimeSlotByTitleAndDescription(String title, String description) {
-
         TimeSlot timeSlot = timeSlotRepository.
                 findByTitleAndDescription(title, description).
                 orElseThrow(() -> new TimeSlotNotFoundException("TimeSlo with title " + title + " description " + description + WAS_NOT_FOUND));
-
 
         return TimeSlotResponseDTO.builder()
                 .id(timeSlot.getId())
@@ -196,7 +182,6 @@ public class TimeSlotService {
                         .red(timeSlot.getRed())
                         .build())
                 .toList();
-
     }
 
     public List<TimeSlotResponseDTO> getTimeSlotsByAmber(String amber) {
