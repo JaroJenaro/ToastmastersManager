@@ -103,6 +103,7 @@ public class AuthService {
 
 
     public boolean login(String email, String password) {
+        LOG.info("Login Uri: {}/login", BACKEND_AUTH_URL);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BACKEND_AUTH_URL + "/login"))
                 .POST(HttpRequest.BodyPublishers.ofString(""))

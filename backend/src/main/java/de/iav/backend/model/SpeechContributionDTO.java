@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SpeechContributionDTO {
     String id;
-    TimeSlotResponseDTO timeSlotDto;
-    UserResponseDTO userDto;
+    TimeSlotResponseDTO timeSlot;
+    UserResponseDTO user;
     String stoppedTime;
 }

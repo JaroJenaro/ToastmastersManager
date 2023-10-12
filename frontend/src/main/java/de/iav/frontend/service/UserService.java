@@ -55,7 +55,7 @@ public class UserService {
             return objectMapper.readValue(responseBody, new TypeReference<>() {
             });
         } catch (JsonProcessingException e) {
-            throw new MappingRuntimeException("Failed to map UserLIst" + e.getMessage());
+            throw new MappingRuntimeException("Failed to map UserList" + e.getMessage());
         }
     }
 

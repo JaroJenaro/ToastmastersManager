@@ -132,4 +132,17 @@ public class SceneSwitchService {
         stage.show();
     }
 
+    public void switchToSpeechContributionController(ActionEvent actionEvent, User user) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/SpeechContributionController.fxml"));
+        Parent root = loader.load();
+
+        SpeechContributionController speechContributionController = loader.getController();
+        LOG.info("  ----> public void switchToUsersController(ActionEvent actionEvent, User user) throws IOException {} ", user);
+        speechContributionController.setUserToShow(user);
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 }

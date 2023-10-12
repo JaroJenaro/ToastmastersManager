@@ -15,7 +15,7 @@ import java.util.*;
 public class TimeSlotService {
     private static final String WAS_NOT_FOUND = " was not found.";
 
-    public final TimeSlotRepository timeSlotRepository;
+    private final TimeSlotRepository timeSlotRepository;
 
     public List<TimeSlotResponseDTO> getAllTimeSlots(){
         return timeSlotRepository.findAll()

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class SpeechContributionIn {
-    TimeSlotResponseDTO timeSlotDto;
-    UserResponseDTO userDto;
+    TimeSlotResponseDTO timeSlot;
+    UserResponseDTO user;
     String stoppedTime;
 }
