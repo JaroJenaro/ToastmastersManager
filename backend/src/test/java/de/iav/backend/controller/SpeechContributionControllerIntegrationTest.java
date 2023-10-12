@@ -118,6 +118,19 @@ class SpeechContributionControllerIntegrationTest {
     }
 
     @Test
+    void getSpeechContributionById2_shouldReturnRequestedUser_whenMatchingIdIsProvided() throws Exception {
+        String usersListAsString = mockMvc.perform(get(BASE_URL))
+                .andReturn().getResponse().getContentAsString();
+
+        List<SpeechContributionDTO> speechContributionList = objectMapper.readValue(usersListAsString, new TypeReference<>() {
+        });
+        SpeechContributionDTO firsSpeechContributionDTO = speechContributionList.get(1);
+
+        mockMvc.perform(get(BASE_URL + "/" + firsSpeechContributionDTO.getId()))
+                .andExpect(jsonPath("id").value(firsSpeechContributionDTO.getId()));
+    }
+
+    @Test
     void createSpeechContribution_shouldCreateNewSpeechContributionWithId_whenValidDataIsProvided() throws Exception {
         SpeechContributionIn speechContribution3 = new SpeechContributionIn(SpeechContributionIn1.getTimeSlot(), SpeechContributionIn2.getUser(), "");
 
