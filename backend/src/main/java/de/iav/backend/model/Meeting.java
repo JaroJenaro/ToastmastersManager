@@ -20,6 +20,4 @@ public class Meeting {
     String dateTime;
     String location;
     List<SpeechContribution> speechContributionList;
-    String password;
-    String role;
 }
