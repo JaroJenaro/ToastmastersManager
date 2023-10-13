@@ -38,14 +38,7 @@ class SpeechContributionControllerIntegrationTest {
     private final NewAppUser user2 = new NewAppUser("Trump", "Donald", "Trump", "1234", "donald.trump@usa.us");
     private final TimeSlotWithoutIdDTO timeSlot1 = new TimeSlotWithoutIdDTO("Rede1", "Rede 1 154 vorbereitet", "1:00", "1:30", "2:00");
     private final TimeSlotWithoutIdDTO timeSlot2 = new TimeSlotWithoutIdDTO("Rede2", "Rede 2 226 vorbereitet", "4:00", "5:30", "6:00");
-/*
-    private final SpeechContributionIn SpeechContributionIn1 = new SpeechContributionIn(new TimeSlotResponseDTO( "12345","Rede1", "Rede 1 154 vorbereitet", "1:00", "1:30", "2:00"),
-            new UserResponseDTO("124", "Wladimir", "Putin", "wladimir.putin@udssr.ru", "ADMIN"), "");
 
-    private final SpeechContributionIn SpeechContributionIn2 = new SpeechContributionIn(new TimeSlotResponseDTO( "12346","Rede2", "Rede 2 226 vorbereitet", "4:00", "5:30", "6:00"),
-            new UserResponseDTO("125",  "Donald", "Trump",  "donald.trump@usa.us","USER"), "");
-
- */
     private SpeechContributionIn SpeechContributionIn1;
 
     private SpeechContributionIn SpeechContributionIn2;
@@ -156,7 +149,7 @@ class SpeechContributionControllerIntegrationTest {
 
         SpeechContributionDTO speechContributionDtoToUpdate = speechContributionList.get(1);
 
-        SpeechContributionIn speechContributionNewData = new SpeechContributionIn(SpeechContributionIn1.getTimeSlot(), SpeechContributionIn2.getUser(), "14:45");
+        SpeechContributionIn speechContributionNewData = new SpeechContributionIn(SpeechContributionIn2.getTimeSlot(), SpeechContributionIn1.getUser(), "14:45");
 
 
         mockMvc.perform(put(BASE_URL + "/" + speechContributionDtoToUpdate.getId())
@@ -169,7 +162,7 @@ class SpeechContributionControllerIntegrationTest {
     }
 
     @Test
-    void updateSpeechContribution_shouldReturn404_whenTimeSlotDoesntExist() throws Exception {
+    void updateSpeechContribution_shouldReturn404_whenSpeechContributionDoesntExist() throws Exception {
 
         SpeechContributionIn SpeechContributionIn1 = new SpeechContributionIn(new TimeSlotResponseDTO( "12345","Rede1", "Rede 1 154 vorbereitet", "1:00", "1:30", "2:00"),
                 new UserResponseDTO("124", "Wladimir", "Putin", "wladimir.putin@udssr.ru", "ADMIN"), "");
@@ -191,10 +184,10 @@ class SpeechContributionControllerIntegrationTest {
         List<SpeechContributionDTO> speechContributionList = objectMapper.readValue(speechContributionListAsString, new TypeReference<>() {
         });
 
-        SpeechContributionDTO speechContributionDtoToUpdate = speechContributionList.get(1);
-
-        SpeechContributionIn invalidRequestBody = new SpeechContributionIn(new TimeSlotResponseDTO( "?","?", "?", "?", "?", "?"),
-                new UserResponseDTO("?", "?", "?", "?", "?"), "");
+        SpeechContributionDTO speechContributionDtoToUpdate = speechContributionList.get(0);
+        SpeechContributionDTO speechContributionDtoSecond = speechContributionList.get(1);
+        SpeechContributionIn invalidRequestBody = new SpeechContributionIn(speechContributionDtoSecond.getTimeSlot(),
+                speechContributionDtoSecond.getUser(), "");
 
         mockMvc.perform(put(BASE_URL + "/" + speechContributionDtoToUpdate.getId())
                         .contentType("application/json")

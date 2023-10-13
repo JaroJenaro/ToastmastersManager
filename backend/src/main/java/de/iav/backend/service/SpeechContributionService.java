@@ -1,5 +1,6 @@
 package de.iav.backend.service;
 
+import de.iav.backend.exception.SpeechContributionBadRequestException;
 import de.iav.backend.exception.SpeechContributionNotFoundException;
 import de.iav.backend.exception.TimeSlotNotFoundException;
 import de.iav.backend.exception.UserNotFoundException;
@@ -9,7 +10,6 @@ import de.iav.backend.repository.TimeSlotRepository;
 import de.iav.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindException;
 
 import java.util.List;
 
@@ -63,29 +63,31 @@ public class SpeechContributionService {
     }
 
     public SpeechContributionDTO updateSpeechContribution(SpeechContributionIn speechContributionIn, String id) {
-        SpeechContribution speechContributionToUpdate = speechContributionRepository
+        SpeechContribution speechContributionToUpdateFromDB = speechContributionRepository
                 .findById(id)
                 .orElseThrow(() -> new SpeechContributionNotFoundException(id));
-        TimeSlot timeSlot = timeSlotRepository
-                .findById(speechContributionIn.getTimeSlot().getId())
+        // Timeslot darf nicht geändert werden oder getauscht werden
+        TimeSlot timeSlotFromDB = timeSlotRepository
+                .findById(speechContributionToUpdateFromDB.getTimeSlot().getId())
                 .orElseThrow(() -> new TimeSlotNotFoundException(speechContributionIn.getTimeSlot().getId()));
-        User user = userRepository
+        // User darf getauscht werden
+        User userInFromDB = userRepository
                 .findById(speechContributionIn.getUser().getId())
                 .orElseThrow(() -> new UserNotFoundException(speechContributionIn.getUser().getId()));
-
-        if(timeSlot.equals(getTimeSlot(speechContributionIn.getTimeSlot())) &&
-                user.equals(getUser(speechContributionIn.getUser())))
+        TimeSlot timeSlotIn = getTimeSlot(speechContributionIn.getTimeSlot());
+        User userIn = getUser(speechContributionIn.getUser());
+        userIn.setPassword(userInFromDB.getPassword());
+        if(timeSlotFromDB.equals(timeSlotIn) && userInFromDB.equals(userIn))
         {
-            speechContributionToUpdate.setUser(getUser(speechContributionIn.getUser()));
-            speechContributionToUpdate.setTimeSlot(getTimeSlot(speechContributionIn.getTimeSlot()));
-            speechContributionToUpdate.setStoppedTime(speechContributionIn.getStoppedTime());
+            speechContributionToUpdateFromDB.setUser(getUser(speechContributionIn.getUser()));
+            speechContributionToUpdateFromDB.setTimeSlot(getTimeSlot(speechContributionIn.getTimeSlot()));
+            speechContributionToUpdateFromDB.setStoppedTime(speechContributionIn.getStoppedTime());
 
-            SpeechContribution savedSpeechContribution = speechContributionRepository.save(speechContributionToUpdate);
+            SpeechContribution savedSpeechContribution = speechContributionRepository.save(speechContributionToUpdateFromDB);
 
             return getSpeechContributionDTO(savedSpeechContribution);
         }
-        else
-            return new BindException();
+        throw new SpeechContributionBadRequestException(" beim updateSpeechContribution ");
     }
     private SpeechContributionDTO getSpeechContributionDTO(SpeechContribution speechContribution){
         return SpeechContributionDTO.builder()

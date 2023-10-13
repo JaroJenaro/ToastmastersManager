@@ -222,4 +222,15 @@ public class TimeSlotService {
                         .build())
                 .toList();
     }
+
+    public TimeSlotResponseDTO getTimeSlotResponseDTO(TimeSlot timeSlot){
+        return TimeSlotResponseDTO.builder()
+                .id(timeSlot.getId())
+                .title(timeSlot.getTitle())
+                .description(timeSlot.getDescription())
+                .green(timeSlot.getGreen())
+                .amber(timeSlot.getAmber())
+                .red(timeSlot.getRed())
+                .build();
+    }
 }

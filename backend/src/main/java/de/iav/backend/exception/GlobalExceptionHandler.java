@@ -15,10 +15,11 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final String TIMESTAMP = "timestamp";
+    private static final String ERROR = "error";
     @ExceptionHandler(TimeSlotNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleTimeSlotNotFoundException(TimeSlotNotFoundException exception) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("error", exception.getMessage());
+        body.put(ERROR, exception.getMessage());
         body.put(TIMESTAMP, Instant.now().toString());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
@@ -26,7 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleUserNotFoundException(UserNotFoundException exception) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("error", exception.getMessage());
+        body.put(ERROR, exception.getMessage());
         body.put(TIMESTAMP, Instant.now().toString());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
@@ -34,9 +35,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SpeechContributionNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleSpeechContributionNotFoundException(SpeechContributionNotFoundException exception) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("error", exception.getMessage());
+        body.put(ERROR, exception.getMessage());
         body.put(TIMESTAMP, Instant.now().toString());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+   @ExceptionHandler(SpeechContributionBadRequestException.class)
+   @ResponseBody
+   public ResponseEntity<Map<String, Object>> handleSpeechContributionForbiddenException(SpeechContributionBadRequestException exception) {
+       Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put(ERROR, exception.getMessage());
+        responseBody.put(TIMESTAMP, Instant.now());
+       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 
     @ExceptionHandler(BindException.class)
@@ -48,7 +58,6 @@ public class GlobalExceptionHandler {
             responseBody.put(error.getField(), error.getDefaultMessage());
             responseBody.put(TIMESTAMP, Instant.now());
         }
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 }
