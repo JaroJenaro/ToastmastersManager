@@ -1,6 +1,5 @@
 package de.iav.backend.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

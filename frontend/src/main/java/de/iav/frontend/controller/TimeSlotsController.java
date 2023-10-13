@@ -1,9 +1,11 @@
 package de.iav.frontend.controller;
 
+import de.iav.frontend.model.SpeechContribution;
 import de.iav.frontend.model.User;
 import de.iav.frontend.model.TimeSlot;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
+import de.iav.frontend.service.SpeechContributionService;
 import de.iav.frontend.service.TimeSlotService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import java.io.IOException;
 public class TimeSlotsController {
     private final TimeSlotService timeSlotService = TimeSlotService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
+    private final SpeechContributionService speechContributionService = SpeechContributionService.getInstance();
     private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
 
@@ -27,6 +30,10 @@ public class TimeSlotsController {
     public Button bUserData;
     @FXML
     public Button bLogout;
+    @FXML
+    public Button bAddCSpeechContribution;
+    @FXML
+    public Button bShowSpeechContribution;
     private User loggedUser;
 
     public void initialize() {
@@ -47,10 +54,11 @@ public class TimeSlotsController {
         sceneSwitchService.switchToNewTimeSlotEditController(event, loggedUser);
     }
 
-    public void onEditTimeSlotClick(ActionEvent event) {
+    public void onEditTimeSlotClick( ActionEvent event) {
         try {
             if (lvTimeSlots.getSelectionModel().getSelectedItem() != null) {
                 sceneSwitchService.switchToTimeSlotEditController(event, loggedUser, lvTimeSlots.getSelectionModel().getSelectedItem());
+
             } else {
                 noTimeSlotIsSelectedMessageBox("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden.");
 
@@ -89,6 +97,18 @@ public class TimeSlotsController {
         });
     }
 
+    private void getMessageBoxWithConfirmationAndOkButton(String  title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+                LOG.info("Pressed OK.");
+            }
+        });
+    }
+
     public void onUsersDataButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToUsersController(event, loggedUser);
     }
@@ -98,5 +118,27 @@ public class TimeSlotsController {
             sceneSwitchService.switchToLoginController(event);
         } else
             noTimeSlotIsSelectedMessageBox("logout nicht erfolgreich");
+    }
+
+    public void onAddSpeechContributionClick() {
+        try {
+            if (lvTimeSlots.getSelectionModel().getSelectedItem() != null) {
+                SpeechContribution savedSpeechContribution =  speechContributionService.createSpeechContribution (
+                        new SpeechContribution(null,lvTimeSlots.getSelectionModel().getSelectedItem(), loggedUser, null),
+                        authService.getSessionId()
+                );
+                getMessageBoxWithConfirmationAndOkButton("Erfolgreich",
+                        "Redebeitrag mit der id:" + savedSpeechContribution.id() + "erfolgreich angelegt", "alles super");
+            } else {
+                noTimeSlotIsSelectedMessageBox("Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden.");
+
+            }
+        } catch (Exception e) {
+            noTimeSlotIsSelectedMessageBox("Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden." + e.getMessage());
+        }
+    }
+
+    public void onShowSpeechContributionButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToSpeechContributionController(event, loggedUser);
     }
 }

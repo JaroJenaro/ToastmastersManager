@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private static final String WAS_NOT_FOUND = " was not found.";
-       private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
 
     public List<UserResponseDTO> getAllUsers() {
@@ -107,7 +107,7 @@ public class UserService {
 
         User user = userRepository.
                 findByEmail(email).
-                orElseThrow(() -> new TimeSlotNotFoundException("USER with email " + email + WAS_NOT_FOUND));
+                orElseThrow(() -> new UserNotFoundException("USER with email " + email + WAS_NOT_FOUND));
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -124,7 +124,7 @@ public class UserService {
                 .findAllByFirstNameEqualsIgnoreCase(searchString);
 
         if (users.isEmpty())
-            throw new TimeSlotNotFoundException("Users with FirstName: " + searchString + WAS_NOT_FOUND);
+            throw new UserNotFoundException("Users with FirstName: " + searchString + WAS_NOT_FOUND);
 
         return users
                 .stream()
@@ -143,7 +143,7 @@ public class UserService {
                 .findAllByLastNameEqualsIgnoreCase(searchString);
 
         if (users.isEmpty())
-            throw new TimeSlotNotFoundException("Users with LastName: " + searchString + WAS_NOT_FOUND);
+            throw new UserNotFoundException("Users with LastName: " + searchString + WAS_NOT_FOUND);
 
         return users
                 .stream()
@@ -160,7 +160,7 @@ public class UserService {
         List<User> users = userRepository
                 .findAllByEmailEqualsIgnoreCase(searchString);
         if (users.isEmpty())
-            throw new TimeSlotNotFoundException("Users with Email: " + searchString + WAS_NOT_FOUND);
+            throw new UserNotFoundException("Users with Email: " + searchString + WAS_NOT_FOUND);
         return users
                 .stream()
                 .map(user -> UserResponseDTO.builder()
@@ -176,7 +176,7 @@ public class UserService {
         List<User> users = userRepository
                 .findAllByRoleEqualsIgnoreCase(searchString);
         if (users.isEmpty())
-            throw new TimeSlotNotFoundException("Users with Role: " + searchString + WAS_NOT_FOUND);
+            throw new UserNotFoundException("Users with Role: " + searchString + WAS_NOT_FOUND);
         return users
                 .stream()
                 .map(user -> UserResponseDTO.builder()
@@ -192,7 +192,7 @@ public class UserService {
     public UserResponseDTO getUserByFirstNameAndLastName(String firstName, String lastName) {
         User user = userRepository.
                 findUserByFirstNameEqualsIgnoreCaseAndLastNameEqualsIgnoreCase(firstName, lastName).
-                orElseThrow(() -> new TimeSlotNotFoundException("USER with firstName " + firstName  + " and  lastName " + lastName +  WAS_NOT_FOUND));
+                orElseThrow(() -> new UserNotFoundException("USER with firstName " + firstName  + " and  lastName " + lastName +  WAS_NOT_FOUND));
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -205,7 +205,7 @@ public class UserService {
     public UserResponseDTO getUserByFirstNameAndEmail(String firstName, String email) {
         User user = userRepository.
                 findUserByFirstNameEqualsIgnoreCaseAndEmailEqualsIgnoreCase(firstName, email).
-                orElseThrow(() -> new TimeSlotNotFoundException("USER with firstName " + firstName  + " and  Email: " + email +  WAS_NOT_FOUND));
+                orElseThrow(() -> new UserNotFoundException("USER with firstName " + firstName  + " and  Email: " + email +  WAS_NOT_FOUND));
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())

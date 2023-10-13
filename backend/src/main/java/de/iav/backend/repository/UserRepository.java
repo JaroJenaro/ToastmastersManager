@@ -13,12 +13,12 @@ public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findByEmail(String email);
 
     Optional<User> findUserByEmail(String userEmail);
+
     List<User> findAllByFirstNameEqualsIgnoreCase(String firstName);
     List<User> findAllByLastNameEqualsIgnoreCase(String lastName);
     List<User> findAllByEmailEqualsIgnoreCase(String email);
     List<User> findAllByRoleEqualsIgnoreCase(String role);
 
     Optional<User> findUserByFirstNameEqualsIgnoreCaseAndLastNameEqualsIgnoreCase(String firstName, String lastName);
-
     Optional<User> findUserByFirstNameEqualsIgnoreCaseAndEmailEqualsIgnoreCase(String firstName, String email);
 }
