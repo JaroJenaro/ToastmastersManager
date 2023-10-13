@@ -48,30 +48,26 @@ public class SpeechContributionService {
     }
 
     public SpeechContributionDTO addSpeechContribution(SpeechContributionIn speechContributionIn) {
-        SpeechContribution speechContribution = SpeechContribution.builder()
-                .timeSlot(TimeSlot.builder()
-                        .id(speechContributionIn.getTimeSlot().getId())
-                        .title(speechContributionIn.getTimeSlot().getTitle())
-                        .description(speechContributionIn.getTimeSlot().getDescription())
-                        .green(speechContributionIn.getTimeSlot().getGreen())
-                        .amber(speechContributionIn.getTimeSlot().getAmber())
-                        .red(speechContributionIn.getTimeSlot().getRed())
-                        .build())
-                .user(User.builder()
-                        .id(speechContributionIn.getUser().getId())
-                        .firstName(speechContributionIn.getUser().getFirstName())
-                        .lastName(speechContributionIn.getUser().getLastName())
-                        .email(speechContributionIn.getUser().getEmail())
-                        .role(speechContributionIn.getUser().getRole())
-                        .build())
-                .stoppedTime(speechContributionIn.getStoppedTime())
-                .build();
+        SpeechContribution speechContribution = getSpeechContribution(speechContributionIn);
 
         SpeechContribution savedSpeechContribution = speechContributionRepository.save(speechContribution);
 
         return getSpeechContributionDTO(savedSpeechContribution);
     }
 
+
+    public SpeechContributionDTO updateSpeechContribution(SpeechContributionIn speechContributionIn, String id) {
+        SpeechContribution speechContributionToUpdate = speechContributionRepository
+                .findById(id)
+                .orElseThrow(() -> new SpeechContributionNotFoundException(id));
+        speechContributionToUpdate.setUser(getUser(speechContributionIn.getUser()));
+        speechContributionToUpdate.setTimeSlot(getTimeSlot(speechContributionIn.getTimeSlot()));
+        speechContributionToUpdate.setStoppedTime(speechContributionIn.getStoppedTime());
+
+        SpeechContribution savedSpeechContribution = speechContributionRepository.save(speechContributionToUpdate);
+
+        return getSpeechContributionDTO(savedSpeechContribution);
+    }
     private SpeechContributionDTO getSpeechContributionDTO(SpeechContribution speechContribution){
         return SpeechContributionDTO.builder()
                 .id(speechContribution.getId())
@@ -91,6 +87,47 @@ public class SpeechContributionService {
                         .role(speechContribution.getUser().getRole())
                         .build())
                 .stoppedTime(speechContribution.getStoppedTime())
+                .build();
+    }
+
+    private SpeechContribution getSpeechContribution(SpeechContributionIn speechContributionIn){
+        return SpeechContribution.builder()
+                .timeSlot(TimeSlot.builder()
+                        .id(speechContributionIn.getTimeSlot().getId())
+                        .title(speechContributionIn.getTimeSlot().getTitle())
+                        .description(speechContributionIn.getTimeSlot().getDescription())
+                        .green(speechContributionIn.getTimeSlot().getGreen())
+                        .amber(speechContributionIn.getTimeSlot().getAmber())
+                        .red(speechContributionIn.getTimeSlot().getRed())
+                        .build())
+                .user(User.builder()
+                        .id(speechContributionIn.getUser().getId())
+                        .firstName(speechContributionIn.getUser().getFirstName())
+                        .lastName(speechContributionIn.getUser().getLastName())
+                        .email(speechContributionIn.getUser().getEmail())
+                        .role(speechContributionIn.getUser().getRole())
+                        .build())
+                .stoppedTime(speechContributionIn.getStoppedTime())
+                .build();
+    }
+
+    private TimeSlot getTimeSlot(TimeSlotResponseDTO timeSlotResponseDTO){
+        return TimeSlot.builder()
+                .id(timeSlotResponseDTO.getId())
+                .title(timeSlotResponseDTO.getTitle())
+                .description(timeSlotResponseDTO.getDescription())
+                .green(timeSlotResponseDTO.getGreen())
+                .amber(timeSlotResponseDTO.getAmber())
+                .red(timeSlotResponseDTO.getRed())
+                .build();
+    }
+    private User getUser(UserResponseDTO userResponseDTO){
+        return User.builder()
+                .id(userResponseDTO.getId())
+                .firstName(userResponseDTO.getFirstName())
+                .lastName(userResponseDTO.getLastName())
+                .email(userResponseDTO.getEmail())
+                .role(userResponseDTO.getRole())
                 .build();
     }
 }
