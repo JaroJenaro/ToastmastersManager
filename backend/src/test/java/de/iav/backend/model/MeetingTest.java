@@ -4,10 +4,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 class MeetingTest {
     private Meeting meeting;
@@ -107,5 +109,58 @@ class MeetingTest {
         assertEquals("3", meeting2.getId());
         assertEquals("2023-09-30 2:00 PM", meeting2.getDateTime());
         assertEquals("Meeting Room B", meeting2.getLocation());
+    }
+
+    @Test
+    void testEquals() {
+        Meeting meeting1 = new Meeting("1", "2023-09-29 10:00 AM", "Meeting Room A", null);
+        Meeting meeting2 = new Meeting("2", "2023-09-30 2:00 PM", "Meeting Room B", null);
+
+        // Meetings mit unterschiedlichen IDs sollten nicht gleich sein
+        assertNotEquals(meeting1, meeting2);
+
+        Meeting meeting3 = new Meeting("1", "2023-09-29 10:00 AM", "Meeting Room A", null);
+
+        // Meetings mit denselben IDs sollten gleich sein
+        assertEquals(meeting1, meeting3);
+    }
+
+    @Test
+    void testToString() {
+        Meeting meeting = new Meeting("1", "2023-09-29 10:00 AM", "Meeting Room A", null);
+        String expectedToString = "Meeting(id=1, dateTime=2023-09-29 10:00 AM, location=Meeting Room A, speechContributionList=null)";
+        assertEquals(expectedToString, meeting.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Meeting meeting1 = new Meeting("1", "2023-09-29 10:00 AM", "Meeting Room A", null);
+        Meeting meeting2 = new Meeting("2", "2023-09-30 2:00 PM", "Meeting Room B", null);
+
+        // Hash-Codes von Meetings mit unterschiedlichen IDs sollten unterschiedlich sein
+        assertNotEquals(meeting1.hashCode(), meeting2.hashCode());
+
+        Meeting meeting3 = new Meeting("1", "2023-09-29 10:00 AM", "Meeting Room A", null);
+
+        // Hash-Codes von Meetings mit denselben IDs sollten gleich sein
+        assertEquals(meeting1.hashCode(), meeting3.hashCode());
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        Meeting meeting = new Meeting();
+
+        meeting.setId("1");
+        assertEquals("1", meeting.getId());
+
+        meeting.setDateTime("2023-09-29 10:00 AM");
+        assertEquals("2023-09-29 10:00 AM", meeting.getDateTime());
+
+        meeting.setLocation("Meeting Room A");
+        assertEquals("Meeting Room A", meeting.getLocation());
+
+        List<SpeechContribution> speechContributions = Arrays.asList(new SpeechContribution(), new SpeechContribution());
+        meeting.setSpeechContributionList(speechContributions);
+        assertThat(meeting.getSpeechContributionList()).isEqualTo(speechContributions);
     }
 }
