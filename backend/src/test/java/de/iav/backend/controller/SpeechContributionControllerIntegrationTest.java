@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -119,10 +119,10 @@ class SpeechContributionControllerIntegrationTest {
 
     @Test
     void getSpeechContributionById2_shouldReturnRequestedUser_whenMatchingIdIsProvided() throws Exception {
-        String usersListAsString = mockMvc.perform(get(BASE_URL))
+        String speechContributionListAsString = mockMvc.perform(get(BASE_URL))
                 .andReturn().getResponse().getContentAsString();
 
-        List<SpeechContributionDTO> speechContributionList = objectMapper.readValue(usersListAsString, new TypeReference<>() {
+        List<SpeechContributionDTO> speechContributionList = objectMapper.readValue(speechContributionListAsString, new TypeReference<>() {
         });
         SpeechContributionDTO firsSpeechContributionDTO = speechContributionList.get(1);
 
@@ -142,4 +142,65 @@ class SpeechContributionControllerIntegrationTest {
                 .andExpect(jsonPath("stoppedTime").value(speechContribution3.getStoppedTime())
                 );
     }
+
+
+
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @Test
+    void updateSpeechContribution_shouldUpdateSpeechContributionAccordingly_whenUserHasAdminRoleAndSpeechContributionExists() throws Exception {
+        String speechContributionListAsString = mockMvc.perform(get(BASE_URL))
+                .andReturn().getResponse().getContentAsString();
+
+        List<SpeechContributionDTO> speechContributionList = objectMapper.readValue(speechContributionListAsString, new TypeReference<>() {
+        });
+
+        SpeechContributionDTO speechContributionDtoToUpdate = speechContributionList.get(1);
+
+        SpeechContributionIn speechContributionNewData = new SpeechContributionIn(SpeechContributionIn1.getTimeSlot(), SpeechContributionIn2.getUser(), "14:45");
+
+
+        mockMvc.perform(put(BASE_URL + "/" + speechContributionDtoToUpdate.getId())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(speechContributionNewData)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(speechContributionDtoToUpdate.getId()))
+                .andExpect(jsonPath("stoppedTime").value(speechContributionNewData.getStoppedTime())
+                );
+    }
+
+    @Test
+    void updateSpeechContribution_shouldReturn404_whenTimeSlotDoesntExist() throws Exception {
+
+        SpeechContributionIn SpeechContributionIn1 = new SpeechContributionIn(new TimeSlotResponseDTO( "12345","Rede1", "Rede 1 154 vorbereitet", "1:00", "1:30", "2:00"),
+                new UserResponseDTO("124", "Wladimir", "Putin", "wladimir.putin@udssr.ru", "ADMIN"), "");
+        String THIS_ID_DOES_NOT_EXIST = "THIS_ID_NUMBER_DOES_NOT_EXIST";
+
+
+        mockMvc.perform(put(BASE_URL + "/" + THIS_ID_DOES_NOT_EXIST)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(SpeechContributionIn1)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateTimeSlot_shouldReturn400_whenValuesInBodyArentValidAndIdIsValid() throws Exception {
+
+        String speechContributionListAsString = mockMvc.perform(get(BASE_URL))
+                .andReturn().getResponse().getContentAsString();
+
+        List<SpeechContributionDTO> speechContributionList = objectMapper.readValue(speechContributionListAsString, new TypeReference<>() {
+        });
+
+        SpeechContributionDTO speechContributionDtoToUpdate = speechContributionList.get(1);
+
+        SpeechContributionIn invalidRequestBody = new SpeechContributionIn(new TimeSlotResponseDTO( "?","?", "?", "?", "?", "?"),
+                new UserResponseDTO("?", "?", "?", "?", "?"), "");
+
+        mockMvc.perform(put(BASE_URL + "/" + speechContributionDtoToUpdate.getId())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(invalidRequestBody)))
+                .andExpect(status().isBadRequest());
+    }
+
+
 }

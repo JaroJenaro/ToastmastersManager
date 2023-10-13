@@ -24,7 +24,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleStudentNotFoundException(UserNotFoundException exception) {
+    public ResponseEntity<Map<String, Object>> handleUserNotFoundException(UserNotFoundException exception) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("error", exception.getMessage());
+        body.put(TIMESTAMP, Instant.now().toString());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SpeechContributionNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleSpeechContributionNotFoundException(SpeechContributionNotFoundException exception) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("error", exception.getMessage());
         body.put(TIMESTAMP, Instant.now().toString());

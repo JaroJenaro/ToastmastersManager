@@ -71,7 +71,7 @@ public class TimeSlotService {
     public TimeSlotResponseDTO updateTimeSlot(TimeSlotWithoutIdDTO timeSlotWithoutIdDTO, String id) {
         TimeSlot timeSlotToUpdate = timeSlotRepository
                 .findById(id)
-                .orElseThrow(() -> new TimeSlotNotFoundException("TimeSlot with id  " + id + WAS_NOT_FOUND));
+                .orElseThrow(() -> new TimeSlotNotFoundException(id));
         timeSlotToUpdate.setTitle(timeSlotWithoutIdDTO.getTitle());
         timeSlotToUpdate.setDescription(timeSlotWithoutIdDTO.getDescription());
         timeSlotToUpdate.setGreen(timeSlotWithoutIdDTO.getGreen());
