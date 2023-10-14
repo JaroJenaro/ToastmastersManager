@@ -95,4 +95,23 @@ public class SpeechContributionService {
             throw new MappingRuntimeException("--->Failed to save SpeechContribution: " + e.getMessage());
         }
     }
+
+    public SpeechContribution updateSpeechContribution(SpeechContribution speechContribution, String sessionId) {
+        try {
+            String requestBody = objectMapper.writeValueAsString(speechContribution);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BACKEND_SC_URL+ "/" + speechContribution.id()))
+                    .header("Content-Type", APPLICATION_JSON)
+                    .header("Accept", APPLICATION_JSON)
+                    .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
+                    .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+            return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenApply(this::mapToSpeechContribution)
+                    .join();
+        } catch (JsonProcessingException e) {
+            throw new MappingRuntimeException("--->Failed to update SpeechContribution: " + e.getMessage());
+        }
+    }
 }
