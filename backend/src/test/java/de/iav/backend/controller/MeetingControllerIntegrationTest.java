@@ -37,8 +37,10 @@ class MeetingControllerIntegrationTest {
 
     private final NewAppUser user1 = new NewAppUser("Putin", "Wladimir", "Putin", "1234", "wladimir.putin@udssr.ru");
     private final NewAppUser user2 = new NewAppUser("Trump", "Donald", "Trump", "1234", "donald.trump@usa.us");
+    private final NewAppUser user3 = new NewAppUser("Kaczynski", "Jaroslaw", "Kaczynski", "1234", "jaroslaw.Kaczynski@idiot.to");
     private final TimeSlotWithoutIdDTO timeSlot1 = new TimeSlotWithoutIdDTO("Rede1", "Rede 1 154 vorbereitet", "1:00", "1:30", "2:00");
     private final TimeSlotWithoutIdDTO timeSlot2 = new TimeSlotWithoutIdDTO("Rede2", "Rede 2 226 vorbereitet", "4:00", "5:30", "6:00");
+    private final TimeSlotWithoutIdDTO timeSlot3 = new TimeSlotWithoutIdDTO("Rede3", "Rede3 vorbereitet", "4:00", "5:30", "7:00");
 
 
     private SpeechContributionIn SpeechContributionIn1;
@@ -46,6 +48,8 @@ class MeetingControllerIntegrationTest {
 
     private SpeechContributionIn SpeechContributionIn3;
     private SpeechContributionIn SpeechContributionIn4;
+    private SpeechContributionIn SpeechContributionIn5;
+
     private MeetingRequestDTO meetingRequestDto1;
     private MeetingRequestDTO meetingRequestDto2;
 
@@ -68,6 +72,10 @@ class MeetingControllerIntegrationTest {
         mockMvc.perform(post(BASE_URL_TS)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(timeSlot1))
+        );
+        mockMvc.perform(post(BASE_URL_TS)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(timeSlot2))
         );
         mockMvc.perform(post(BASE_URL_TS)
                 .contentType("application/json")
@@ -167,5 +175,56 @@ class MeetingControllerIntegrationTest {
 
         mockMvc.perform(get(BASE_URL_MEET + "/" + firsMeetingResponseDTO.getId()))
                 .andExpect(jsonPath("id").value(firsMeetingResponseDTO.getId()));
+    }
+
+    @Test
+    void createMeeting_shouldCreateNewMeetingWithId_whenValidDataIsProvided() throws Exception {
+        mockMvc.perform(post(BASE_URL_USR)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(user3))
+        );
+        String usersListAsString = mockMvc.perform(get(BASE_URL_USR))
+                .andReturn().getResponse().getContentAsString();
+        List<UserResponseDTO> userResponseDtoList = objectMapper.readValue(usersListAsString, new TypeReference<>() {
+        });
+
+        mockMvc.perform(post(BASE_URL_TS)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(timeSlot3))
+        );
+        String timeSlotsListAsString = mockMvc.perform(get(BASE_URL_TS))
+                .andReturn().getResponse().getContentAsString();
+        List<TimeSlotResponseDTO> timeSlotsDtoList = objectMapper.readValue(timeSlotsListAsString, new TypeReference<>() {
+        });
+
+        SpeechContributionIn5 = new SpeechContributionIn(timeSlotsDtoList.get(2),userResponseDtoList.get(2),"" );
+        mockMvc.perform(post(BASE_URL)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(SpeechContributionIn5))
+        );
+
+        String speechContributionListAsString = mockMvc.perform(get(BASE_URL))
+                .andReturn().getResponse().getContentAsString();
+        List<SpeechContributionDTO> speechContributionsDtoList = objectMapper.readValue(speechContributionListAsString, new TypeReference<>() {
+        });
+
+        List<SpeechContributionDTO> speechContributionsDtoListNew = new ArrayList<>();
+        speechContributionsDtoListNew.add(speechContributionsDtoList.get(0));
+        speechContributionsDtoListNew.add(speechContributionsDtoList.get(1));
+        speechContributionsDtoListNew.add(speechContributionsDtoList.get(2));
+        speechContributionsDtoListNew.add(speechContributionsDtoList.get(3));
+        speechContributionsDtoListNew.add(speechContributionsDtoList.get(4));
+
+        MeetingRequestDTO meetingRequestDto3 = new MeetingRequestDTO("2023.10.13 19:00 Uhr", "Berlin",speechContributionsDtoListNew);
+
+        mockMvc.perform(post(BASE_URL_MEET)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(meetingRequestDto3)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("id").isNotEmpty())
+                .andExpect(jsonPath("dateTime").value(meetingRequestDto3.getDateTime()))
+                .andExpect(jsonPath("location").value(meetingRequestDto3.getLocation()))
+                .andExpect(jsonPath("speechContributionList[4].user.firstName").value(meetingRequestDto3.getSpeechContributionList().get(4).getUser().getFirstName())
+                );
     }
 }
