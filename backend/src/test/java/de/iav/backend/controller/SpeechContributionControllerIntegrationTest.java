@@ -195,5 +195,44 @@ class SpeechContributionControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @Test
+    void deleteTimeSlot_shouldDeleteTimeSlotById_whenTimeSlotExistsAndUserHasAdminRole() throws Exception {
+        String speechContributionListAsString = mockMvc.perform(get(BASE_URL))
+                .andReturn().getResponse().getContentAsString();
 
+        List<SpeechContributionDTO> speechContributionList = objectMapper.readValue(speechContributionListAsString, new TypeReference<>() {
+        });
+
+        SpeechContributionDTO speechContributionDtoToDELETE = speechContributionList.get(0);
+
+        mockMvc.perform(delete(BASE_URL + "/" + speechContributionDtoToDELETE.getId()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get(BASE_URL + "/" + speechContributionDtoToDELETE.getId()))
+                .andExpect(status().isNotFound());
+    }
+
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @Test
+    void deleteTimeSlot_shouldReturn404_whenTimeSlotDoesntExistAndUserHasAdminRole() throws Exception {
+        String THIS_MATRICULATION_NUMBER_DOES_NOT_EXIST = "THIS_MATRICULATION_NUMBER_DOES_NOT_EXIST";
+
+        mockMvc.perform(delete(BASE_URL + "/" + THIS_MATRICULATION_NUMBER_DOES_NOT_EXIST))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteTimeSlot_shouldReturn403_whenUserHasNoAdminRole() throws Exception {
+        String speechContributionListAsString = mockMvc.perform(get(BASE_URL))
+                .andReturn().getResponse().getContentAsString();
+
+        List<SpeechContributionDTO> speechContributionList = objectMapper.readValue(speechContributionListAsString, new TypeReference<>() {
+        });
+
+        SpeechContributionDTO speechContributionDtoToDELETE = speechContributionList.get(0);
+
+        mockMvc.perform(delete(BASE_URL + "/" + speechContributionDtoToDELETE.getId()))
+                .andExpect(status().isForbidden());
+    }
 }

@@ -92,7 +92,7 @@ public class TimeSlotService {
     public void deleteTimeSlot(String id) {
         TimeSlot timeSlot = timeSlotRepository
                 .findById(id)
-                .orElseThrow(() -> new TimeSlotNotFoundException("TimeSlot with id  " + id + WAS_NOT_FOUND));
+                .orElseThrow(() -> new TimeSlotNotFoundException(id ));
         timeSlotRepository.delete(timeSlot);
     }
 

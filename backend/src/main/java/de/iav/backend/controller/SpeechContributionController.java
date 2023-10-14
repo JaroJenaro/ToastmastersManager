@@ -2,8 +2,6 @@ package de.iav.backend.controller;
 
 import de.iav.backend.model.SpeechContributionDTO;
 import de.iav.backend.model.SpeechContributionIn;
-import de.iav.backend.model.TimeSlotResponseDTO;
-import de.iav.backend.model.TimeSlotWithoutIdDTO;
 import de.iav.backend.service.SpeechContributionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -41,5 +39,9 @@ public class SpeechContributionController {
     public SpeechContributionDTO updateSpeechContribution(@PathVariable String id, @Valid @RequestBody SpeechContributionIn speechContributionIn) {
         return speechContributionService.updateSpeechContribution(speechContributionIn, id);
     }
-
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSpeechContribution(@PathVariable String id) {
+        speechContributionService.deleteSpeechContribution(id);
+    }
 }

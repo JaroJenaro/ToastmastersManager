@@ -89,6 +89,14 @@ public class SpeechContributionService {
         }
         throw new SpeechContributionBadRequestException(" beim updateSpeechContribution ");
     }
+
+    public void deleteSpeechContribution(String id) {
+        SpeechContribution speechContributionToDELETE = speechContributionRepository
+                .findById(id)
+                .orElseThrow(() -> new SpeechContributionNotFoundException(id));
+        speechContributionRepository.delete(speechContributionToDELETE);
+    }
+
     private SpeechContributionDTO getSpeechContributionDTO(SpeechContribution speechContribution){
         return SpeechContributionDTO.builder()
                 .id(speechContribution.getId())

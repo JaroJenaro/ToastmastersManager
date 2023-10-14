@@ -3,10 +3,11 @@ package de.iav.frontend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.iav.frontend.exception.DeletingRuntimeException;
 import de.iav.frontend.exception.MappingRuntimeException;
 import de.iav.frontend.model.SpeechContribution;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import javafx.application.Platform;
+import javafx.scene.control.TableView;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,7 +19,6 @@ public class SpeechContributionService {
     private static SpeechContributionService instance;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    private static final Logger LOG = LogManager.getLogger();
     private static final String BACKEND_SC_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/speech-contributions";
     private static final String APPLICATION_JSON = "application/json";
     private static final String JSESSIONID_IS_EQUAL ="JSESSIONID=";
@@ -64,19 +64,6 @@ public class SpeechContributionService {
         }
     }
 
-    public SpeechContribution getSpeechContributionById(String id) {
-        HttpRequest request = HttpRequest.newBuilder()
-                .GET()
-                .uri(URI.create(BACKEND_SC_URL + "/" + id))
-                .build();
-
-        SpeechContribution respondedUser = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::body)
-                .thenApply(this::mapToSpeechContribution)
-                .join();
-        LOG.info("respondedUser: {}", respondedUser);
-        return respondedUser;
-    }
     public SpeechContribution createSpeechContribution(SpeechContribution speechContribution, String sessionId) {
         try {
             String requestBody = objectMapper.writeValueAsString(speechContribution);
@@ -113,5 +100,27 @@ public class SpeechContributionService {
         } catch (JsonProcessingException e) {
             throw new MappingRuntimeException("--->Failed to update SpeechContribution: " + e.getMessage());
         }
+    }
+
+    public void deleteSpeechContribution(String idToDelete, TableView<SpeechContribution> tableView, String sessionId) {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BACKEND_SC_URL + "/" + idToDelete))
+                .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
+                .DELETE()
+                .build();
+
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenAccept(response -> {
+                    if (response.statusCode() == 204) {
+                        Platform.runLater(() -> {
+                            tableView.getItems().removeIf(timeSlot -> timeSlot.id().equals(idToDelete));
+                            tableView.refresh();
+                        });
+                    } else {
+                        throw new DeletingRuntimeException("Fehler beim Löschen des TimeSlots mit der id " + idToDelete);
+                    }
+                })
+                .join();
     }
 }
