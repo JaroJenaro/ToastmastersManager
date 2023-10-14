@@ -21,7 +21,7 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
            </HBox.margin>
         </Button>
-        <Button onAction="#onEditSpeechContributionClick" text="Redebeitrag bearbeiten" visible="false">
+        <Button onAction="#onEditSpeechContributionClick" text="Redebeitrag bearbeiten">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>

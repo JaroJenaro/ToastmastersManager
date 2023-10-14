@@ -5,6 +5,7 @@ import de.iav.frontend.model.User;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.SpeechContributionService;
+import de.iav.frontend.util.Alerts;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -95,7 +96,17 @@ public class SpeechContributionController {
         // TODO
     }
 
-    public void onEditSpeechContributionClick() {
-        // TODO
+    public void onEditSpeechContributionClick(ActionEvent event) throws IOException {
+        if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null)
+        {
+            sceneSwitchService.switchToSpeechContributionEditController(event, loggedUser, tvSpeechContribution.getSelectionModel().getSelectedItem());
+
+        }
+        else {
+            Alerts.getMessageBoxWithWarningAndOkButton("Nichts selektiert", "selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
+        }
+
     }
+
+
 }

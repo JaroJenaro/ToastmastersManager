@@ -60,7 +60,7 @@ public class UserService {
     public UserResponseDTO updateUser(String id, NewAppUser userDto) {
         User userToUpdate = userRepository
                 .findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with id  " + id + WAS_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(id));
         userToUpdate.setFirstName(userDto.firstName());
         userToUpdate.setLastName(userDto.lastName());
         userToUpdate.setEmail(userDto.email());
@@ -214,4 +214,13 @@ public class UserService {
                 .role(user.getRole())
                 .build();
     }
+    public UserResponseDTO getUserResponseDTO(User user) {
+            return UserResponseDTO.builder()
+                    .id(user.getId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .role(user.getRole())
+                    .build();
+}
 }
