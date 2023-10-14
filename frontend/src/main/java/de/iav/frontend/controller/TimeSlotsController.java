@@ -7,6 +7,7 @@ import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.SpeechContributionService;
 import de.iav.frontend.service.TimeSlotService;
+import de.iav.frontend.util.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -34,6 +35,8 @@ public class TimeSlotsController {
     public Button bAddCSpeechContribution;
     @FXML
     public Button bShowSpeechContribution;
+    @FXML
+    public Button bFirstMeeting;
     private User loggedUser;
 
     public void initialize() {
@@ -97,18 +100,6 @@ public class TimeSlotsController {
         });
     }
 
-    private void getMessageBoxWithConfirmationAndOkButton(String  title, String headerText, String contentText) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
-        alert.showAndWait().ifPresent(rs -> {
-            if (rs == ButtonType.OK) {
-                LOG.info("Pressed OK.");
-            }
-        });
-    }
-
     public void onUsersDataButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToUsersController(event, loggedUser);
     }
@@ -127,7 +118,7 @@ public class TimeSlotsController {
                         new SpeechContribution(null,lvTimeSlots.getSelectionModel().getSelectedItem(), loggedUser, null),
                         authService.getSessionId()
                 );
-                getMessageBoxWithConfirmationAndOkButton("Erfolgreich",
+                Alerts.getMessageBoxWithConfirmationAndOkButton("Erfolgreich",
                         "Redebeitrag mit der id:" + savedSpeechContribution.id() + "erfolgreich angelegt", "alles super");
             } else {
                 noTimeSlotIsSelectedMessageBox("Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden.");
@@ -140,5 +131,9 @@ public class TimeSlotsController {
 
     public void onShowSpeechContributionButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToSpeechContributionController(event, loggedUser);
+    }
+
+    public void onFirstMeetingButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToMeetingController(event, loggedUser);
     }
 }
