@@ -160,4 +160,18 @@ public class SceneSwitchService {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void switchToMeetingController(ActionEvent actionEvent, User user) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/MeetingController.fxml"));
+        Parent root = loader.load();
+
+        MeetingController meetingController = loader.getController();
+        LOG.info("  ----> public void switchToSpeechContributionEditController(ActionEvent actionEvent, User user, SpeechContribution speechContribution) throws IOException {} ", user);
+        meetingController.setUserAndMeetingToShow(user);
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 }

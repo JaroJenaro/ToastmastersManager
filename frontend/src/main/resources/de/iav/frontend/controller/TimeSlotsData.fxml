@@ -37,16 +37,21 @@
     </HBox>
    <ListView fx:id="lvTimeSlots" prefHeight="631.0" prefWidth="452.0" />
    <HBox prefHeight="100.0" prefWidth="200.0">
+         <Button fx:id="bShowSpeechContribution" mnemonicParsing="false" onAction="#onShowSpeechContributionButtonClick" text="Redebeiträge ansehen">
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+         </Button>
          <Button fx:id="bAddCSpeechContribution" mnemonicParsing="false" onAction="#onAddSpeechContributionClick" text="Redebeitrag anlegen">
             <HBox.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>
          </Button>
-         <Button fx:id="bShowSpeechContribution" mnemonicParsing="false" onAction="#onShowSpeechContributionButtonClick" text="Redebeiträge ansehen">
-            <HBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </HBox.margin>
-         </Button>
+      <Button fx:id="bFirstMeeting" mnemonicParsing="false" onAction="#onFirstMeetingButtonClick" text="first Meeting">
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+      </Button>
       <VBox.margin>
          <Insets />
       </VBox.margin>
