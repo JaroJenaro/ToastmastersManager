@@ -37,6 +37,8 @@ public class TimeSlotsController {
     public Button bShowSpeechContribution;
     @FXML
     public Button bFirstMeeting;
+    @FXML
+    public Button bCreateOneMeeting;
     private User loggedUser;
 
     public void initialize() {
@@ -63,11 +65,13 @@ public class TimeSlotsController {
                 sceneSwitchService.switchToTimeSlotEditController(event, loggedUser, lvTimeSlots.getSelectionModel().getSelectedItem());
 
             } else {
-                noTimeSlotIsSelectedMessageBox("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden.");
+                Alerts.getMessageBoxWithInformationAndOkButton("Kein TimeSlot zum Bearbeiten ausgewählt", "Siehe Details zum Bearbeiten in Information Dialog",
+                        "Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden.");
 
             }
         } catch (Exception e) {
-            noTimeSlotIsSelectedMessageBox("Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden." + e.getMessage());
+            Alerts.getMessageBoxWithInformationAndOkButton("Kein TimeSlot zum Bearbeiten ausgewählt", "Siehe Details zum Edit in Information Dialog",
+                    "Damit ein Timeslot bearbeitet werden kann muss zunächst einer selektiert werden." + e.getMessage());
         }
     }
 
@@ -76,11 +80,13 @@ public class TimeSlotsController {
             if (lvTimeSlots.getSelectionModel().getSelectedItem() != null) {
                 timeSlotService.deleteTimeSlot(lvTimeSlots.getSelectionModel().getSelectedItem().id(), lvTimeSlots, authService.getSessionId());
             } else {
-                noTimeSlotIsSelectedMessageBox("Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden.");
+                Alerts.getMessageBoxWithInformationAndOkButton("Kein TimeSlot zum Löschen ausgewählt", "Siehe Details zum Löschen in Information Dialog",
+                        "Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden.");
 
             }
         } catch (Exception e) {
-            noTimeSlotIsSelectedMessageBox("Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden." + e.getMessage());
+            Alerts.getMessageBoxWithInformationAndOkButton("Unerwartetes Verhalten", "Siehe Details zum Delete in Information Dialog",
+                    "Damit ein Timeslot gelöscht werden kann muss zunächst einer selektiert werden." + e.getMessage());
         }
     }
 
@@ -88,17 +94,7 @@ public class TimeSlotsController {
         loggedUser = user;
     }
 
-    private void noTimeSlotIsSelectedMessageBox(String contentText) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Kein TimeSlot ausgewählt");
-        alert.setHeaderText("Siehe Details in Information Dialog");
-        alert.setContentText(contentText);
-        alert.showAndWait().ifPresent(rs -> {
-            if (rs == ButtonType.OK) {
-                LOG.info("Pressed OK.");
-            }
-        });
-    }
+
 
     public void onUsersDataButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToUsersController(event, loggedUser);
@@ -108,7 +104,8 @@ public class TimeSlotsController {
         if (authService.logout()) {
             sceneSwitchService.switchToLoginController(event);
         } else
-            noTimeSlotIsSelectedMessageBox("logout nicht erfolgreich");
+            Alerts.getMessageBoxWithInformationAndOkButton("Logout nicht erfolgreich", "Siehe Details zum Logout in Information Dialog",
+                    "logout nicht erfolgreich");
     }
 
     public void onAddSpeechContributionClick() {
@@ -121,11 +118,13 @@ public class TimeSlotsController {
                 Alerts.getMessageBoxWithConfirmationAndOkButton("Erfolgreich",
                         "Redebeitrag mit der id:" + savedSpeechContribution.id() + "erfolgreich angelegt", "alles super");
             } else {
-                noTimeSlotIsSelectedMessageBox("Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden.");
+                Alerts.getMessageBoxWithInformationAndOkButton("Kein Redebeitrag erstellt.", "Siehe Details zum Redebeitrag in Information Dialog",
+                        "Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden.");
 
             }
         } catch (Exception e) {
-            noTimeSlotIsSelectedMessageBox("Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden." + e.getMessage());
+            Alerts.getMessageBoxWithInformationAndOkButton("Kein TimeSlot ausgewählt", "Siehe Details in Information Dialog",
+                    "Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden." + e.getMessage());
         }
     }
 
@@ -135,5 +134,10 @@ public class TimeSlotsController {
 
     public void onFirstMeetingButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToMeetingController(event, loggedUser);
+    }
+
+    public void onCreateOneMeetingButtonClick() {
+        Alerts.getMessageBoxWithInformationAndOkButton("Meeting erstellen", "Siehe Details in Information Dialog",
+                "Hier kann es weiter gehen.");
     }
 }
