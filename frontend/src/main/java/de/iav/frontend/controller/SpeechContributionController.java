@@ -23,7 +23,8 @@ public class SpeechContributionController {
     private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
 
-
+    private static final String DELETE_NOT_POSSIBLE = "Löschen nicht möglich";
+    private static final String UPDATE_NOT_POSSIBLE = "Bearbeiten nicht möglich";
     @FXML
     public Label lLoggedInUser;
     @FXML
@@ -93,7 +94,20 @@ public class SpeechContributionController {
     }
 
     public void onDeleteSpeechContributionClick() {
-        // TODO
+        try {
+        if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null)
+        {
+            speechContributionService.deleteSpeechContribution(tvSpeechContribution.getSelectionModel().getSelectedItem().id(), tvSpeechContribution, authService.getSessionId());
+
+
+        }
+        else {
+            Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Zum Löschen selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
+        }
+        } catch (Exception e) {
+            Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Löschen nicht möglich, weile siehe unten: ", e.getMessage());
+        }
+
     }
 
     public void onEditSpeechContributionClick(ActionEvent event) throws IOException {
@@ -103,7 +117,7 @@ public class SpeechContributionController {
 
         }
         else {
-            Alerts.getMessageBoxWithWarningAndOkButton("Nichts selektiert", "selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
+            Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Zum Bearbeiten selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
         }
 
     }
