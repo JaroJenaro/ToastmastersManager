@@ -20,9 +20,6 @@ public class SpeechContributionEditController {
 
     @FXML
     public Label lSpeechContributionTitle;
-
-
-
     @FXML
     public Button bUpdate;
     @FXML
@@ -33,9 +30,9 @@ public class SpeechContributionEditController {
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private final UserService userService = UserService.getInstance();
     private final AuthService authService = AuthService.getInstance();
-
     private final SpeechContributionService speechContributionService = SpeechContributionService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
+
     @FXML
     public Label lTimeSlot;
 
@@ -46,26 +43,20 @@ public class SpeechContributionEditController {
 
     public void initialize() {
         LOG.info("SpeechContributionEditController");
-
-
    }
-
-
-
 
     public void backButtonPressed(ActionEvent actionEvent) throws IOException {
         sceneSwitchService.switchToSpeechContributionController(actionEvent, loggedUser);
     }
 
     public void onUpdateButtonClick(ActionEvent event) throws IOException {
-        if(speechContributionToUpdate.user().equals(cbUser.getSelectionModel().getSelectedItem()))
+        if((speechContributionToUpdate.user() != null) && speechContributionToUpdate.user().equals(cbUser.getSelectionModel().getSelectedItem()))
         {
             Alerts.getMessageBoxWithWarningAndOkButton("Keine Änderung", "Es ist kein neue User ausgewählt.", "Deshalb macht Speichern keinen Sinn");
             errorLabel.setText("Zum Bearbeiten eines Beitrags dan user ändern. Ansonsten Abbrechen.");
         }
         else
         {
-
             SpeechContribution speechContributionToSave = new SpeechContribution(speechContributionToUpdate.id(),speechContributionToUpdate.timeSlot(),
                     cbUser.getSelectionModel().getSelectedItem(), speechContributionToUpdate.stoppedTime());
             SpeechContribution savedSpeechContribution = speechContributionService.updateSpeechContribution(speechContributionToSave, authService.getSessionId());
@@ -73,8 +64,6 @@ public class SpeechContributionEditController {
             LOG.info("Updated SpeechContribution: {}", savedSpeechContribution);
             sceneSwitchService.switchToSpeechContributionController(event, loggedUser);
         }
-
-
     }
 
     public void setUserToShowAndSpeechContributionToUpdate(User user, SpeechContribution speechContribution) {
@@ -88,15 +77,3 @@ public class SpeechContributionEditController {
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
