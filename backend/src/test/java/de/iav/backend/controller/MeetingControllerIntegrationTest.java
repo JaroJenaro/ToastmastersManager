@@ -45,7 +45,6 @@ class MeetingControllerIntegrationTest {
     private SpeechContributionDTO SpeechContributionIn3;
     private SpeechContributionDTO SpeechContributionIn4;
     private SpeechContributionDTO SpeechContributionIn5;
-    private SpeechContributionDTO SpeechContributionIn6;
 
     private MeetingRequestDTO meetingRequestDto1;
     private MeetingRequestDTO meetingRequestDto2;
@@ -152,6 +151,14 @@ class MeetingControllerIntegrationTest {
     }
 
     @Test
+    void getMeetingById_shouldReturn404_whenMatchingIdIsProvided() throws Exception {
+
+        mockMvc.perform(get(BASE_URL_MEET + "/THIS_MeetingId_NUMBER_DOES_NOT_EXIST" )
+                        .contentType("application/json"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void createMeeting_shouldCreateNewMeetingWithId_whenValidDataIsProvided() throws Exception {
         mockMvc.perform(post(BASE_URL_USR)
                 .contentType("application/json")
@@ -205,7 +212,7 @@ class MeetingControllerIntegrationTest {
         });
 
         SpeechContributionIn5 = new SpeechContributionDTO(null, timeSlotsDtoList.get(2),null,"" );
-        SpeechContributionIn6 = new SpeechContributionDTO(null,timeSlotsDtoList.get(2),null,"" );
+        SpeechContributionDTO speechContributionIn6 = new SpeechContributionDTO(null, timeSlotsDtoList.get(2), null, "");
 
         List<SpeechContributionDTO> speechContributionsDtoListNew = new ArrayList<>();
         speechContributionsDtoListNew.add(SpeechContributionIn1);
@@ -213,7 +220,7 @@ class MeetingControllerIntegrationTest {
         speechContributionsDtoListNew.add(SpeechContributionIn3);
         speechContributionsDtoListNew.add(SpeechContributionIn4);
         speechContributionsDtoListNew.add(SpeechContributionIn5);
-        speechContributionsDtoListNew.add(SpeechContributionIn6);
+        speechContributionsDtoListNew.add(speechContributionIn6);
 
         MeetingRequestDTO meetingRequestDto3 = new MeetingRequestDTO("2023.10.13 19:00 Uhr", "Berlin",speechContributionsDtoListNew);
 

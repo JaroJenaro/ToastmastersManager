@@ -40,6 +40,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(MeetingNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleMeetingNotFoundException(MeetingNotFoundException exception) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(ERROR, exception.getMessage());
+        body.put(TIMESTAMP, Instant.now().toString());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
    @ExceptionHandler(SpeechContributionBadRequestException.class)
    @ResponseBody
    public ResponseEntity<Map<String, Object>> handleSpeechContributionForbiddenException(SpeechContributionBadRequestException exception) {
