@@ -52,6 +52,11 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
       </Button>
+      <Button fx:id="bCreateOneMeeting" mnemonicParsing="false" onAction="#onCreateOneMeetingButtonClick" text="neus Meeting erstellen">
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+      </Button>
       <VBox.margin>
          <Insets />
       </VBox.margin>

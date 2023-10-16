@@ -18,7 +18,7 @@ public class SpeechContribution {
     String id;
     @DBRef
     TimeSlot timeSlot;
-    @DBRef
+    @DBRef(lazy = true)
     User user;
     String stoppedTime;
 }

@@ -8,9 +8,11 @@ import de.iav.backend.model.*;
 import de.iav.backend.repository.SpeechContributionRepository;
 import de.iav.backend.repository.TimeSlotRepository;
 import de.iav.backend.repository.UserRepository;
+import de.iav.backend.util.BackendBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,25 +26,7 @@ public class SpeechContributionService {
     public List<SpeechContributionDTO> getAllSpeechContributions(){
         return speechContributionRepository.findAll()
                 .stream()
-                .map(speechContribution -> SpeechContributionDTO.builder()
-                        .id(speechContribution.getId())
-                        .user(UserResponseDTO.builder()
-                                .id(speechContribution.getUser().getId())
-                                .firstName(speechContribution.getUser().getFirstName())
-                                .lastName(speechContribution.getUser().getLastName())
-                                .email(speechContribution.getUser().getEmail())
-                                .role(speechContribution.getUser().getRole())
-                                .build())
-                        .timeSlot(TimeSlotResponseDTO.builder()
-                                .id(speechContribution.getTimeSlot().getId())
-                                .title(speechContribution.getTimeSlot().getTitle())
-                                .description(speechContribution.getTimeSlot().getDescription())
-                                .green(speechContribution.getTimeSlot().getGreen())
-                                .amber(speechContribution.getTimeSlot().getAmber())
-                                .red(speechContribution.getTimeSlot().getRed())
-                                .build())
-                        .stoppedTime(speechContribution.getStoppedTime())
-                        .build())
+                .map(BackendBuilder::getSpeechContributionDTO)
                 .toList();
     }
 
@@ -51,16 +35,30 @@ public class SpeechContributionService {
                 findById(id).
                 orElseThrow(() -> new SpeechContributionNotFoundException(id));
 
-        return getSpeechContributionDTO(speechContribution);
+        return BackendBuilder.getSpeechContributionDTO(speechContribution);
     }
 
     public SpeechContributionDTO addSpeechContribution(SpeechContributionIn speechContributionIn) {
-        SpeechContribution speechContribution = getSpeechContribution(speechContributionIn);
+        SpeechContribution speechContribution = BackendBuilder.getSpeechContribution(speechContributionIn);
 
         SpeechContribution savedSpeechContribution = speechContributionRepository.save(speechContribution);
 
-        return getSpeechContributionDTO(savedSpeechContribution);
+        return BackendBuilder.getSpeechContributionDTO(savedSpeechContribution);
     }
+
+    public List<SpeechContributionDTO> addSpeechContributionList(List<SpeechContributionDTO> speechContributionDtoToSaveList) {
+        List<SpeechContributionDTO> speechContributionDTOList = new ArrayList<>();
+        for (SpeechContributionDTO getSpeechContributionFromDTO:speechContributionDtoToSaveList
+             ) {
+            SpeechContribution speechContribution =  BackendBuilder.getSpeechContributionFromDTO(getSpeechContributionFromDTO);
+
+            SpeechContribution savedSpeechContribution = speechContributionRepository.save(speechContribution);
+
+            speechContributionDTOList.add(BackendBuilder.getSpeechContributionDTO(savedSpeechContribution));
+        }
+        return speechContributionDTOList;
+    }
+
 
     public SpeechContributionDTO updateSpeechContribution(SpeechContributionIn speechContributionIn, String id) {
         SpeechContribution speechContributionToUpdateFromDB = speechContributionRepository
@@ -75,17 +73,17 @@ public class SpeechContributionService {
                 .findById(speechContributionIn.getUser().getId())
                 .orElseThrow(() -> new UserNotFoundException(speechContributionIn.getUser().getId()));
         TimeSlot timeSlotIn = getTimeSlot(speechContributionIn.getTimeSlot());
-        User userIn = getUser(speechContributionIn.getUser());
+        User userIn = BackendBuilder.getUserFromResponse(speechContributionIn.getUser());
         userIn.setPassword(userInFromDB.getPassword());
         if(timeSlotFromDB.equals(timeSlotIn) && userInFromDB.equals(userIn))
         {
-            speechContributionToUpdateFromDB.setUser(getUser(speechContributionIn.getUser()));
+            speechContributionToUpdateFromDB.setUser(BackendBuilder.getUserFromResponse(speechContributionIn.getUser()));
             speechContributionToUpdateFromDB.setTimeSlot(getTimeSlot(speechContributionIn.getTimeSlot()));
             speechContributionToUpdateFromDB.setStoppedTime(speechContributionIn.getStoppedTime());
 
             SpeechContribution savedSpeechContribution = speechContributionRepository.save(speechContributionToUpdateFromDB);
 
-            return getSpeechContributionDTO(savedSpeechContribution);
+            return BackendBuilder.getSpeechContributionDTO(savedSpeechContribution);
         }
         throw new SpeechContributionBadRequestException(" beim updateSpeechContribution ");
     }
@@ -95,49 +93,6 @@ public class SpeechContributionService {
                 .findById(id)
                 .orElseThrow(() -> new SpeechContributionNotFoundException(id));
         speechContributionRepository.delete(speechContributionToDELETE);
-    }
-
-    private SpeechContributionDTO getSpeechContributionDTO(SpeechContribution speechContribution){
-        return SpeechContributionDTO.builder()
-                .id(speechContribution.getId())
-                .timeSlot(TimeSlotResponseDTO.builder()
-                        .id(speechContribution.getTimeSlot().getId())
-                        .title(speechContribution.getTimeSlot().getTitle())
-                        .description(speechContribution.getTimeSlot().getDescription())
-                        .green(speechContribution.getTimeSlot().getGreen())
-                        .amber(speechContribution.getTimeSlot().getAmber())
-                        .red(speechContribution.getTimeSlot().getRed())
-                        .build())
-                .user(UserResponseDTO.builder()
-                        .id(speechContribution.getUser().getId())
-                        .firstName(speechContribution.getUser().getFirstName())
-                        .lastName(speechContribution.getUser().getLastName())
-                        .email(speechContribution.getUser().getEmail())
-                        .role(speechContribution.getUser().getRole())
-                        .build())
-                .stoppedTime(speechContribution.getStoppedTime())
-                .build();
-    }
-
-    private SpeechContribution getSpeechContribution(SpeechContributionIn speechContributionIn){
-        return SpeechContribution.builder()
-                .timeSlot(TimeSlot.builder()
-                        .id(speechContributionIn.getTimeSlot().getId())
-                        .title(speechContributionIn.getTimeSlot().getTitle())
-                        .description(speechContributionIn.getTimeSlot().getDescription())
-                        .green(speechContributionIn.getTimeSlot().getGreen())
-                        .amber(speechContributionIn.getTimeSlot().getAmber())
-                        .red(speechContributionIn.getTimeSlot().getRed())
-                        .build())
-                .user(User.builder()
-                        .id(speechContributionIn.getUser().getId())
-                        .firstName(speechContributionIn.getUser().getFirstName())
-                        .lastName(speechContributionIn.getUser().getLastName())
-                        .email(speechContributionIn.getUser().getEmail())
-                        .role(speechContributionIn.getUser().getRole())
-                        .build())
-                .stoppedTime(speechContributionIn.getStoppedTime())
-                .build();
     }
 
     private TimeSlot getTimeSlot(TimeSlotResponseDTO timeSlotResponseDTO){
@@ -150,13 +105,5 @@ public class SpeechContributionService {
                 .red(timeSlotResponseDTO.getRed())
                 .build();
     }
-    private User getUser(UserResponseDTO userResponseDTO){
-        return User.builder()
-                .id(userResponseDTO.getId())
-                .firstName(userResponseDTO.getFirstName())
-                .lastName(userResponseDTO.getLastName())
-                .email(userResponseDTO.getEmail())
-                .role(userResponseDTO.getRole())
-                .build();
-    }
+
 }

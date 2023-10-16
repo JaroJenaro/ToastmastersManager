@@ -35,4 +35,16 @@ public class Alerts {
             }
         });
     }
+
+    public static void getMessageBoxWithInformationAndOkButton(String  title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+                LOG.info("Pressed OK.");
+            }
+        });
+    }
 }

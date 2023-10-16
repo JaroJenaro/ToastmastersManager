@@ -2,10 +2,12 @@ package de.iav.frontend.controller;
 
 import de.iav.frontend.model.Meeting;
 import de.iav.frontend.model.SpeechContribution;
+import de.iav.frontend.model.TimeSlot;
 import de.iav.frontend.model.User;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.MeetingService;
 import de.iav.frontend.service.SceneSwitchService;
+import de.iav.frontend.service.TimeSlotService;
 import de.iav.frontend.util.Alerts;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -20,10 +22,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MeetingController {
     private final MeetingService meetingService = MeetingService.getInstance();
+    private final TimeSlotService timeSlotService = TimeSlotService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
@@ -63,29 +67,31 @@ public class MeetingController {
         LOG.info("showAllSpeechContributions");
 
         tvSpeechContribution.getColumns().clear();
-        tcFirsteName.setCellValueFactory(cellData -> {
-            String firstName =cellData.getValue().user().firstName();
-            return Bindings.createObjectBinding(() -> firstName);
-        });
-
-        tcLastName.setCellValueFactory(cellData -> {
-            String lastName =cellData.getValue().user().lastName();
-            return Bindings.createObjectBinding(() -> lastName);
-        });
-
-        tcEmail.setCellValueFactory(cellData -> {
-            String email =cellData.getValue().user().email();
-            return Bindings.createObjectBinding(() -> email);
-        });
 
         tcTitle.setCellValueFactory(cellData -> {
             String title =cellData.getValue().timeSlot().title();
             return Bindings.createObjectBinding(() -> title);
         });
-        tvSpeechContribution.getColumns().add(tcFirsteName);
+
+        tcLastName.setCellValueFactory(cellData -> {
+            String description =cellData.getValue().timeSlot().description();
+            return Bindings.createObjectBinding(() -> description);
+        });
+
+        tcEmail.setCellValueFactory(cellData -> {
+            String red =cellData.getValue().timeSlot().red();
+            return Bindings.createObjectBinding(() -> red);
+        });
+        tcFirsteName.setCellValueFactory(cellData -> {
+            User user =cellData.getValue().user();
+            return Bindings.createObjectBinding(() ->user!=null?user.toString():"keinRedner");
+        });
+
+        tvSpeechContribution.getColumns().add(tcTitle);
         tvSpeechContribution.getColumns().add(tcLastName);
         tvSpeechContribution.getColumns().add(tcEmail);
-        tvSpeechContribution.getColumns().add(tcTitle);
+        tvSpeechContribution.getColumns().add(tcFirsteName);
+
         LOG.info("showAllSpeechContributions durch");
     }
 
@@ -113,6 +119,18 @@ public class MeetingController {
     }
 
     public void onEditSpeechContributionClick() {
+        List<TimeSlot> timeSlots = timeSlotService.getAllTimeSlots();
+        
+        Meeting meeting = new Meeting(null, "2023.09.27 19:00 Uhr", "Braunschweig",  getSpeechContributionList(timeSlots));
+        meetingService.createMeeting(meeting, authService.getSessionId());
         Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Bearbeiten noch nicht umgesetzt", "kommt später");
+    }
+    private List<SpeechContribution> getSpeechContributionList(List<TimeSlot> timeSlots)
+    {
+        List<SpeechContribution> speechContribution = new ArrayList<>();
+        for (TimeSlot timeSlot:timeSlots) {
+            speechContribution.add(new SpeechContribution(null, timeSlot, null, null));
+        }
+        return speechContribution;
     }
 }

@@ -3,9 +3,9 @@ package de.iav.backend.service;
 import de.iav.backend.exception.*;
 import de.iav.backend.model.*;
 import de.iav.backend.repository.MeetingRepository;
+import de.iav.backend.util.BackendBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -13,6 +13,7 @@ import java.util.List;
 public class MeetingService {
 
     private final MeetingRepository meetingRepository;
+    private final SpeechContributionService speechContributionService;
 
     public List<MeetingResponseDTO> getAllSMeetings(){
         return meetingRepository.findAll()
@@ -36,25 +37,7 @@ public class MeetingService {
                 .location(meeting.getLocation())
                 .speechContributionList(meeting.getSpeechContributionList()
                         .stream()
-                        .map(speechContribution -> SpeechContributionDTO.builder()
-                                .id(speechContribution.getId())
-                                .user(UserResponseDTO.builder()
-                                        .id(speechContribution.getUser().getId())
-                                        .firstName(speechContribution.getUser().getFirstName())
-                                        .lastName(speechContribution.getUser().getLastName())
-                                        .email(speechContribution.getUser().getEmail())
-                                        .role(speechContribution.getUser().getRole())
-                                        .build())
-                                .timeSlot(TimeSlotResponseDTO.builder()
-                                        .id(speechContribution.getTimeSlot().getId())
-                                        .title(speechContribution.getTimeSlot().getTitle())
-                                        .description(speechContribution.getTimeSlot().getDescription())
-                                        .green(speechContribution.getTimeSlot().getGreen())
-                                        .amber(speechContribution.getTimeSlot().getAmber())
-                                        .red(speechContribution.getTimeSlot().getRed())
-                                        .build())
-                                .stoppedTime(speechContribution.getStoppedTime())
-                                .build())
+                        .map(BackendBuilder::getSpeechContributionDTO)
                         .toList())
                 .build();
     }
@@ -67,13 +50,13 @@ public class MeetingService {
                         .stream()
                         .map(speechContribution -> SpeechContribution.builder()
                                 .id(speechContribution.getId())
-                                .user(User.builder()
+                                .user(speechContribution.getUser() != null ? User.builder()
                                         .id(speechContribution.getUser().getId())
                                         .firstName(speechContribution.getUser().getFirstName())
                                         .lastName(speechContribution.getUser().getLastName())
                                         .email(speechContribution.getUser().getEmail())
                                         .role(speechContribution.getUser().getRole())
-                                        .build())
+                                        .build():null)
                                 .timeSlot(TimeSlot.builder()
                                         .id(speechContribution.getTimeSlot().getId())
                                         .title(speechContribution.getTimeSlot().getTitle())
@@ -90,10 +73,20 @@ public class MeetingService {
 
     public MeetingResponseDTO addMeeting(MeetingRequestDTO meetingRequestDto) {
 
+        List<SpeechContributionDTO> speechContributionDTOList =
+                speechContributionService.addSpeechContributionList(meetingRequestDto.getSpeechContributionList());
+        meetingRequestDto.setSpeechContributionList(speechContributionDTOList);
         Meeting meeting = getMeeting(meetingRequestDto);
 
         Meeting savedMeeting = meetingRepository.save(meeting);
 
         return getMeetingResponseDTO(savedMeeting);
+    }
+
+    public MeetingResponseDTO getMeetingByDateTimeAndLocation(String dateTime, String location) {
+        Meeting meeting = meetingRepository.findByDateTimeIsIgnoreCaseAndLocationIgnoreCase(dateTime, location)
+                .orElseThrow(() -> new MeetingNotFoundException(" mit dateTime: " +dateTime+" mit standort: " +location));
+
+        return getMeetingResponseDTO(meeting);
     }
 }

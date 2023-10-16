@@ -1,5 +1,6 @@
 package de.iav.backend.security;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -18,6 +19,7 @@ public record NewAppUser(
         @NotNull
         @NotBlank(message = "email is required")
         @Size(min = 2, message = "email must be at least 2 characters long")
+        @Email
         String email
 ) {
 

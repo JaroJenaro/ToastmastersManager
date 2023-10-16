@@ -54,29 +54,29 @@ public class SpeechContributionController {
         tvSpeechContribution.getColumns().clear();
         speechContributionList.addAll(speechContributionService.getAllSpeechContributions());
 
-        tcFirsteName.setCellValueFactory(cellData -> {
-            String firstName =cellData.getValue().user().firstName();
-            return Bindings.createObjectBinding(() -> firstName);
-        });
-
-        tcLastName.setCellValueFactory(cellData -> {
-            String lastName =cellData.getValue().user().lastName();
-            return Bindings.createObjectBinding(() -> lastName);
-        });
-
-        tcEmail.setCellValueFactory(cellData -> {
-            String email =cellData.getValue().user().email();
-            return Bindings.createObjectBinding(() -> email);
-        });
-
         tcTitle.setCellValueFactory(cellData -> {
             String title =cellData.getValue().timeSlot().title();
             return Bindings.createObjectBinding(() -> title);
         });
-        tvSpeechContribution.getColumns().add(tcFirsteName);
+
+        tcLastName.setCellValueFactory(cellData -> {
+            String description =cellData.getValue().timeSlot().description();
+            return Bindings.createObjectBinding(() -> description);
+        });
+
+        tcEmail.setCellValueFactory(cellData -> {
+            String red =cellData.getValue().timeSlot().red();
+            return Bindings.createObjectBinding(() -> red);
+        });
+        tcFirsteName.setCellValueFactory(cellData -> {
+            User user =cellData.getValue().user();
+            return Bindings.createObjectBinding(() ->user!=null?user.toString():"keinRedner");
+        });
+
+        tvSpeechContribution.getColumns().add(tcTitle);
         tvSpeechContribution.getColumns().add(tcLastName);
         tvSpeechContribution.getColumns().add(tcEmail);
-        tvSpeechContribution.getColumns().add(tcTitle);
+        tvSpeechContribution.getColumns().add(tcFirsteName);
 
         // Daten in die TableView einfügen
         tvSpeechContribution.setItems(speechContributionList);
@@ -99,7 +99,6 @@ public class SpeechContributionController {
         {
             speechContributionService.deleteSpeechContribution(tvSpeechContribution.getSelectionModel().getSelectedItem().id(), tvSpeechContribution, authService.getSessionId());
 
-
         }
         else {
             Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Zum Löschen selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
@@ -107,7 +106,6 @@ public class SpeechContributionController {
         } catch (Exception e) {
             Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Löschen nicht möglich, weile siehe unten: ", e.getMessage());
         }
-
     }
 
     public void onEditSpeechContributionClick(ActionEvent event) throws IOException {
@@ -119,8 +117,5 @@ public class SpeechContributionController {
         else {
             Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Zum Bearbeiten selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
         }
-
     }
-
-
 }
