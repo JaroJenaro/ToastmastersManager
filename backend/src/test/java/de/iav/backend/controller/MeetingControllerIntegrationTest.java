@@ -236,4 +236,21 @@ class MeetingControllerIntegrationTest {
                 .andExpect(jsonPath("speechContributionList[5].user").value(IsNull.nullValue())
                 );
     }
+
+    @Test
+    void searchTimeslot_ByTitleAndDescription() throws Exception {
+        mockMvc.perform(get(BASE_URL_MEET + "/search?dateTime=" + meetingRequestDto1.getDateTime() + "&location=" + meetingRequestDto1.getLocation()))
+                .andExpect(jsonPath("id").isNotEmpty())
+                .andExpect(jsonPath("location").isNotEmpty())
+                .andExpect(jsonPath("location").value(meetingRequestDto1.getLocation()))
+                .andExpect(jsonPath("dateTime").value(meetingRequestDto1.getDateTime()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getNoTimeSlotsBySearchAttribut_shouldReturnReturn404_whenOneFittingEntryNotExists() throws Exception {
+
+        mockMvc.perform(get(BASE_URL_MEET + "/search?dateTime=gibtEsNicht&location=gibtEsAuchNicht"))
+                .andExpect(status().isNotFound());
+    }
 }

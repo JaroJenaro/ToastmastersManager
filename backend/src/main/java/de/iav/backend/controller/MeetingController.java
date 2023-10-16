@@ -32,4 +32,13 @@ public class MeetingController {
     public MeetingResponseDTO createMeeting(@Valid @RequestBody MeetingRequestDTO meetingRequestDto) {
         return meetingService.addMeeting(meetingRequestDto);
     }
+
+    @GetMapping("/search")
+    public MeetingResponseDTO searchMeetingByStandortAndDateTime(
+            @RequestParam String dateTime,
+            @RequestParam String location
+
+    ) {
+        return meetingService.getMeetingByStandortAndDateTime(dateTime, location);
+    }
 }
