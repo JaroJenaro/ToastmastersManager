@@ -3,6 +3,7 @@ package de.iav.frontend.controller;
 import de.iav.frontend.model.User;
 import de.iav.frontend.model.UserRequestDto;
 import de.iav.frontend.security.AuthService;
+import de.iav.frontend.service.MeetingService;
 import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.UserService;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import java.io.IOException;
 public class LoginController {
     private final UserService userService = UserService.getInstance();
     private final AuthService authService = AuthService.getInstance();
+    private final MeetingService meetingService = MeetingService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
     @FXML
     public PasswordField password;
@@ -26,6 +28,7 @@ public class LoginController {
     @FXML
     public Label informationForUser;
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
+
     private static final String GET_FIRSTNAME = "";
     private static final String GET_LASTNAME = "";
     @FXML
@@ -44,7 +47,10 @@ public class LoginController {
                 informationForUser.setText("login successfully");
                 User logInUser = userService.getUserByEmail(email.getText());
                 LOG.info("logInUser: {}" , logInUser);
-                sceneSwitchService.switchToTimeSlotsController(actionEvent, logInUser);
+                if(meetingService.getAllMeetings().isEmpty())
+                    sceneSwitchService.switchToTimeSlotsController(actionEvent, logInUser);
+                else
+                    sceneSwitchService.switchToMeetingController(actionEvent, logInUser);
                 LOG.info("scene Switch : {}",  logInUser);
             } else {
                 informationForUser.setText("login unsuccessfully");
@@ -53,7 +59,6 @@ public class LoginController {
         else {
             informationForUser.setText("login Daten ungültig");
         }
-
     }
 
     public void registerButtonPressed(ActionEvent actionEvent) throws IOException {
@@ -79,11 +84,9 @@ public class LoginController {
         }
     }
 
-
     public void onActionPasswordField(ActionEvent event) throws IOException {
         loginAuthorized(event);
     }
-
 
     public void onSpecialLoginButtonClick(ActionEvent event) throws IOException {
         email.setText("jaro.jenaro@speaker.de");
@@ -108,5 +111,3 @@ public class LoginController {
         }
     }
 }
-
-

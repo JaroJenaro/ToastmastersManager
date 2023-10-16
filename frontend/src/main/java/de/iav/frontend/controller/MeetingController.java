@@ -2,12 +2,10 @@ package de.iav.frontend.controller;
 
 import de.iav.frontend.model.Meeting;
 import de.iav.frontend.model.SpeechContribution;
-import de.iav.frontend.model.TimeSlot;
 import de.iav.frontend.model.User;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.MeetingService;
 import de.iav.frontend.service.SceneSwitchService;
-import de.iav.frontend.service.TimeSlotService;
 import de.iav.frontend.util.Alerts;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -22,18 +20,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MeetingController {
     private final MeetingService meetingService = MeetingService.getInstance();
-    private final TimeSlotService timeSlotService = TimeSlotService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
 
     private static final String DELETE_NOT_POSSIBLE = "Löschen nicht möglich";
-    private static final String UPDATE_NOT_POSSIBLE = "Bearbeiten nicht möglich";
+
     @FXML
     public Label lLoggedInUser;
     @FXML
@@ -54,7 +50,13 @@ public class MeetingController {
     @FXML
     public Label lDateTime;
     @FXML
+    public Button bPrev;
+    @FXML
+    public Button bNext;
+    @FXML
     private User loggedUser;
+
+    private Integer meetingIndex = 0;
     ObservableList<SpeechContribution> speechContributionList = FXCollections.observableArrayList();
     List<Meeting> meetingsList;
 
@@ -100,10 +102,10 @@ public class MeetingController {
         lLoggedInUser.setText(authService.me());
         meetingsList = meetingService.getAllMeetings();
         if (!meetingsList.isEmpty()) {
-            lDateTime.setText(meetingsList.get(0).dateTime());
-            lLocation.setText(meetingsList.get(0).location());
+            lDateTime.setText(meetingsList.get(meetingIndex).dateTime());
+            lLocation.setText(meetingsList.get(meetingIndex).location());
             // Daten in die TableView einfügen
-            speechContributionList.addAll(meetingsList.get(0).speechContributionList());
+            speechContributionList.addAll(meetingsList.get(meetingIndex).speechContributionList());
             tvSpeechContribution.setItems(speechContributionList);
         }
         else Alerts.getMessageBoxWithWarningAndOkButton("Kein Meeting in DB", "DB enthält keinen Meeting",
@@ -119,18 +121,45 @@ public class MeetingController {
     }
 
     public void onEditSpeechContributionClick() {
-        List<TimeSlot> timeSlots = timeSlotService.getAllTimeSlots();
-        
-        Meeting meeting = new Meeting(null, "2023.09.27 19:00 Uhr", "Braunschweig",  getSpeechContributionList(timeSlots));
-        meetingService.createMeeting(meeting, authService.getSessionId());
-        Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Bearbeiten noch nicht umgesetzt", "kommt später");
+        Alerts.getMessageBoxWithInformationAndOkButton("Hier werden",
+                "später sich die leute bei",
+                "Redebeiträgen eintragen können");
+
     }
-    private List<SpeechContribution> getSpeechContributionList(List<TimeSlot> timeSlots)
-    {
-        List<SpeechContribution> speechContribution = new ArrayList<>();
-        for (TimeSlot timeSlot:timeSlots) {
-            speechContribution.add(new SpeechContribution(null, timeSlot, null, null));
+
+    public void onPrevButtonClick() {
+        if (meetingIndex > 0)
+        {
+            meetingIndex--;
+            bNext.setDisable(false);
+            lDateTime.setText(meetingsList.get(meetingIndex).dateTime());
+            lLocation.setText(meetingsList.get(meetingIndex).location());
+            // Daten in die TableView einfügen
+            speechContributionList.clear();
+            speechContributionList.addAll(meetingsList.get(meetingIndex).speechContributionList());
+            tvSpeechContribution.setItems(speechContributionList);
+            if(meetingIndex == 0)
+                bPrev.setDisable(true);
         }
-        return speechContribution;
+        else Alerts.getMessageBoxWithWarningAndOkButton("Erste Index", "Erste Meeting",
+                "hier soll eigentlich graue button sein" );
+    }
+
+    public void onNextButtonClick() {
+        if (meetingIndex < meetingsList.size()-1)
+        {
+            meetingIndex++;
+            bPrev.setDisable(false);
+            lDateTime.setText(meetingsList.get(meetingIndex).dateTime());
+            lLocation.setText(meetingsList.get(meetingIndex).location());
+            // Daten in die TableView einfügen
+            speechContributionList.clear();
+            speechContributionList.addAll(meetingsList.get(meetingIndex).speechContributionList());
+            tvSpeechContribution.setItems(speechContributionList);
+            if(meetingIndex == meetingsList.size()-1)
+                bNext.setDisable(true);
+        }
+        else Alerts.getMessageBoxWithWarningAndOkButton("Letzte Index", "Lette meeting Meeting",
+                "hier soll eigentlich graue button sein" );
     }
 }
