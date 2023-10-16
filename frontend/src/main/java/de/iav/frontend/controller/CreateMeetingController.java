@@ -68,7 +68,7 @@ public class CreateMeetingController {
         sceneSwitchService.switchToTimeSlotsController(event,loggedUser);
     }
 
-    public void onCreateButtonClick() {
+    public void onCreateButtonClick() throws InterruptedException {
         try {
             if (checkDate() && checkLocation()) {
                 Meeting meetingExist = meetingService.getMeetingByDateTimeAndLocation(lDateTime.getText(), cbLocation.getValue());
@@ -91,6 +91,7 @@ public class CreateMeetingController {
             Alerts.getMessageBoxWithWarningAndOkButton(CREATE_NOT_POSSIBLE, "Hat leider nicht geklappt. IOException Siehe Meldung:", e.getMessage());
         } catch (InterruptedException e) {
             Alerts.getMessageBoxWithWarningAndOkButton(CREATE_NOT_POSSIBLE, "Hat leider nicht geklappt. InterruptedException Siehe Meldung:", e.getMessage());
+            throw e;
         }
     }
 
