@@ -83,7 +83,7 @@ public class MeetingService {
         return getMeetingResponseDTO(savedMeeting);
     }
 
-    public MeetingResponseDTO getMeetingByStandortAndDateTime(String dateTime, String location) {
+    public MeetingResponseDTO getMeetingByDateTimeAndLocation(String dateTime, String location) {
         Meeting meeting = meetingRepository.findByDateTimeIsIgnoreCaseAndLocationIgnoreCase(dateTime, location)
                 .orElseThrow(() -> new MeetingNotFoundException(" mit dateTime: " +dateTime+" mit standort: " +location));
 

@@ -94,8 +94,6 @@ public class TimeSlotsController {
         loggedUser = user;
     }
 
-
-
     public void onUsersDataButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToUsersController(event, loggedUser);
     }
@@ -136,8 +134,7 @@ public class TimeSlotsController {
         sceneSwitchService.switchToMeetingController(event, loggedUser);
     }
 
-    public void onCreateOneMeetingButtonClick() {
-        Alerts.getMessageBoxWithInformationAndOkButton("Meeting erstellen", "Siehe Details in Information Dialog",
-                "Hier kann es weiter gehen.");
+    public void onCreateOneMeetingButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToCreateMeetingController(event, loggedUser);
     }
 }

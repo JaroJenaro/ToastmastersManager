@@ -39,6 +39,6 @@ public class MeetingController {
             @RequestParam String location
 
     ) {
-        return meetingService.getMeetingByStandortAndDateTime(dateTime, location);
+        return meetingService.getMeetingByDateTimeAndLocation(dateTime, location);
     }
 }

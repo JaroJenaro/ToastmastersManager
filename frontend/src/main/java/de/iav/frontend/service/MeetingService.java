@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.iav.frontend.exception.MappingRuntimeException;
 import de.iav.frontend.model.Meeting;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -80,4 +81,26 @@ public class MeetingService {
         }
     }
 
+    public Meeting getMeetingByDateTimeAndLocation(String dateTime, String location) throws IOException, InterruptedException {
+        String url = BACKEND_SC_MEET + "/search?dateTime=" + dateTime + "&location=" + location;
+        url = url.replace(" ", "%20");
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create(url))
+                .build();
+
+        HttpResponse<String> response;
+        response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        int statusCode = response.statusCode();
+        String responseBody = response.body();
+
+        if (statusCode == 200) {
+             return mapToMeeting(responseBody);
+        } else if (statusCode == 404) {
+             return null;
+         } else {
+            throw new MappingRuntimeException("Fehler beim Abrufen des Meetings: " + responseBody);
+        }
+    }
 }
