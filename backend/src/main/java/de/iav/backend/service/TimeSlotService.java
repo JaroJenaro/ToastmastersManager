@@ -68,7 +68,7 @@ public class TimeSlotService {
                 .build();
     }
 
-    public TimeSlotResponseDTO updateTimeSlot(TimeSlotWithoutIdDTO timeSlotWithoutIdDTO, String id) {
+    public TimeSlotResponseDTO updateTimeSlot(String id, TimeSlotWithoutIdDTO timeSlotWithoutIdDTO) {
         TimeSlot timeSlotToUpdate = timeSlotRepository
                 .findById(id)
                 .orElseThrow(() -> new TimeSlotNotFoundException(id));

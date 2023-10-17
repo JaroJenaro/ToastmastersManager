@@ -89,4 +89,17 @@ public class MeetingService {
 
         return getMeetingResponseDTO(meeting);
     }
+
+    public MeetingResponseDTO updateMeeting(String id, MeetingRequestDTO meetingRequestDto) {
+        Meeting meetingFromDb = meetingRepository
+                .findById(id)
+                .orElseThrow(() -> new MeetingNotFoundException(id));
+
+        Meeting meetingToUpdate = getMeeting(meetingRequestDto);
+        meetingToUpdate.setId(meetingFromDb.getId());
+
+        Meeting savedMeeting = meetingRepository.save(meetingToUpdate);
+
+        return getMeetingResponseDTO(savedMeeting);
+    }
 }

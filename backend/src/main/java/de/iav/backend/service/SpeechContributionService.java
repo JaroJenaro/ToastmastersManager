@@ -60,7 +60,7 @@ public class SpeechContributionService {
     }
 
 
-    public SpeechContributionDTO updateSpeechContribution(SpeechContributionIn speechContributionIn, String id) {
+    public SpeechContributionDTO updateSpeechContribution( String id, SpeechContributionIn speechContributionIn) {
         SpeechContribution speechContributionToUpdateFromDB = speechContributionRepository
                 .findById(id)
                 .orElseThrow(() -> new SpeechContributionNotFoundException(id));

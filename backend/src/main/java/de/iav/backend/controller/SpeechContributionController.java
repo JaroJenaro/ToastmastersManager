@@ -37,7 +37,7 @@ public class SpeechContributionController {
 
     @PutMapping("/{id}")
     public SpeechContributionDTO updateSpeechContribution(@PathVariable String id, @Valid @RequestBody SpeechContributionIn speechContributionIn) {
-        return speechContributionService.updateSpeechContribution(speechContributionIn, id);
+        return speechContributionService.updateSpeechContribution(id, speechContributionIn);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

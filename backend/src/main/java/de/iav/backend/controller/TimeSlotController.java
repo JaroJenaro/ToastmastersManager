@@ -68,7 +68,7 @@ public class TimeSlotController {
 
     @PutMapping("/{id}")
     public TimeSlotResponseDTO updateTimeSlot(@PathVariable String id, @Valid @RequestBody TimeSlotWithoutIdDTO timeSlotWithoutIdDTO) {
-        return timeSlotService.updateTimeSlot(timeSlotWithoutIdDTO, id);
+        return timeSlotService.updateTimeSlot(id, timeSlotWithoutIdDTO);
     }
 
     @DeleteMapping("/{id}")
