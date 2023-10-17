@@ -147,13 +147,13 @@ public class SceneSwitchService {
         stage.show();
     }
 
-    public void switchToSpeechContributionEditController(ActionEvent actionEvent, User user, SpeechContribution speechContribution) throws IOException {
+    public void switchToSpeechContributionEditController(ActionEvent actionEvent, User user, SpeechContribution speechContribution, int meetingIndex) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/SpeechContributionEdit.fxml"));
         Parent root = loader.load();
 
         SpeechContributionEditController speechContributionEditController = loader.getController();
         LOG.info("  ----> public void switchToSpeechContributionEditController(ActionEvent actionEvent, User user, SpeechContribution speechContribution) throws IOException {} ", user);
-        speechContributionEditController.setUserToShowAndSpeechContributionToUpdate(user, speechContribution);
+        speechContributionEditController.setUserToShowAndSpeechContributionToUpdate(user, speechContribution, meetingIndex);
 
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -161,13 +161,13 @@ public class SceneSwitchService {
         stage.show();
     }
 
-    public void switchToMeetingController(ActionEvent actionEvent, User user) throws IOException {
+    public void switchToMeetingController(ActionEvent actionEvent, User user, int meetingIndex) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/MeetingController.fxml"));
         Parent root = loader.load();
 
         MeetingController meetingController = loader.getController();
         LOG.info("  ----> public void switchToMeetingController(ActionEvent actionEvent, User user) throws IOException {} ", user);
-        meetingController.setUserAndMeetingToShow(user);
+        meetingController.setUserAndMeetingToShow(user, meetingIndex);
 
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

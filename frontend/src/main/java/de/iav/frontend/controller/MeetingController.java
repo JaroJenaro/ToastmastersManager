@@ -62,7 +62,7 @@ public class MeetingController {
     @FXML
     private User loggedUser;
 
-    private Integer meetingIndex = 0;
+    private Integer meetingIndex;
     ObservableList<SpeechContribution> speechContributionList = FXCollections.observableArrayList();
     List<Meeting> meetingsList;
 
@@ -111,8 +111,9 @@ public class MeetingController {
         LOG.info("showAllSpeechContributions durch");
     }
 
-    public void setUserAndMeetingToShow(User user) {
+    public void setUserAndMeetingToShow(User user, int meetingIndex) {
         loggedUser= user;
+        this.meetingIndex = meetingIndex;
         lLoggedInUser.setText(authService.me());
         meetingsList = meetingService.getAllMeetings();
         if (!meetingsList.isEmpty()) {
@@ -147,7 +148,7 @@ public class MeetingController {
 
         if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null)
         {
-            sceneSwitchService.switchToSpeechContributionEditController(event, loggedUser, tvSpeechContribution.getSelectionModel().getSelectedItem());
+            sceneSwitchService.switchToSpeechContributionEditController(event, loggedUser, tvSpeechContribution.getSelectionModel().getSelectedItem(), meetingIndex);
 
         }
         else {
