@@ -7,6 +7,7 @@ import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.SpeechContributionService;
 import de.iav.frontend.util.Alerts;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -72,6 +73,13 @@ public class SpeechContributionController {
             User user =cellData.getValue().user();
             return Bindings.createObjectBinding(() ->user!=null?user.toString():"keinRedner");
         });
+
+        TableColumn<SpeechContribution, Integer> indexColumn = new TableColumn<>("#");
+        indexColumn.setCellValueFactory(param -> new ReadOnlyIntegerWrapper(tvSpeechContribution.getItems().indexOf(param.getValue()) + 1).asObject());
+        indexColumn.setSortable(false);
+        indexColumn.setPrefWidth(30); // Breite der Indexspalte
+
+        tvSpeechContribution.getColumns().add(indexColumn);
 
         tvSpeechContribution.getColumns().add(tcTitle);
         tvSpeechContribution.getColumns().add(tcLastName);

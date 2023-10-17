@@ -6,22 +6,49 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="613.0" prefWidth="473.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.MeetingController">
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
-   <Label fx:id="lLoggedInUser" text="Label" />
    <HBox prefHeight="100.0" prefWidth="200.0">
+         <Label fx:id="lLoggedInUser" text="Label" />
+      <Pane prefHeight="17.0" prefWidth="12.0" />
+      <Label fx:id="lNavi" text="Navi" />
+   </HBox>
+  <VBox prefHeight="200.0" prefWidth="100.0">
+      <HBox prefHeight="100.0" prefWidth="200.0">
+           <Label minWidth="-Infinity" prefHeight="33.0" prefWidth="147.0" text="Location" textAlignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+          <Label fx:id="lLocation" minWidth="-Infinity" prefWidth="147.0">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+      </HBox>
+  </VBox>
+   <HBox prefHeight="100.0" prefWidth="200.0">
+      <VBox prefHeight="200.0" prefWidth="100.0">
+            <Button fx:id="bPrev" mnemonicParsing="false" onAction="#onPrevButtonClick" prefHeight="35.0" prefWidth="80.0" text="&lt; PREV" />
+      </VBox>
      <VBox prefHeight="200.0" prefWidth="100.0">
-       <Label minWidth="-Infinity" prefHeight="17.0" prefWidth="147.0" text="Location" />
-       <Label fx:id="lLocation" minWidth="-Infinity" prefWidth="147.0" />
+       <Label fx:id="lDateTime" minWidth="-Infinity" prefHeight="29.0" prefWidth="275.0">
+            <font>
+               <Font size="24.0" />
+            </font></Label>
      </VBox>
-     <VBox prefHeight="34.0" prefWidth="128.0" />
-     <VBox prefHeight="200.0" prefWidth="100.0">
-       <Label minWidth="-Infinity" prefHeight="17.0" prefWidth="169.0" text="Datum und Uhrzeit" />
-       <Label fx:id="lDateTime" minWidth="-Infinity" prefWidth="169.0" />
+     <VBox prefHeight="29.0" prefWidth="123.0">
+            <Button fx:id="bNext" mnemonicParsing="false" onAction="#onNextButtonClick" prefHeight="29.0" prefWidth="75.0" text="NEXT &gt;">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Button>
      </VBox>
    </HBox>
     <HBox prefHeight="100.0" prefWidth="200.0">
@@ -30,7 +57,7 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
            </HBox.margin>
         </Button>
-        <Button onAction="#onEditSpeechContributionClick" text="Redebeitrag bearbeiten" >
+        <Button onAction="#onEditSpeechContributionClick" text="Redebeitrag bearbeiten">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
@@ -42,12 +69,12 @@
       </Button>
     </HBox>
    <TableView fx:id="tvSpeechContribution" prefHeight="599.0" prefWidth="433.0">
-     <columns>
-       <TableColumn fx:id="tcFirsteName" text="Vorname" />
-       <TableColumn fx:id="tcLastName" text="Nachname" />
-       <TableColumn fx:id="tcEmail" text="Email" />
-       <TableColumn fx:id="tcTitle" text="Title" />
-     </columns>
+       <columns>
+           <TableColumn fx:id="tcTimeSlotTitle" text="Redebeitrag-Title" />
+           <TableColumn fx:id="tcTimeSlotRed" text="Max. Zeit" />
+           <TableColumn fx:id="tcUserLastAndFirstName" text="Redner" />
+           <TableColumn fx:id="tcTimeSlotDescription" text="Beschreibung" />
+       </columns>
    </TableView>
    <opaqueInsets>
       <Insets />

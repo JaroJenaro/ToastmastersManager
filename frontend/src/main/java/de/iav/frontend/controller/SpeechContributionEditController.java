@@ -53,7 +53,7 @@ public class SpeechContributionEditController {
         if((speechContributionToUpdate.user() != null) && speechContributionToUpdate.user().equals(cbUser.getSelectionModel().getSelectedItem()))
         {
             Alerts.getMessageBoxWithWarningAndOkButton("Keine Änderung", "Es ist kein neue User ausgewählt.", "Deshalb macht Speichern keinen Sinn");
-            errorLabel.setText("Zum Bearbeiten eines Beitrags dan user ändern. Ansonsten Abbrechen.");
+            errorLabel.setText("Zum Bearbeiten eines Beitrags den user ändern. Ansonsten Abbrechen.");
         }
         else
         {

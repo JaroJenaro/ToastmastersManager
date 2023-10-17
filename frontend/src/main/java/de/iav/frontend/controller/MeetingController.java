@@ -2,14 +2,13 @@ package de.iav.frontend.controller;
 
 import de.iav.frontend.model.Meeting;
 import de.iav.frontend.model.SpeechContribution;
-import de.iav.frontend.model.TimeSlot;
 import de.iav.frontend.model.User;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.MeetingService;
 import de.iav.frontend.service.SceneSwitchService;
-import de.iav.frontend.service.TimeSlotService;
 import de.iav.frontend.util.Alerts;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,18 +21,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MeetingController {
     private final MeetingService meetingService = MeetingService.getInstance();
-    private final TimeSlotService timeSlotService = TimeSlotService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
 
     private static final String DELETE_NOT_POSSIBLE = "Löschen nicht möglich";
     private static final String UPDATE_NOT_POSSIBLE = "Bearbeiten nicht möglich";
+
     @FXML
     public Label lLoggedInUser;
     @FXML
@@ -41,20 +39,30 @@ public class MeetingController {
     @FXML
     public TableView<SpeechContribution> tvSpeechContribution;
     @FXML
-    public TableColumn<SpeechContribution, String> tcFirsteName;
+    public  TableColumn<SpeechContribution, String> tcTimeSlotTitle;
     @FXML
-    public TableColumn<SpeechContribution, String> tcTitle;
+    public  TableColumn<SpeechContribution, String> tcTimeSlotRed;
     @FXML
-    public TableColumn<SpeechContribution, String>  tcLastName;
+    public  TableColumn<SpeechContribution, String> tcUserLastAndFirstName;
     @FXML
-    public TableColumn<SpeechContribution, String>  tcEmail;
+    public  TableColumn<SpeechContribution, String> tcTimeSlotDescription;
+
 
     @FXML
     public Label lLocation;
     @FXML
     public Label lDateTime;
     @FXML
+    public Button bPrev;
+    @FXML
+    public Button bNext;
+    @FXML
+    public Label lNavi;
+
+    @FXML
     private User loggedUser;
+
+    private Integer meetingIndex = 0;
     ObservableList<SpeechContribution> speechContributionList = FXCollections.observableArrayList();
     List<Meeting> meetingsList;
 
@@ -68,29 +76,37 @@ public class MeetingController {
 
         tvSpeechContribution.getColumns().clear();
 
-        tcTitle.setCellValueFactory(cellData -> {
+        tcTimeSlotTitle.setCellValueFactory(cellData -> {
             String title =cellData.getValue().timeSlot().title();
             return Bindings.createObjectBinding(() -> title);
         });
 
-        tcLastName.setCellValueFactory(cellData -> {
-            String description =cellData.getValue().timeSlot().description();
-            return Bindings.createObjectBinding(() -> description);
-        });
-
-        tcEmail.setCellValueFactory(cellData -> {
+        tcTimeSlotRed.setCellValueFactory(cellData -> {
             String red =cellData.getValue().timeSlot().red();
             return Bindings.createObjectBinding(() -> red);
         });
-        tcFirsteName.setCellValueFactory(cellData -> {
+
+        tcTimeSlotDescription.setCellValueFactory(cellData -> {
+            String description =cellData.getValue().timeSlot().description();
+            return Bindings.createObjectBinding(() -> description);
+        });
+        tcUserLastAndFirstName.setCellValueFactory(cellData -> {
             User user =cellData.getValue().user();
-            return Bindings.createObjectBinding(() ->user!=null?user.toString():"keinRedner");
+            return Bindings.createObjectBinding(() ->user!=null?user.lastName() + ", " + user.firstName():" ");
         });
 
-        tvSpeechContribution.getColumns().add(tcTitle);
-        tvSpeechContribution.getColumns().add(tcLastName);
-        tvSpeechContribution.getColumns().add(tcEmail);
-        tvSpeechContribution.getColumns().add(tcFirsteName);
+        // Spalte für die Indexe hinzufügen
+        TableColumn<SpeechContribution, Integer> indexColumn = new TableColumn<>("#");
+        indexColumn.setCellValueFactory(param -> new ReadOnlyIntegerWrapper(tvSpeechContribution.getItems().indexOf(param.getValue()) + 1).asObject());
+        indexColumn.setSortable(false);
+        indexColumn.setPrefWidth(30); // Breite der Indexspalte
+
+        tvSpeechContribution.getColumns().add(indexColumn);
+        tvSpeechContribution.getColumns().add(tcTimeSlotTitle);
+        tvSpeechContribution.getColumns().add(tcTimeSlotRed);
+        tvSpeechContribution.getColumns().add(tcUserLastAndFirstName);
+        tvSpeechContribution.getColumns().add(tcTimeSlotDescription);
+
 
         LOG.info("showAllSpeechContributions durch");
     }
@@ -100,14 +116,23 @@ public class MeetingController {
         lLoggedInUser.setText(authService.me());
         meetingsList = meetingService.getAllMeetings();
         if (!meetingsList.isEmpty()) {
-            lDateTime.setText(meetingsList.get(0).dateTime());
-            lLocation.setText(meetingsList.get(0).location());
-            // Daten in die TableView einfügen
-            speechContributionList.addAll(meetingsList.get(0).speechContributionList());
-            tvSpeechContribution.setItems(speechContributionList);
+            updateTableAndOtherView();
+            if (meetingsList.size() == 1)
+            {
+                bNext.setDisable(true);
+                bPrev.setDisable(true);
+            }
+            if(meetingIndex ==0)
+            {
+                bPrev.setDisable(true);
+            }
         }
-        else Alerts.getMessageBoxWithWarningAndOkButton("Kein Meeting in DB", "DB enthält keinen Meeting",
-                "legen sie zunächst einen Termin ein!" );
+        else {
+            Alerts.getMessageBoxWithWarningAndOkButton("Kein Meeting in DB", "DB enthält keinen Meeting",
+                    "legen sie zunächst einen Termin ein!" );
+            bNext.setDisable(false);
+            bPrev.setDisable(false);
+        }
     }
 
     public void onBackButtonClick(ActionEvent event) throws IOException {
@@ -118,19 +143,52 @@ public class MeetingController {
         Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Löschen noch nicht umgesetzt", "kommt später");
     }
 
-    public void onEditSpeechContributionClick() {
-        List<TimeSlot> timeSlots = timeSlotService.getAllTimeSlots();
-        
-        Meeting meeting = new Meeting(null, "2023.09.27 19:00 Uhr", "Braunschweig",  getSpeechContributionList(timeSlots));
-        meetingService.createMeeting(meeting, authService.getSessionId());
-        Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Bearbeiten noch nicht umgesetzt", "kommt später");
-    }
-    private List<SpeechContribution> getSpeechContributionList(List<TimeSlot> timeSlots)
-    {
-        List<SpeechContribution> speechContribution = new ArrayList<>();
-        for (TimeSlot timeSlot:timeSlots) {
-            speechContribution.add(new SpeechContribution(null, timeSlot, null, null));
+    public void onEditSpeechContributionClick(ActionEvent event) throws IOException {
+
+        if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null)
+        {
+            sceneSwitchService.switchToSpeechContributionEditController(event, loggedUser, tvSpeechContribution.getSelectionModel().getSelectedItem());
+
         }
-        return speechContribution;
+        else {
+            Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Zum Bearbeiten selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
+        }
+    }
+
+    public void onPrevButtonClick() {
+        if (meetingIndex > 0)
+        {
+            meetingIndex--;
+            bNext.setDisable(false);
+            updateTableAndOtherView();
+            if(meetingIndex == 0)
+                bPrev.setDisable(true);
+
+        }
+        else Alerts.getMessageBoxWithWarningAndOkButton("Erste Index", "Erste Meeting",
+                "hier soll eigentlich graue button sein" );
+    }
+
+    public void onNextButtonClick() {
+        if (meetingIndex < meetingsList.size()-1)
+        {
+            meetingIndex++;
+            bPrev.setDisable(false);
+            updateTableAndOtherView();
+            if(meetingIndex == meetingsList.size()-1)
+                bNext.setDisable(true);
+        }
+        else Alerts.getMessageBoxWithWarningAndOkButton("Letzte Index", "Lette meeting Meeting",
+                "hier soll eigentlich graue button sein" );
+    }
+    private void updateTableAndOtherView(){
+        lDateTime.setText(meetingsList.get(meetingIndex).dateTime());
+        lLocation.setText(meetingsList.get(meetingIndex).location());
+        // Daten in die TableView einfügen
+        speechContributionList.clear();
+        speechContributionList.addAll(meetingsList.get(meetingIndex).speechContributionList());
+        tvSpeechContribution.setItems(speechContributionList);
+        lNavi.setText((meetingIndex+1) + "/" + meetingsList.size() );
+
     }
 }
