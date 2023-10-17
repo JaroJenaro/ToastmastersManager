@@ -6,7 +6,7 @@ public class BackendBuilder {
 
     BackendBuilder() {
     }
-    //BackendBuilder.getSpeechContributionDTO
+    //BackendBuilder.getTimeSlotResponseDTO
 
     public static SpeechContribution getSpeechContributionFromDTO(SpeechContributionDTO speechContributionDto){
             return SpeechContribution.builder()
@@ -78,6 +78,17 @@ public class BackendBuilder {
                 .lastName(userResponseDTO.getLastName())
                 .email(userResponseDTO.getEmail())
                 .role(userResponseDTO.getRole())
+                .build();
+    }
+
+    public static TimeSlotResponseDTO getTimeSlotResponseDTO(TimeSlot timeSlot) {
+        return TimeSlotResponseDTO.builder()
+                .id(timeSlot.getId())
+                .title(timeSlot.getTitle())
+                .description(timeSlot.getDescription())
+                .green(timeSlot.getGreen())
+                .amber(timeSlot.getAmber())
+                .red(timeSlot.getRed())
                 .build();
     }
 }

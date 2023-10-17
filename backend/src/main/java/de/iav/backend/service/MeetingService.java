@@ -98,6 +98,14 @@ public class MeetingService {
         Meeting meetingToUpdate = getMeeting(meetingRequestDto);
         meetingToUpdate.setId(meetingFromDb.getId());
 
+
+        List<SpeechContributionDTO> speechContributionDTOList =
+                speechContributionService.addSpeechContributionList(meetingRequestDto.getSpeechContributionList());
+
+        meetingToUpdate.setSpeechContributionList(speechContributionDTOList.stream()
+                .map(BackendBuilder::getSpeechContributionFromDTO)
+                .toList());
+
         Meeting savedMeeting = meetingRepository.save(meetingToUpdate);
 
         return getMeetingResponseDTO(savedMeeting);

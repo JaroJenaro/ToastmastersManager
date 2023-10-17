@@ -43,7 +43,7 @@ public class MeetingController {
     }
 
     @PutMapping("/{id}")
-    public MeetingResponseDTO createMeeting(@PathVariable String id, @Valid @RequestBody MeetingRequestDTO meetingRequestDto) {
+    public MeetingResponseDTO createMeeting(@PathVariable String id,@Valid @RequestBody MeetingRequestDTO meetingRequestDto) {
         return meetingService.updateMeeting(id, meetingRequestDto);
     }
 }
