@@ -266,16 +266,16 @@ class MeetingControllerIntegrationTest {
 
         MeetingResponseDTO meetingResponseDtoOldData = meetingResponseDTOList.get(1);
 
-        MeetingRequestDTO MeetingRequestDtoNewData = new MeetingRequestDTO( "23.12.2023 14:45 Uhr", "Goslar", meetingResponseDtoOldData.getSpeechContributionList());
+        MeetingRequestDTO meetingRequestDtoNewData = new MeetingRequestDTO( "23.12.2023 14:45 Uhr", "Goslar", meetingResponseDtoOldData.getSpeechContributionList());
 
 
         mockMvc.perform(put(BASE_URL_MEET + "/" + meetingResponseDtoOldData.getId())
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(MeetingRequestDtoNewData)))
+                        .content(objectMapper.writeValueAsString(meetingRequestDtoNewData)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(meetingResponseDtoOldData.getId()))
-                .andExpect(jsonPath("location").value(MeetingRequestDtoNewData.getLocation()))
-                .andExpect(jsonPath("dateTime").value(MeetingRequestDtoNewData.getDateTime())
+                .andExpect(jsonPath("location").value(meetingRequestDtoNewData.getLocation()))
+                .andExpect(jsonPath("dateTime").value(meetingRequestDtoNewData.getDateTime())
                 );
     }
 
