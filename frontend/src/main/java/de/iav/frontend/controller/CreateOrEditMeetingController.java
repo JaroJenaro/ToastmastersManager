@@ -28,11 +28,8 @@ public class CreateOrEditMeetingController {
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
-
     private static final String CREATE_NOT_POSSIBLE = "Erstellen nicht möglich";
-
     private static final String UPDATE_NOT_POSSIBLE = "Aktualisieren nicht möglich";
-
     private static final String DATE_TIME_FORMAT = "yyyy.MM.dd HH:mm 'Uhr'";
     private static final String TIME_FORMAT = "HH:mm";
 
@@ -56,8 +53,8 @@ public class CreateOrEditMeetingController {
     public Label lLocation;
 
     private User loggedUser;
-    WayToCreateOrEdit wayToCreateOrEdit;
-    ObservableList<String> locationList = FXCollections.observableArrayList();
+    private WayToCreateOrEdit wayToCreateOrEdit;
+    private final ObservableList<String> locationList = FXCollections.observableArrayList();
     private Meeting meetingToUpdate;
     private int meetingIndex;
 
@@ -96,8 +93,8 @@ public class CreateOrEditMeetingController {
     private void createOneMeeting() throws InterruptedException {
         try {
             if (checkDate() && checkLocation()) {
-                Meeting meetingExist = meetingService.getMeetingByDateTimeAndLocation(lDateTime.getText(), cbLocation.getValue());
-                if (meetingExist == null) {
+                Meeting meetingExists = meetingService.getMeetingByDateTimeAndLocation(lDateTime.getText(), cbLocation.getValue());
+                if (meetingExists == null) {
                     List<TimeSlot> timeSlots = timeSlotService.getAllTimeSlots();
 
                     Meeting meeting = new Meeting(null, lDateTime.getText(), cbLocation.getValue(), getSpeechContributionList(timeSlots));
@@ -107,7 +104,7 @@ public class CreateOrEditMeetingController {
                 } else {
                     Alerts.getMessageBoxWithWarningAndOkButton(
                             CREATE_NOT_POSSIBLE,
-                            "Anlegen eines Meetings nicht möglich weil bereits ein existiert mit ID: " + meetingExist.id(),
+                            "Anlegen eines Meetings nicht möglich weil bereits ein existiert mit ID: " + meetingExists.id(),
                             "kommt später");
                 }
             }

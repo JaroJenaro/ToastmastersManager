@@ -6,7 +6,6 @@ public class BackendBuilder {
 
     BackendBuilder() {
     }
-    //BackendBuilder.getTimeSlotResponseDTO
 
     public static SpeechContribution getSpeechContributionFromDTO(SpeechContributionDTO speechContributionDto){
             return SpeechContribution.builder()
