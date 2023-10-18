@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,8 +120,8 @@ public class CreateOrEditMeetingController {
     private void updateOneMeeting(ActionEvent event) throws InterruptedException {
         try {
             if (checkDate() && checkLocation()) {
-                Meeting meetingExist = meetingService.getMeetingByDateTimeAndLocation(meetingToUpdate.dateTime(), meetingToUpdate.location());
-                if (meetingExist != null) {
+                Meeting meetingExists = meetingService.getMeetingByDateTimeAndLocation(meetingToUpdate.dateTime(), meetingToUpdate.location());
+                if (meetingExists != null) {
 
                     Meeting meeting = new Meeting(meetingToUpdate.id(), lDateTime.getText(), cbLocation.getValue(), meetingToUpdate.speechContributionList());
                     Meeting savedMeeting = meetingService.updateMeeting(meeting, authService.getSessionId());
@@ -170,6 +171,7 @@ public class CreateOrEditMeetingController {
     }
 
     private String getTimeFromMeetingDateTime(String timeString) {
+        //das hier auch mit try absichern
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         LocalTime localTime = LocalTime.parse(timeString, formatter);
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
@@ -185,14 +187,8 @@ public class CreateOrEditMeetingController {
     {
         LocalDate selectedDate = dpDateTime.getValue();
         String timeText = tfTime.getText();
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
-
         if (selectedDate != null && (timeText.length() == 5)) {
-            LocalDateTime dateTime = LocalDateTime.of(selectedDate, LocalTime.parse(timeText, timeFormatter));
-            DateTimeFormatter combinedFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-            String combinedText = dateTime.format(combinedFormatter);
-            lDateTime.setText(combinedText);
-            return true;
+            return onDateTimeCheckIntern();
         } else {
             lDateTime.setText("Bitte wähle ein Datum und gib eine Uhrzeit ein.");
             return false;
@@ -210,15 +206,28 @@ public class CreateOrEditMeetingController {
     }
 
     public void onDateTimeCheck() {
-        LocalDate selectedDate = dpDateTime.getValue();
-        String timeText = tfTime.getText();
+        onDateTimeCheckIntern();
+    }
 
-        if (selectedDate != null && (timeText.length() == 5)){
+    private boolean onDateTimeCheckIntern()
+    {
+        try{
+            LocalDate selectedDate = dpDateTime.getValue();
+            String timeText = tfTime.getText();
+
+            if (selectedDate != null && (timeText.length() == 5)){
                 DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
                 LocalDateTime dateTime = LocalDateTime.of(selectedDate, LocalTime.parse(timeText, timeFormatter));
                 DateTimeFormatter combinedFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
                 String combinedText = dateTime.format(combinedFormatter);
                 lDateTime.setText(combinedText);
+            }
+            return true;
         }
+        catch(DateTimeParseException e)
+        {
+            Alerts.getMessageBoxWithWarningAndOkButton("Ungültige Angaben", "Hat leider nicht geklappt. DateTimeParseException Siehe Meldung:", e.getMessage());
+        }
+        return false;
     }
 }
