@@ -24,7 +24,6 @@ public class RegistrationController {
     public Label lPassword;
     @FXML
     public Label lRegisterTitle;
-    WayToCreateOrEditUser wayToCreateOrEditUser;
     @FXML
     public TextField firstName;
     @FXML
@@ -45,6 +44,8 @@ public class RegistrationController {
 
     private User loggedUser;
     private User userToUpdate;
+
+    WayToCreateOrEditUser wayToCreateOrEditUser;
 
     public void initialize() {
         firstName.setPromptText("Vorname mind 4 Zeichen Lang");
@@ -109,7 +110,6 @@ public class RegistrationController {
         signUp.setText("Sign Up");
         lRegisterTitle.setText("Register User");
     }
-
 
     public void registerUser(ActionEvent event) throws IOException {
         if (isRegisterDataValid()) {
@@ -196,15 +196,3 @@ public class RegistrationController {
         lRegisterTitle.setText(loggedUser.toString());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

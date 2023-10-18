@@ -228,7 +228,7 @@ class TimeSlotServiceTest {
         when(timeSlotRepository.save(any(TimeSlot.class))).thenAnswer(invocation -> invocation.<TimeSlot>getArgument(0));
 
         // Call the service method to update the TimeSlot
-        TimeSlotResponseDTO result = timeSlotService.updateTimeSlot(inputDTO, "1");
+        TimeSlotResponseDTO result = timeSlotService.updateTimeSlot("1", inputDTO);
 
         // Verify that the service method returns the updated DTO
         assertEquals("1", result.getId());
@@ -259,7 +259,7 @@ class TimeSlotServiceTest {
         when(timeSlotRepository.findById("1")).thenReturn(java.util.Optional.empty());
 
         // Verify that the TimeSlotNotFoundException is thrown when updating a non-existent TimeSlot
-        assertThrows(TimeSlotNotFoundException.class, () -> timeSlotService.updateTimeSlot(inputDTO, "1"));
+        assertThrows(TimeSlotNotFoundException.class, () -> timeSlotService.updateTimeSlot( "1", inputDTO));
 
         // Verify that the repository's findById method was called with the correct ID
         verify(timeSlotRepository, times(1)).findById("1");

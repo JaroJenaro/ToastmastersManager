@@ -4,6 +4,7 @@ import de.iav.backend.exception.TimeSlotNotFoundException;
 import de.iav.backend.model.TimeSlot;
 import de.iav.backend.model.TimeSlotResponseDTO;
 import de.iav.backend.model.TimeSlotWithoutIdDTO;
+import de.iav.backend.util.BackendBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import de.iav.backend.repository.TimeSlotRepository;
@@ -20,14 +21,7 @@ public class TimeSlotService {
     public List<TimeSlotResponseDTO> getAllTimeSlots(){
         return timeSlotRepository.findAll()
                 .stream()
-                .map(timeSlot -> TimeSlotResponseDTO.builder()
-                        .id(timeSlot.getId())
-                        .title(timeSlot.getTitle())
-                        .description(timeSlot.getDescription())
-                        .green(timeSlot.getGreen())
-                        .amber(timeSlot.getAmber())
-                        .red(timeSlot.getRed())
-                        .build())
+                .map(BackendBuilder::getTimeSlotResponseDTO)
                 .toList();
     }
 
@@ -68,7 +62,7 @@ public class TimeSlotService {
                 .build();
     }
 
-    public TimeSlotResponseDTO updateTimeSlot(TimeSlotWithoutIdDTO timeSlotWithoutIdDTO, String id) {
+    public TimeSlotResponseDTO updateTimeSlot(String id, TimeSlotWithoutIdDTO timeSlotWithoutIdDTO) {
         TimeSlot timeSlotToUpdate = timeSlotRepository
                 .findById(id)
                 .orElseThrow(() -> new TimeSlotNotFoundException(id));

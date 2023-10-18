@@ -41,4 +41,9 @@ public class MeetingController {
     ) {
         return meetingService.getMeetingByDateTimeAndLocation(dateTime, location);
     }
+
+    @PutMapping("/{id}")
+    public MeetingResponseDTO createMeeting(@PathVariable String id,@Valid @RequestBody MeetingRequestDTO meetingRequestDto) {
+        return meetingService.updateMeeting(id, meetingRequestDto);
+    }
 }

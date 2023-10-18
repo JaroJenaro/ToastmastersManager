@@ -119,7 +119,7 @@ public class SpeechContributionController {
     public void onEditSpeechContributionClick(ActionEvent event) throws IOException {
         if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null)
         {
-            sceneSwitchService.switchToSpeechContributionEditController(event, loggedUser, tvSpeechContribution.getSelectionModel().getSelectedItem());
+            sceneSwitchService.switchToSpeechContributionEditController(event, loggedUser, tvSpeechContribution.getSelectionModel().getSelectedItem(), 0);
 
         }
         else {

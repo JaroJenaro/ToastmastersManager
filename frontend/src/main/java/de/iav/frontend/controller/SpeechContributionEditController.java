@@ -36,6 +36,8 @@ public class SpeechContributionEditController {
     @FXML
     public Label lTimeSlot;
 
+    int meetingIndex;
+
     ObservableList<User> usersList = FXCollections.observableArrayList();
     private User loggedUser;
 
@@ -62,18 +64,20 @@ public class SpeechContributionEditController {
             SpeechContribution savedSpeechContribution = speechContributionService.updateSpeechContribution(speechContributionToSave, authService.getSessionId());
 
             LOG.info("Updated SpeechContribution: {}", savedSpeechContribution);
-            sceneSwitchService.switchToSpeechContributionController(event, loggedUser);
+            sceneSwitchService.switchToMeetingController(event, loggedUser, meetingIndex);
         }
     }
 
-    public void setUserToShowAndSpeechContributionToUpdate(User user, SpeechContribution speechContribution) {
+    public void setUserToShowAndSpeechContributionToUpdate(User user, SpeechContribution speechContribution, int meetingIndex) {
         loggedUser= user;
         speechContributionToUpdate = speechContribution;
-
+        this.meetingIndex = meetingIndex;
         lTimeSlot.setText(speechContributionToUpdate.timeSlot().toString());
         usersList.addAll(userService.getAllUsers());
+        usersList.add(0, null);
         cbUser.setItems(usersList);
         cbUser.setValue(speechContributionToUpdate.user());
+
 
     }
 }

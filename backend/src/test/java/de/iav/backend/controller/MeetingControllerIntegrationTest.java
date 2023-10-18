@@ -253,4 +253,58 @@ class MeetingControllerIntegrationTest {
         mockMvc.perform(get(BASE_URL_MEET + "/search?dateTime=gibtEsNicht&location=gibtEsAuchNicht"))
                 .andExpect(status().isNotFound());
     }
+
+
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @Test
+    void updateSpeechContribution_shouldUpdateSpeechContributionAccordingly_whenUserHasAdminRoleAndSpeechContributionExists() throws Exception {
+        String meetingListAsString = mockMvc.perform(get(BASE_URL_MEET))
+                .andReturn().getResponse().getContentAsString();
+
+        List<MeetingResponseDTO> meetingResponseDTOList = objectMapper.readValue(meetingListAsString, new TypeReference<>() {
+        });
+
+        MeetingResponseDTO meetingResponseDtoOldData = meetingResponseDTOList.get(1);
+
+        MeetingRequestDTO meetingRequestDtoNewData = new MeetingRequestDTO( "23.12.2023 14:45 Uhr", "Goslar", meetingResponseDtoOldData.getSpeechContributionList());
+
+
+        mockMvc.perform(put(BASE_URL_MEET + "/" + meetingResponseDtoOldData.getId())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(meetingRequestDtoNewData)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(meetingResponseDtoOldData.getId()))
+                .andExpect(jsonPath("location").value(meetingRequestDtoNewData.getLocation()))
+                .andExpect(jsonPath("dateTime").value(meetingRequestDtoNewData.getDateTime())
+                );
+    }
+
+    @Test
+    void updateSpeechContribution_shouldReturn404_whenSpeechContributionDoesntExist() throws Exception {
+        String THIS_ID_DOES_NOT_EXIST = "THIS_ID_NUMBER_DOES_NOT_EXIST";
+
+
+        mockMvc.perform(put(BASE_URL_MEET + "/" + THIS_ID_DOES_NOT_EXIST)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(meetingRequestDto1)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateTimeSlot_shouldReturn400_whenValuesInBodyArentValidAndIdIsValid() throws Exception {
+
+        String meetingListAsString = mockMvc.perform(get(BASE_URL_MEET))
+                .andReturn().getResponse().getContentAsString();
+
+        List<MeetingResponseDTO> meetingResponseDTOList = objectMapper.readValue(meetingListAsString, new TypeReference<>() {
+        });
+        MeetingResponseDTO meetingResponseDtoOldData = meetingResponseDTOList.get(1);
+
+        MeetingRequestDTO invalidRequestBody = new MeetingRequestDTO(null, null, meetingRequestDto1.getSpeechContributionList());
+
+        mockMvc.perform(put(BASE_URL_MEET + "/" + meetingResponseDtoOldData.getId())
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(invalidRequestBody)))
+                .andExpect(status().isBadRequest());
+    }
 }

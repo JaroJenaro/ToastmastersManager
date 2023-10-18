@@ -60,7 +60,7 @@ public class SpeechContributionService {
     }
 
 
-    public SpeechContributionDTO updateSpeechContribution(SpeechContributionIn speechContributionIn, String id) {
+    public SpeechContributionDTO updateSpeechContribution( String id, SpeechContributionIn speechContributionIn) {
         SpeechContribution speechContributionToUpdateFromDB = speechContributionRepository
                 .findById(id)
                 .orElseThrow(() -> new SpeechContributionNotFoundException(id));
@@ -68,16 +68,30 @@ public class SpeechContributionService {
         TimeSlot timeSlotFromDB = timeSlotRepository
                 .findById(speechContributionToUpdateFromDB.getTimeSlot().getId())
                 .orElseThrow(() -> new TimeSlotNotFoundException(speechContributionIn.getTimeSlot().getId()));
-        // User darf getauscht werden
-        User userInFromDB = userRepository
-                .findById(speechContributionIn.getUser().getId())
-                .orElseThrow(() -> new UserNotFoundException(speechContributionIn.getUser().getId()));
+        // User darf getauscht oder entfernt werden
         TimeSlot timeSlotIn = getTimeSlot(speechContributionIn.getTimeSlot());
-        User userIn = BackendBuilder.getUserFromResponse(speechContributionIn.getUser());
-        userIn.setPassword(userInFromDB.getPassword());
-        if(timeSlotFromDB.equals(timeSlotIn) && userInFromDB.equals(userIn))
+        User userInFromDB;
+        if(speechContributionIn.getUser() != null) {
+            userInFromDB = userRepository
+                    .findById(speechContributionIn.getUser().getId())
+                    .orElseThrow(() -> new UserNotFoundException(speechContributionIn.getUser().getId()));
+
+            User userIn = BackendBuilder.getUserFromResponse(speechContributionIn.getUser());
+            userIn.setPassword(userInFromDB.getPassword());
+            if(timeSlotFromDB.equals(timeSlotIn) && userInFromDB.equals(userIn))
+            {
+                speechContributionToUpdateFromDB.setUser(BackendBuilder.getUserFromResponse(speechContributionIn.getUser()));
+                speechContributionToUpdateFromDB.setTimeSlot(getTimeSlot(speechContributionIn.getTimeSlot()));
+                speechContributionToUpdateFromDB.setStoppedTime(speechContributionIn.getStoppedTime());
+
+                SpeechContribution savedSpeechContribution = speechContributionRepository.save(speechContributionToUpdateFromDB);
+
+                return BackendBuilder.getSpeechContributionDTO(savedSpeechContribution);
+            }
+        }
+        else if(timeSlotFromDB.equals(timeSlotIn))
         {
-            speechContributionToUpdateFromDB.setUser(BackendBuilder.getUserFromResponse(speechContributionIn.getUser()));
+            speechContributionToUpdateFromDB.setUser(null);
             speechContributionToUpdateFromDB.setTimeSlot(getTimeSlot(speechContributionIn.getTimeSlot()));
             speechContributionToUpdateFromDB.setStoppedTime(speechContributionIn.getStoppedTime());
 

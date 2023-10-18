@@ -6,10 +6,10 @@ public class BackendBuilder {
 
     BackendBuilder() {
     }
-    //BackendBuilder.getSpeechContributionDTO
 
     public static SpeechContribution getSpeechContributionFromDTO(SpeechContributionDTO speechContributionDto){
             return SpeechContribution.builder()
+                    .id(speechContributionDto.getId())
                     .timeSlot(TimeSlot.builder()
                             .id(speechContributionDto.getTimeSlot().getId())
                             .title(speechContributionDto.getTimeSlot().getTitle())
@@ -71,6 +71,7 @@ public class BackendBuilder {
                 .stoppedTime(speechContributionIn.getStoppedTime())
                 .build();
     }
+
     public static User getUserFromResponse(UserResponseDTO userResponseDTO){
         return User.builder()
                 .id(userResponseDTO.getId())
@@ -78,6 +79,17 @@ public class BackendBuilder {
                 .lastName(userResponseDTO.getLastName())
                 .email(userResponseDTO.getEmail())
                 .role(userResponseDTO.getRole())
+                .build();
+    }
+
+    public static TimeSlotResponseDTO getTimeSlotResponseDTO(TimeSlot timeSlot) {
+        return TimeSlotResponseDTO.builder()
+                .id(timeSlot.getId())
+                .title(timeSlot.getTitle())
+                .description(timeSlot.getDescription())
+                .green(timeSlot.getGreen())
+                .amber(timeSlot.getAmber())
+                .red(timeSlot.getRed())
                 .build();
     }
 }

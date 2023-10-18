@@ -50,7 +50,7 @@ public class LoginController {
                 if(meetingService.getAllMeetings().isEmpty())
                     sceneSwitchService.switchToTimeSlotsController(actionEvent, logInUser);
                 else
-                    sceneSwitchService.switchToMeetingController(actionEvent, logInUser);
+                    sceneSwitchService.switchToMeetingController(actionEvent, logInUser, 0);
                 LOG.info("scene Switch : {}",  logInUser);
             } else {
                 informationForUser.setText("login unsuccessfully");

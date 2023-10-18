@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.CreateMeetingController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.CreateOrEditMeetingController">
 
    <Label fx:id="lMeetingTitle" layoutX="220.0" layoutY="25.0" prefHeight="27.0" prefWidth="160.0" text="Meeting erstellen" />
 
@@ -16,9 +16,9 @@
    <ComboBox fx:id="cbLocation" layoutX="206.0" layoutY="180.0" prefHeight="25.0" prefWidth="264.0" promptText="Standort auswählen" />
    <Button fx:id="bUpdate" layoutX="90.0" layoutY="281.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefHeight="25.0" prefWidth="80.0" text="Speichern" />
    <Button fx:id="bBack" layoutX="419.0" layoutY="281.0" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="25.0" prefWidth="80.0" text="Back" />
-   <DatePicker fx:id="dpDateTime" layoutX="206.0" layoutY="65.0" prefHeight="25.0" prefWidth="264.0" promptText="datum auswählen" />
+   <DatePicker fx:id="dpDateTime" layoutX="206.0" layoutY="65.0" onAction="#onDateTimeCheck" prefHeight="25.0" prefWidth="264.0" promptText="datum auswählen" />
    <Label layoutX="42.0" layoutY="98.0" text="Uhrzeit" />
-   <TextField fx:id="tfTime" layoutX="206.0" layoutY="94.0" prefHeight="25.0" prefWidth="264.0" />
+   <TextField fx:id="tfTime" layoutX="206.0" layoutY="94.0" onAction="#onDateTimeCheck" prefHeight="25.0" prefWidth="264.0" promptText="Uhrzeit in Form: &quot;HH::mm&quot; eingeben" />
    <Label fx:id="lDateTime" layoutX="205.0" layoutY="132.0" prefHeight="17.0" prefWidth="264.0" />
    <Label fx:id="lLocation" layoutX="206.0" layoutY="216.0" prefHeight="17.0" prefWidth="264.0" />
 
