@@ -35,16 +35,19 @@
   </VBox>
    <HBox prefHeight="100.0" prefWidth="200.0">
       <VBox prefHeight="200.0" prefWidth="100.0">
-            <Button fx:id="bPrev" mnemonicParsing="false" onAction="#onPrevButtonClick" prefHeight="35.0" prefWidth="80.0" text="&lt; PREV" />
+            <Button fx:id="bPrev" minWidth="60.0" mnemonicParsing="false" onAction="#onPrevButtonClick" prefHeight="29.0" prefWidth="75.0" text="&lt; PREV" />
+      </VBox>
+      <VBox minWidth="40.0" prefHeight="29.0" prefWidth="80.0">
+             <Label fx:id="lPlaceHolder" />
       </VBox>
      <VBox prefHeight="200.0" prefWidth="100.0">
-       <Label fx:id="lDateTime" minWidth="-Infinity" prefHeight="29.0" prefWidth="275.0">
+       <Label fx:id="lDateTime" minWidth="240.0" prefHeight="29.0" prefWidth="270.0">
             <font>
                <Font size="24.0" />
             </font></Label>
      </VBox>
      <VBox prefHeight="29.0" prefWidth="123.0">
-            <Button fx:id="bNext" mnemonicParsing="false" onAction="#onNextButtonClick" prefHeight="29.0" prefWidth="75.0" text="NEXT &gt;">
+            <Button fx:id="bNext" minWidth="65.0" mnemonicParsing="false" onAction="#onNextButtonClick" prefHeight="29.0" prefWidth="75.0" text="NEXT &gt;">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -73,7 +76,7 @@
          </HBox.margin>
       </Button>
     </HBox>
-   <TableView fx:id="tvSpeechContribution" prefHeight="599.0" prefWidth="433.0">
+   <TableView fx:id="tvSpeechContribution" onKeyPressed="#onTableViewKeyPressed" onMouseClicked="#onRowTableViewMouseClicked" prefHeight="599.0" prefWidth="433.0">
        <columns>
            <TableColumn fx:id="tcTimeSlotTitle" text="Redebeitrag-Title" />
            <TableColumn fx:id="tcTimeSlotRed" text="Max. Zeit" />
