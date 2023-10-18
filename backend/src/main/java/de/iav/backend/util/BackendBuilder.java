@@ -10,6 +10,7 @@ public class BackendBuilder {
 
     public static SpeechContribution getSpeechContributionFromDTO(SpeechContributionDTO speechContributionDto){
             return SpeechContribution.builder()
+                    .id(speechContributionDto.getId())
                     .timeSlot(TimeSlot.builder()
                             .id(speechContributionDto.getTimeSlot().getId())
                             .title(speechContributionDto.getTimeSlot().getTitle())
@@ -71,6 +72,7 @@ public class BackendBuilder {
                 .stoppedTime(speechContributionIn.getStoppedTime())
                 .build();
     }
+
     public static User getUserFromResponse(UserResponseDTO userResponseDTO){
         return User.builder()
                 .id(userResponseDTO.getId())

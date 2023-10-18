@@ -1,10 +1,7 @@
 package de.iav.frontend.service;
 
 import de.iav.frontend.controller.*;
-import de.iav.frontend.model.SpeechContribution;
-import de.iav.frontend.model.TimeSlot;
-import de.iav.frontend.model.User;
-import de.iav.frontend.model.UserRequestDto;
+import de.iav.frontend.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -55,10 +52,8 @@ public class SceneSwitchService {
     }
 
     public void switchToUserEditController(ActionEvent actionEvent, User loggedUser, User selectedItem) throws IOException {
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/Registration.fxml"));
         Parent root = loader.load();
-
 
         RegistrationController registrationController = loader.getController();
         LOG.info("  ----> public void switchToUserEditController(ActionEvent actionEvent, User user) throws IOException {}", loggedUser);
@@ -71,10 +66,8 @@ public class SceneSwitchService {
     }
 
     public void switchToTimeSlotsController(ActionEvent actionEvent, User user) throws IOException {
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/TimeSlotsData.fxml"));
         Parent root = loader.load();
-
 
         TimeSlotsController timeSlotsController = loader.getController();
         LOG.info("  ----> public void switchToTimeSlotsController(ActionEvent actionEvent, User user) throws IOException {} ", user);
@@ -87,10 +80,8 @@ public class SceneSwitchService {
     }
 
     public void switchToNewTimeSlotEditController(ActionEvent actionEvent, User user) throws IOException {
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/TimeSlotEdit.fxml"));
         Parent root = loader.load();
-
 
         TimeSlotEditController newTimeSlotEditController = loader.getController();
         LOG.info("  ----> public void switchToTimeSlotEditController(ActionEvent actionEvent, User user) throws IOException {} ", user);
@@ -102,11 +93,9 @@ public class SceneSwitchService {
         stage.show();
     }
 
-
     public void switchToTimeSlotEditController(ActionEvent actionEvent, User user, TimeSlot timeSlot) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/TimeSlotEdit.fxml"));
         Parent root = loader.load();
-
 
         TimeSlotEditController timeSlotEditController = loader.getController();
         LOG.info("  ----> public void switchToTimeSlotEditController(ActionEvent actionEvent, User user) throws IOException {} ", user);
@@ -176,12 +165,26 @@ public class SceneSwitchService {
     }
 
     public void switchToCreateMeetingController(ActionEvent actionEvent, User user) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/CreateMeeting.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/CreateOrEditMeeting.fxml"));
         Parent root = loader.load();
 
-        CreateMeetingController createMeetingController = loader.getController();
+        CreateOrEditMeetingController createOrEditMeetingController = loader.getController();
         LOG.info("  ----> public void switchToCreateMeetingController(ActionEvent actionEvent, User user) throws IOException {} ", user);
-        createMeetingController.setUserToShow(user);
+        createOrEditMeetingController.setUserAndEditToShow(user);
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void switchToUpdateMeetingController(ActionEvent actionEvent, User user, Meeting meeting, int meetingIndex) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/CreateOrEditMeeting.fxml"));
+        Parent root = loader.load();
+
+        CreateOrEditMeetingController createOrEditMeetingController = loader.getController();
+        LOG.info("  ----> public void switchToCreateMeetingController(ActionEvent actionEvent, User user) throws IOException {} ", user);
+        createOrEditMeetingController.setUserAndUpdateToShow(user, meeting, meetingIndex);
 
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

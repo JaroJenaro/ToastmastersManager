@@ -23,7 +23,6 @@ public class MeetingService {
     private static final String JSESSIONID_IS_EQUAL ="JSESSIONID=";
     private static final String COOKIE = "Cookie";
 
-
     public MeetingService() {
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
@@ -55,6 +54,7 @@ public class MeetingService {
             throw new MappingRuntimeException("Failed to map MeetingList" + e.getMessage());
         }
     }
+
     private Meeting mapToMeeting(String json) {
         try {
             return objectMapper.readValue(json, Meeting.class);
@@ -62,6 +62,7 @@ public class MeetingService {
             throw new MappingRuntimeException("Failed to map Meeting" + e.getMessage());
         }
     }
+
     public Meeting createMeeting(Meeting meeting, String sessionId) {
         try {
             String requestBody = objectMapper.writeValueAsString(meeting);
@@ -101,6 +102,25 @@ public class MeetingService {
              return null;
          } else {
             throw new MappingRuntimeException("Fehler beim Abrufen des Meetings: " + responseBody);
+        }
+    }
+
+    public Meeting updateMeeting(Meeting meeting, String sessionId) {
+        try {
+            String requestBody = objectMapper.writeValueAsString(meeting);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BACKEND_SC_MEET+ "/" + meeting.id()))
+                    .header("Content-Type", APPLICATION_JSON)
+                    .header("Accept", APPLICATION_JSON)
+                    .header(COOKIE, JSESSIONID_IS_EQUAL + sessionId)
+                    .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+            return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenApply(this::mapToMeeting)
+                    .join();
+        } catch (JsonProcessingException e) {
+            throw new MappingRuntimeException("--->Failed to update Meeting: " + e.getMessage());
         }
     }
 }

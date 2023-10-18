@@ -58,6 +58,8 @@ public class MeetingController {
     public Button bNext;
     @FXML
     public Label lNavi;
+    @FXML
+    public Button bUpdateMeeting;
 
     @FXML
     private User loggedUser;
@@ -101,13 +103,18 @@ public class MeetingController {
         indexColumn.setSortable(false);
         indexColumn.setPrefWidth(30); // Breite der Indexspalte
 
+        TableColumn<SpeechContribution, String> idColumn = new TableColumn<>("id");
+        idColumn.setCellValueFactory(cellData -> {
+            String idSpeechContribution =cellData.getValue().id();
+            return Bindings.createObjectBinding(() -> idSpeechContribution);
+        });
+
         tvSpeechContribution.getColumns().add(indexColumn);
         tvSpeechContribution.getColumns().add(tcTimeSlotTitle);
         tvSpeechContribution.getColumns().add(tcTimeSlotRed);
         tvSpeechContribution.getColumns().add(tcUserLastAndFirstName);
         tvSpeechContribution.getColumns().add(tcTimeSlotDescription);
-
-
+        tvSpeechContribution.getColumns().add(idColumn);
         LOG.info("showAllSpeechContributions durch");
     }
 
@@ -190,6 +197,9 @@ public class MeetingController {
         speechContributionList.addAll(meetingsList.get(meetingIndex).speechContributionList());
         tvSpeechContribution.setItems(speechContributionList);
         lNavi.setText((meetingIndex+1) + "/" + meetingsList.size() );
+    }
 
+    public void onUpdateMeetingButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToUpdateMeetingController(event, loggedUser, meetingsList.get(meetingIndex), meetingIndex);
     }
 }

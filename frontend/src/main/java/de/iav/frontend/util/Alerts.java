@@ -47,4 +47,13 @@ public class Alerts {
             }
         });
     }
+
+    public static boolean getMessageBoxWithInformationAndOkButtonAndReturnBoolean(String title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+
+        return alert.showAndWait().filter(rs -> rs == ButtonType.OK).isPresent();
+    }
 }
