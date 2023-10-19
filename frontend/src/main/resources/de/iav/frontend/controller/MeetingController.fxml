@@ -55,21 +55,16 @@
      </VBox>
    </HBox>
     <HBox prefHeight="100.0" prefWidth="200.0">
-      <Button mnemonicParsing="false" onAction="#onUpdateMeetingButtonClick" text="Meeting löschen">
+      <Button fx:id="bCreateMeeting" minWidth="50.0" mnemonicParsing="false" onAction="#onCreateMeetingButtonClick" prefHeight="25.0" prefWidth="124.0" text="Meeting erstellen">
          <HBox.margin>
-            <Insets bottom="5.0" right="5.0" top="5.0" />
-         </HBox.margin>
-      </Button>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin></Button>
       <Button fx:id="bUpdateMeeting" mnemonicParsing="false" onAction="#onUpdateMeetingButtonClick" text="Meeting bearbeiten">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
       </Button>
-      <Button minWidth="50.0" mnemonicParsing="false" onAction="#onUpdateMeetingButtonClick" prefWidth="100.0" text="Reserve" visible="false">
-         <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </HBox.margin></Button>
-      <Button fx:id="bBack" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="25.0" prefWidth="66.0" text="Back">
+      <Button fx:id="bDeleteMeeting" mnemonicParsing="false" onAction="#onDeleteMeetingButtonClick" text="Meeting löschen">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
@@ -84,11 +79,6 @@
        </columns>
    </TableView>
    <HBox prefHeight="100.0" prefWidth="200.0">
-           <Button onAction="#onDeleteSpeechContributionClick" text="Redebeitrag löschen">
-              <HBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-              </HBox.margin>
-           </Button>
          <Button prefHeight="25.0" prefWidth="48.0" text="Reserve" visible="false">
             <HBox.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -99,7 +89,12 @@
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>
            </Button>
-         <Button  cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" text="Back">
+           <Button onAction="#onDeleteSpeechContributionClick" text="Redebeitrag löschen">
+              <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+              </HBox.margin>
+           </Button>
+         <Button cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" text="Back">
             <HBox.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>

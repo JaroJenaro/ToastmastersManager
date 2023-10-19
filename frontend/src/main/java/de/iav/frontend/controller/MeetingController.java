@@ -34,9 +34,7 @@ public class MeetingController {
 
     @FXML
     public Label lLoggedInUser;
-    @FXML
-    public Button bBack;
-    @FXML
+     @FXML
     public TableView<SpeechContribution> tvSpeechContribution;
     @FXML
     public  TableColumn<SpeechContribution, String> tcTimeSlotTitle;
@@ -60,6 +58,10 @@ public class MeetingController {
     public Button bUpdateMeeting;
     @FXML
     public Label lPlaceHolder;
+    @FXML
+    public Button bCreateMeeting;
+    @FXML
+    public Button bDeleteMeeting;
     @FXML
     private User loggedUser;
 
@@ -118,7 +120,7 @@ public class MeetingController {
     public void setUserAndMeetingToShow(User user, int meetingIndex) {
         loggedUser= user;
         this.meetingIndex = meetingIndex;
-        lLoggedInUser.setText(authService.me() + "Role: " +  user.role());
+        lLoggedInUser.setText(authService.me() + " Role: " +  user.role());
         meetingsList = meetingService.getAllMeetings();
         if (!meetingsList.isEmpty()) {
             updateTableAndOtherView();
@@ -133,8 +135,8 @@ public class MeetingController {
         else {
             Alerts.getMessageBoxWithWarningAndOkButton("Kein Meeting in DB", "DB enthält keinen Meeting",
                     "legen sie zunächst einen Termin ein!" );
-            bNext.setDisable(false);
-            bPrev.setDisable(false);
+            bNext.setDisable(true);
+            bPrev.setDisable(true);
         }
     }
 
@@ -147,11 +149,14 @@ public class MeetingController {
     }
 
     public void onEditSpeechContributionClick(ActionEvent event) throws IOException {
-        if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null){
-            sceneSwitchService.switchToSpeechContributionEditController(event, loggedUser, tvSpeechContribution.getSelectionModel().getSelectedItem(), meetingIndex);
-        }
-        else{
-            Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Zum Bearbeiten selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
+        if(!tvSpeechContribution.getItems().isEmpty()){
+            if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null){
+                sceneSwitchService.switchToSpeechContributionEditController(event, loggedUser, tvSpeechContribution.getSelectionModel().getSelectedItem(), meetingIndex);
+            }else{
+                Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Zum Bearbeiten selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
+            }
+        }else{
+            Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Zum Bearbeiten muss ein Termin mit Redebeiträgen existieren", "ohne Meeting geht es hier nicht weiter");
         }
     }
 
@@ -189,7 +194,11 @@ public class MeetingController {
     }
 
     public void onUpdateMeetingButtonClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToUpdateMeetingController(event, loggedUser, meetingsList.get(meetingIndex), meetingIndex);
+        if(!tvSpeechContribution.getItems().isEmpty()){
+            sceneSwitchService.switchToUpdateMeetingController(event, loggedUser, meetingsList.get(meetingIndex), meetingIndex);
+        }else{
+            Alerts.getMessageBoxWithWarningAndOkButton(UPDATE_NOT_POSSIBLE, "Zum Bearbeiten muss ein Termin existieren", "ohne Meeting geht es hier nicht weiter");
+        }
     }
 
     public void onRowTableViewMouseClicked(MouseEvent mouseEvent) throws IOException {
@@ -212,5 +221,13 @@ public class MeetingController {
                             "\nUser:" + selectedSpeechContribution.user()
                     );
         }
+    }
+
+    public void onDeleteMeetingButtonClick() {
+        Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Löschen noch nicht umgesetzt", "kommt später");
+    }
+
+    public void onCreateMeetingButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToCreateMeetingController(event, loggedUser);
     }
 }

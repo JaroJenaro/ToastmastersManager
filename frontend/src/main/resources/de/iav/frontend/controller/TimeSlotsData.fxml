@@ -42,17 +42,12 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
          </Button>
-         <Button fx:id="bAddCSpeechContribution" mnemonicParsing="false" onAction="#onAddSpeechContributionClick" text="Redebeitrag anlegen">
-            <HBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </HBox.margin>
-         </Button>
-      <Button fx:id="bFirstMeeting" mnemonicParsing="false" onAction="#onFirstMeetingButtonClick" text="first Meeting">
+      <Button fx:id="bFirstMeeting" mnemonicParsing="false" onAction="#onFirstMeetingButtonClick" text="Meeting-Navigator">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
       </Button>
-      <Button fx:id="bCreateOneMeeting" mnemonicParsing="false" onAction="#onCreateOneMeetingButtonClick" text="neus Meeting erstellen">
+      <Button fx:id="bCreateOneMeeting" mnemonicParsing="false" onAction="#onCreateOneMeetingButtonClick" text="Neues Meeting erstellen">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
