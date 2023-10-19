@@ -1,0 +1,28 @@
+.button.control {
+    -fx-background-color: #041E96;
+    -fx-text-fill:  White;
+    -fx-font-family: SansSerif;
+}
+
+.button.menu {
+    -fx-background-color:  #5400B4;
+    -fx-text-fill:  WHITE;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-insets: 0;
+}
+.button.process {
+    -fx-background-color: transparent;
+    -fx-text-fill:  #818181;
+    -fx-font-family: SansSerif;
+}
+
+.button.create {
+    -fx-background-color:  #5455B4;
+    -fx-text-fill:  WHITE;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-insets: 0;
+}
