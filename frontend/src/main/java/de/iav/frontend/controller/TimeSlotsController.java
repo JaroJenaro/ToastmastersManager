@@ -126,10 +126,6 @@ public class TimeSlotsController {
         }
     }
 
-    public void onShowSpeechContributionButtonClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToSpeechContributionController(event, loggedUser);
-    }
-
     public void onFirstMeetingButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToMeetingController(event, loggedUser, 0);
     }

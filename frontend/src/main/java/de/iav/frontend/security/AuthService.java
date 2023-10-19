@@ -14,11 +14,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Base64;
 
-
 public class AuthService {
 
     private String email;
-
     private String sessionId;
     private String errorMessage;
 
@@ -51,9 +49,7 @@ public class AuthService {
     private static AuthService instance;
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
-
     private static final String BACKEND_AUTH_URL = System.getenv("BACKEND_TOASTMASTER_URI") + "/auth";
-
 
     private AuthService() {
     }
@@ -66,13 +62,11 @@ public class AuthService {
     }
 
     public boolean registerAppUser(UserRequestDto appUserRequest) {
-
         LOG.info("1: {}", appUserRequest);
         LOG.info("1a: {}/register", BACKEND_AUTH_URL);
         try {
             String requestBody = objectMapper.writeValueAsString(appUserRequest);
             LOG.info("2a: {}", appUserRequest);
-
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BACKEND_AUTH_URL + "/register"))
@@ -86,7 +80,6 @@ public class AuthService {
             LOG.info("3: {}", response);
 
             int statusCode = response.join().statusCode();
-
             if (statusCode == 201) {
                 return true;
             } else {
@@ -98,9 +91,6 @@ public class AuthService {
             throw new MappingRuntimeException("Failed to register User" + e.getMessage());
         }
     }
-
-
-
 
     public boolean login(String email, String password) {
         LOG.info("Login Uri: {}/login", BACKEND_AUTH_URL);
@@ -116,7 +106,6 @@ public class AuthService {
         if (statusCode == 200) {
             String responseCookie = response.join().headers().firstValue("Set-Cookie").orElseThrow();
             String responseSessionId = responseCookie.substring(11, responseCookie.indexOf(";"));
-
             setSessionId(responseSessionId);
             setEmail(email);
 
@@ -136,7 +125,6 @@ public class AuthService {
 
         var response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
         int statusCode = response.join().statusCode();
-
         if (statusCode == 200) {
             return true;
         } else {
@@ -154,13 +142,11 @@ public class AuthService {
 
         var response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
         int statusCode = response.join().statusCode();
-
         if (statusCode == 200) {
-            return "me :" + response.join().body() + "  auth: " + getEmail();
+            return "me :" + response.join().body();
         } else {
             setErrorMessage("Logout failed");
             return "Kein User ist eingeloggt";
         }
     }
-
 }

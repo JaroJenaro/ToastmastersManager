@@ -118,7 +118,7 @@ public class MeetingController {
     public void setUserAndMeetingToShow(User user, int meetingIndex) {
         loggedUser= user;
         this.meetingIndex = meetingIndex;
-        lLoggedInUser.setText(authService.me());
+        lLoggedInUser.setText(authService.me() + "Role: " +  user.role());
         meetingsList = meetingService.getAllMeetings();
         if (!meetingsList.isEmpty()) {
             updateTableAndOtherView();

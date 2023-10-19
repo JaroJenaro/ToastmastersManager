@@ -9,4 +9,7 @@ public record User(
         Role role
 
 ) {
+    public String toString() {
+        return lastName + "; " + firstName + ": " + role;
+    }
 }
