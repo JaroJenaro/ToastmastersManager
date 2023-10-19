@@ -133,6 +133,9 @@ public class MeetingController {
             if(meetingIndex ==0){
                 bPrev.setDisable(true);
             }
+            if(meetingIndex == meetingsList.size()-1){
+                bNext.setDisable(true);
+            }
         }
         else {
             Alerts.getMessageBoxWithWarningAndOkButton("Kein Meeting in DB", "DB enthält keinen Meeting",
@@ -182,7 +185,7 @@ public class MeetingController {
                 bPrev.setDisable(true);
         }
         else Alerts.getMessageBoxWithWarningAndOkButton("Erste Index", "Erste Meeting",
-                "hier soll eigentlich graue button sein" );
+                "hier sollte eigentlich graue button sein" );
     }
 
     public void onNextButtonClick() {
@@ -193,8 +196,8 @@ public class MeetingController {
             if(meetingIndex == meetingsList.size()-1)
                 bNext.setDisable(true);
         }
-        else Alerts.getMessageBoxWithWarningAndOkButton("Letzte Index", "Lette meeting Meeting",
-                "hier soll eigentlich graue button sein" );
+        else Alerts.getMessageBoxWithWarningAndOkButton("Letzte Index", "Letzte  Meeting",
+                "hier sollte eigentlich graue button sein" );
     }
 
     private void updateTableAndOtherView(){
@@ -241,6 +244,6 @@ public class MeetingController {
     }
 
     public void onCreateMeetingButtonClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToCreateMeetingController(event, loggedUser);
+        sceneSwitchService.switchToCreateMeetingController(event, loggedUser, meetingIndex, meetingsList.size());
     }
 }

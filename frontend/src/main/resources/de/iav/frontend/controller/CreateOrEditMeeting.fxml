@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.CreateOrEditMeetingController">
 
@@ -14,8 +15,12 @@
    <Label layoutX="42.0" layoutY="69.0" text="Termin" />
    <Label layoutX="42.0" layoutY="184.0" text="Standort" />
    <ComboBox fx:id="cbLocation" layoutX="206.0" layoutY="180.0" prefHeight="25.0" prefWidth="264.0" promptText="Standort auswählen" />
-   <Button fx:id="bUpdate" layoutX="90.0" layoutY="281.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefHeight="25.0" prefWidth="80.0" text="Speichern" />
-   <Button fx:id="bBack" layoutX="419.0" layoutY="281.0" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="25.0" prefWidth="80.0" text="Back" />
+   <HBox layoutX="36.0" layoutY="248.0" prefHeight="57.0" prefWidth="485.0">
+      <Button fx:id="bBack" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="26.0" prefWidth="209.0" styleClass="read" stylesheets="@../../../../css/buttonStyling.css" text="Meeting-Navigation" />
+      <Button fx:id="bCreate" mnemonicParsing="false" onAction="#onCreateButtonClick" prefHeight="26.0" prefWidth="180.0" styleClass="create" stylesheets="@../../../../css/buttonStyling.css" text="Speichern" />
+      <Button fx:id="bUpdate" mnemonicParsing="false" onAction="#onCreateButtonClick" prefHeight="26.0" prefWidth="182.0" styleClass="update" stylesheets="@../../../../css/buttonStyling.css" text="Speichern" />
+   </HBox>
+
    <DatePicker fx:id="dpDateTime" layoutX="206.0" layoutY="65.0" onAction="#onDateTimeCheck" prefHeight="25.0" prefWidth="264.0" promptText="datum auswählen" />
    <Label layoutX="42.0" layoutY="98.0" text="Uhrzeit" />
    <TextField fx:id="tfTime" layoutX="206.0" layoutY="94.0" onAction="#onDateTimeCheck" prefHeight="25.0" prefWidth="264.0" promptText="Uhrzeit in Form: &quot;HH::mm&quot; eingeben" />

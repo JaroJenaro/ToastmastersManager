@@ -107,10 +107,6 @@ public class TimeSlotsController {
         sceneSwitchService.switchToMeetingController(event, loggedUser, 0);
     }
 
-    public void onCreateOneMeetingButtonClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToCreateMeetingController(event, loggedUser);
-    }
-
     public void onShowSpeechContributionButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToSpeechContributionController(event, loggedUser);
     }

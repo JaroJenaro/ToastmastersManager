@@ -52,12 +52,15 @@ public class CreateOrEditMeetingController {
     public TextField tfTime;
     @FXML
     public Label lLocation;
+    @FXML
+    public Button bCreate;
 
     private User loggedUser;
     private WayToCreateOrEdit wayToCreateOrEdit;
     private final ObservableList<String> locationList = FXCollections.observableArrayList();
     private Meeting meetingToUpdate;
     private int meetingIndex;
+    private int meetingSize;
 
     public void initialize() {
         LOG.info("---->CreateMeetingController public void initialize");
@@ -72,12 +75,12 @@ public class CreateOrEditMeetingController {
     }
 
     public void onBackButtonClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToTimeSlotsController(event,loggedUser);
+        sceneSwitchService.switchToMeetingController(event, loggedUser, meetingIndex);
     }
 
     public void onCreateButtonClick(ActionEvent event) throws InterruptedException {
         if(wayToCreateOrEdit == WayToCreateOrEdit.CREATE){
-            createOneMeeting();
+            createOneMeeting(event);
         }
         else if(wayToCreateOrEdit == WayToCreateOrEdit.UPDATE){
             updateOneMeeting(event);
@@ -91,7 +94,7 @@ public class CreateOrEditMeetingController {
         }
     }
 
-    private void createOneMeeting() throws InterruptedException {
+    private void createOneMeeting(ActionEvent event) throws InterruptedException {
         try {
             if (checkDate() && checkLocation()) {
                 Meeting meetingExists = meetingService.getMeetingByDateTimeAndLocation(lDateTime.getText(), cbLocation.getValue());
@@ -100,8 +103,9 @@ public class CreateOrEditMeetingController {
 
                     Meeting meeting = new Meeting(null, lDateTime.getText(), cbLocation.getValue(), getSpeechContributionList(timeSlots));
                     Meeting savedMeeting = meetingService.createMeeting(meeting, authService.getSessionId());
-                    Alerts.getMessageBoxWithInformationAndOkButton("Erfolgreiches anlegen des Meetings mit der ID",
-                            "Erfolgreiches anlegen des Meetings mit der ID: " + savedMeeting.id(), "alles geklappt");
+                    if(Alerts.getMessageBoxWithInformationAndOkButtonAndReturnBoolean("Erfolgreiches anlegen des Meetings mit der ID",
+                            "Erfolgreiches anlegen des Meetings mit der ID: " + savedMeeting.id(), "alles geklappt"))
+                        sceneSwitchService.switchToMeetingController(event, loggedUser, meetingSize);
                 } else {
                     Alerts.getMessageBoxWithWarningAndOkButton(
                             CREATE_NOT_POSSIBLE,
@@ -152,10 +156,14 @@ public class CreateOrEditMeetingController {
         return speechContribution;
     }
 
-    public void setUserAndEditToShow(User user) {
+    public void setUserAndEditToShow(User user, int meetingIndex, int meetingSize) {
         loggedUser= user;
         meetingToUpdate = null;
+        this.meetingIndex = meetingIndex;
+        this.meetingSize = meetingSize;
         this.wayToCreateOrEdit = WayToCreateOrEdit.CREATE;
+        bCreate.setVisible(true);
+        bUpdate.setVisible(false);
     }
 
     public void setUserAndUpdateToShow(User user, Meeting meeting, int meetingIndex) {
@@ -168,6 +176,8 @@ public class CreateOrEditMeetingController {
         lDateTime.setText(meetingToUpdate.dateTime());
 
         this.wayToCreateOrEdit = WayToCreateOrEdit.UPDATE;
+        bCreate.setVisible(false);
+        bUpdate.setVisible(true);
     }
 
     private String getTimeFromMeetingDateTime(String timeString) {

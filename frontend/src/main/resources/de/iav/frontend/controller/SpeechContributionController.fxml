@@ -16,17 +16,17 @@
    <Label fx:id="lLoggedInUser" text="Label" />
 
     <HBox prefHeight="100.0" prefWidth="200.0">
-        <Button onAction="#onDeleteSpeechContributionClick" text="Redebeitrag löschen">
-           <HBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-           </HBox.margin>
-        </Button>
-        <Button onAction="#onEditSpeechContributionClick" text="Redebeitrag bearbeiten">
+        <Button onAction="#onEditSpeechContributionClick" text="Redebeitrag bearbeiten" styleClass="update" stylesheets="@../../../../css/buttonStyling.css">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
         </Button>
-      <Button fx:id="bBack" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" text="Back">
+        <Button onAction="#onDeleteSpeechContributionClick" text="Redebeitrag löschen" styleClass="delete" stylesheets="@../../../../css/buttonStyling.css">
+            <HBox.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </HBox.margin>
+        </Button>
+        <Button fx:id="bBack" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" text="Zeitschlitze verwalten" styleClass="read" stylesheets="@../../../../css/buttonStyling.css">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>

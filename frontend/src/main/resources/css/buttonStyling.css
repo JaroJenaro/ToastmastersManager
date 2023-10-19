@@ -19,10 +19,35 @@
 }
 
 .button.create {
-    -fx-background-color:  #5455B4;
+    -fx-background-color:  #4CAF50;
     -fx-text-fill:  WHITE;
     -fx-font-family: SansSerif;
-    -fx-font-weight: bold;
-    -fx-font-size: 15px;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-insets: 0;
+}
+
+.button.read {
+    -fx-background-color:  #9E9E9E;
+    -fx-text-fill:  BLACK;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-insets: 0;
+}
+.button.update {
+    -fx-background-color:  #FFC107;
+    -fx-text-fill:  BLACK;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-insets: 0;
+}
+.button.delete {
+    -fx-background-color:  #F44336;
+    -fx-text-fill:  WHITE;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
     -fx-background-insets: 0;
 }

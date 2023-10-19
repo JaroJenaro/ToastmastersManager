@@ -14,17 +14,17 @@
    <Label fx:id="lLoggedInUser" text="Label" />
 
     <HBox prefHeight="100.0" prefWidth="200.0">
-        <Button onAction="#onDeleteUserClick" text="User löschen">
+        <Button onAction="#onDeleteUserClick" text="User löschen" styleClass="delete" stylesheets="@../../../../css/buttonStyling.css">
            <HBox.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
            </HBox.margin>
         </Button>
-        <Button onAction="#onEditUserClick" text="User bearbeiten">
+        <Button onAction="#onEditUserClick" text="User bearbeiten" styleClass="update" stylesheets="@../../../../css/buttonStyling.css">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
         </Button>
-      <Button fx:id="bBack" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" text="Back">
+      <Button fx:id="bBack" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" text="Zeitschlitze verwalten" styleClass="read" stylesheets="@../../../../css/buttonStyling.css">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>

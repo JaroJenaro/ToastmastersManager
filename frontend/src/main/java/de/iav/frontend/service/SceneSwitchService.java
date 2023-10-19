@@ -164,13 +164,13 @@ public class SceneSwitchService {
         stage.show();
     }
 
-    public void switchToCreateMeetingController(ActionEvent actionEvent, User user) throws IOException {
+    public void switchToCreateMeetingController(ActionEvent actionEvent, User user,  int meetingIndex, int meetingsSize) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/CreateOrEditMeeting.fxml"));
         Parent root = loader.load();
 
         CreateOrEditMeetingController createOrEditMeetingController = loader.getController();
         LOG.info("  ----> public void switchToCreateMeetingController(ActionEvent actionEvent, User user) throws IOException {} ", user);
-        createOrEditMeetingController.setUserAndEditToShow(user);
+        createOrEditMeetingController.setUserAndEditToShow(user, meetingIndex, meetingsSize);
 
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
