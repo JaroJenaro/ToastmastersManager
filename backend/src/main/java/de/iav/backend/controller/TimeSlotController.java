@@ -5,20 +5,18 @@ import de.iav.backend.model.TimeSlotWithoutIdDTO;
 import de.iav.backend.service.TimeSlotService;
 import jakarta.validation.Valid;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/toast-master-manager/timeslots")
 public class TimeSlotController {
 
     private final TimeSlotService timeSlotService;
-
-
-    public TimeSlotController(TimeSlotService timeSlotService) {
-        this.timeSlotService = timeSlotService;
-    }
 
     @GetMapping
     public List<TimeSlotResponseDTO> getAllTimeSlots(            @RequestParam(required = false) String title,
@@ -48,16 +46,14 @@ public class TimeSlotController {
     @GetMapping("/search")
     public TimeSlotResponseDTO searchTimeSlotByTitleAndDescription(
             @RequestParam String title,
-            @RequestParam String description
-    ) {
+            @RequestParam String description){
            return timeSlotService.getTimeSlotByTitleAndDescription(title, description);
     }
 
     @GetMapping("/search2")
     public TimeSlotResponseDTO searchTimeSlotByTitleAndRed(
             @RequestParam String title,
-            @RequestParam String red
-    ) {
+            @RequestParam String red) {
         return timeSlotService.getTimeSlotByTitleAndRed(title, red);}
 
     @PostMapping
@@ -76,6 +72,4 @@ public class TimeSlotController {
     public void deleteTimeSlot(@PathVariable String id) {
         timeSlotService.deleteTimeSlot(id);
     }
-
 }
-
