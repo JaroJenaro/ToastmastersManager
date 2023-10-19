@@ -1,11 +1,9 @@
 package de.iav.frontend.controller;
 
-import de.iav.frontend.model.SpeechContribution;
 import de.iav.frontend.model.User;
 import de.iav.frontend.model.TimeSlot;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
-import de.iav.frontend.service.SpeechContributionService;
 import de.iav.frontend.service.TimeSlotService;
 import de.iav.frontend.util.Alerts;
 import javafx.event.ActionEvent;
@@ -19,7 +17,6 @@ import java.io.IOException;
 public class TimeSlotsController {
     private final TimeSlotService timeSlotService = TimeSlotService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
-    private final SpeechContributionService speechContributionService = SpeechContributionService.getInstance();
     private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
 
@@ -31,8 +28,6 @@ public class TimeSlotsController {
     public Button bUserData;
     @FXML
     public Button bLogout;
-    @FXML
-    public Button bAddCSpeechContribution;
     @FXML
     public Button bShowSpeechContribution;
     @FXML
@@ -106,35 +101,13 @@ public class TimeSlotsController {
                     "logout nicht erfolgreich");
     }
 
-    public void onAddSpeechContributionClick() {
-        try {
-            if (lvTimeSlots.getSelectionModel().getSelectedItem() != null) {
-                SpeechContribution savedSpeechContribution =  speechContributionService.createSpeechContribution (
-                        new SpeechContribution(null,lvTimeSlots.getSelectionModel().getSelectedItem(), loggedUser, null),
-                        authService.getSessionId()
-                );
-                Alerts.getMessageBoxWithConfirmationAndOkButton("Erfolgreich",
-                        "Redebeitrag mit der id:" + savedSpeechContribution.id() + "erfolgreich angelegt", "alles super");
-            } else {
-                Alerts.getMessageBoxWithInformationAndOkButton("Kein Redebeitrag erstellt.", "Siehe Details zum Redebeitrag in Information Dialog",
-                        "Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden.");
 
-            }
-        } catch (Exception e) {
-            Alerts.getMessageBoxWithInformationAndOkButton("Kein TimeSlot ausgewählt", "Siehe Details in Information Dialog",
-                    "Damit ein Redebeitrag angelegt werden kann muss zunächst ein Timeslot selektiert werden." + e.getMessage());
-        }
-    }
-
-    public void onShowSpeechContributionButtonClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToSpeechContributionController(event, loggedUser);
-    }
 
     public void onFirstMeetingButtonClick(ActionEvent event) throws IOException {
         sceneSwitchService.switchToMeetingController(event, loggedUser, 0);
     }
 
-    public void onCreateOneMeetingButtonClick(ActionEvent event) throws IOException {
-        sceneSwitchService.switchToCreateMeetingController(event, loggedUser);
+    public void onShowSpeechContributionButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToSpeechContributionController(event, loggedUser);
     }
 }

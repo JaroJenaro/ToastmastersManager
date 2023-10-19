@@ -4,20 +4,18 @@ import de.iav.backend.model.SpeechContributionDTO;
 import de.iav.backend.model.SpeechContributionIn;
 import de.iav.backend.service.SpeechContributionService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/toast-master-manager/speech-contributions")
 public class SpeechContributionController {
 
     private final SpeechContributionService speechContributionService;
-
-    public SpeechContributionController(SpeechContributionService speechContributionService) {
-        this.speechContributionService = speechContributionService;
-    }
 
     @GetMapping
     public List<SpeechContributionDTO> getAllSpeechContributions() {
@@ -39,6 +37,7 @@ public class SpeechContributionController {
     public SpeechContributionDTO updateSpeechContribution(@PathVariable String id, @Valid @RequestBody SpeechContributionIn speechContributionIn) {
         return speechContributionService.updateSpeechContribution(id, speechContributionIn);
     }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSpeechContribution(@PathVariable String id) {

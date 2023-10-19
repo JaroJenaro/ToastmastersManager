@@ -48,7 +48,7 @@ public class SpeechContributionEditController {
    }
 
     public void backButtonPressed(ActionEvent actionEvent) throws IOException {
-        sceneSwitchService.switchToSpeechContributionController(actionEvent, loggedUser);
+        sceneSwitchService.switchToMeetingController(actionEvent, loggedUser, meetingIndex);
     }
 
     public void onUpdateButtonClick(ActionEvent event) throws IOException {
@@ -77,7 +77,5 @@ public class SpeechContributionEditController {
         usersList.add(0, null);
         cbUser.setItems(usersList);
         cbUser.setValue(speechContributionToUpdate.user());
-
-
     }
 }

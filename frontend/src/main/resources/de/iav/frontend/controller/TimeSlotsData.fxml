@@ -7,29 +7,34 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="613.0" prefWidth="473.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.TimeSlotsController">
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
     <AnchorPane prefHeight="200.0" prefWidth="200.0">
-      <Button fx:id="bLogout" mnemonicParsing="false" onAction="#onLogoutButtonClick" text="Logout" AnchorPane.rightAnchor="110.0" />
-        <Button fx:id="bUserData" layoutX="324.0" mnemonicParsing="false" onAction="#onUsersDataButtonClick" prefHeight="25.0" prefWidth="109.0" text="Users Verwalten" AnchorPane.leftAnchor="324.0" AnchorPane.rightAnchor="0.0" />
+      <Button fx:id="bLogout" layoutX="376.0" layoutY="3.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" text="Logout" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+        <Button fx:id="bUserData" layoutY="4.0" mnemonicParsing="false" onAction="#onUsersDataButtonClick" prefHeight="26.0" prefWidth="167.0" styleClass="read" stylesheets="@../../../../css/buttonStyling.css" text="Users Verwalten" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="5.0" />
+      <Label fx:id="lLoggedInUser" layoutX="183.0" layoutY="7.0" />
     </AnchorPane>
-   <Label fx:id="lLoggedInUser" text="Label" />
-
+   <Label text="Zeitschlitze/Slots">
+      <font>
+         <Font size="24.0" />
+      </font>
+   </Label>
     <HBox prefHeight="100.0" prefWidth="200.0">
-        <Button onAction="#onNewTimeSlotClick" text="neuen timeSlot anlegen">
+        <Button minWidth="100.0" onAction="#onNewTimeSlotClick" prefWidth="150.0" styleClass="create" stylesheets="@../../../../css/buttonStyling.css" text="Slot erstellen">
             <HBox.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>
         </Button>
-        <Button onAction="#onEditTimeSlotClick" text="timeSlot bearbeiten">
+        <Button minWidth="100.0" onAction="#onEditTimeSlotClick" prefWidth="150.0" styleClass="update" stylesheets="@../../../../css/buttonStyling.css" text="Slot bearbeiten">
             <HBox.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>
         </Button>
-        <Button onAction="#onDeleteTimeSlotClick" text="timeSlot löschen">
+        <Button minWidth="100.0" onAction="#onDeleteTimeSlotClick" prefWidth="150.0" styleClass="delete" stylesheets="@../../../../css/buttonStyling.css" text="Slot löschen">
            <HBox.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
            </HBox.margin>
@@ -37,22 +42,13 @@
     </HBox>
    <ListView fx:id="lvTimeSlots" prefHeight="631.0" prefWidth="452.0" />
    <HBox prefHeight="100.0" prefWidth="200.0">
-         <Button fx:id="bShowSpeechContribution" mnemonicParsing="false" onAction="#onShowSpeechContributionButtonClick" text="Redebeiträge ansehen">
+         <Button fx:id="bShowSpeechContribution" mnemonicParsing="false" onAction="#onShowSpeechContributionButtonClick" prefHeight="26.0" prefWidth="178.0" styleClass="read" stylesheets="@../../../../css/buttonStyling.css" text="Redebeiträge ansehen">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
          </Button>
-         <Button fx:id="bAddCSpeechContribution" mnemonicParsing="false" onAction="#onAddSpeechContributionClick" text="Redebeitrag anlegen">
-            <HBox.margin>
-               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </HBox.margin>
-         </Button>
-      <Button fx:id="bFirstMeeting" mnemonicParsing="false" onAction="#onFirstMeetingButtonClick" text="first Meeting">
-         <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </HBox.margin>
-      </Button>
-      <Button fx:id="bCreateOneMeeting" mnemonicParsing="false" onAction="#onCreateOneMeetingButtonClick" text="neus Meeting erstellen">
+      <Label minWidth="40.0" prefWidth="80.0" />
+      <Button fx:id="bFirstMeeting" mnemonicParsing="false" onAction="#onFirstMeetingButtonClick" prefHeight="26.0" prefWidth="172.0" styleClass="read" stylesheets="@../../../../css/buttonStyling.css" text="Meeting-Navigator">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>

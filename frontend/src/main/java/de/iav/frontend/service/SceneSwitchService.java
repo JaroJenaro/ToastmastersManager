@@ -122,6 +122,7 @@ public class SceneSwitchService {
         stage.show();
     }
 
+
     public void switchToSpeechContributionController(ActionEvent actionEvent, User user) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/SpeechContributionController.fxml"));
         Parent root = loader.load();
@@ -135,7 +136,6 @@ public class SceneSwitchService {
         stage.setScene(scene);
         stage.show();
     }
-
     public void switchToSpeechContributionEditController(ActionEvent actionEvent, User user, SpeechContribution speechContribution, int meetingIndex) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/SpeechContributionEdit.fxml"));
         Parent root = loader.load();
@@ -164,13 +164,13 @@ public class SceneSwitchService {
         stage.show();
     }
 
-    public void switchToCreateMeetingController(ActionEvent actionEvent, User user) throws IOException {
+    public void switchToCreateMeetingController(ActionEvent actionEvent, User user,  int meetingIndex, int meetingsSize) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/de/iav/frontend/controller/CreateOrEditMeeting.fxml"));
         Parent root = loader.load();
 
         CreateOrEditMeetingController createOrEditMeetingController = loader.getController();
         LOG.info("  ----> public void switchToCreateMeetingController(ActionEvent actionEvent, User user) throws IOException {} ", user);
-        createOrEditMeetingController.setUserAndEditToShow(user);
+        createOrEditMeetingController.setUserAndEditToShow(user, meetingIndex, meetingsSize);
 
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

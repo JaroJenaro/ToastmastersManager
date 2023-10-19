@@ -1,0 +1,53 @@
+.button.control {
+    -fx-background-color: #041E96;
+    -fx-text-fill:  White;
+    -fx-font-family: SansSerif;
+}
+
+.button.menu {
+    -fx-background-color:  #5400B4;
+    -fx-text-fill:  WHITE;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-insets: 0;
+}
+.button.process {
+    -fx-background-color: transparent;
+    -fx-text-fill:  #818181;
+    -fx-font-family: SansSerif;
+}
+
+.button.create {
+    -fx-background-color:  #4CAF50;
+    -fx-text-fill:  WHITE;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-insets: 0;
+}
+
+.button.read {
+    -fx-background-color:  #9E9E9E;
+    -fx-text-fill:  BLACK;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-insets: 0;
+}
+.button.update {
+    -fx-background-color:  #FFC107;
+    -fx-text-fill:  BLACK;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-insets: 0;
+}
+.button.delete {
+    -fx-background-color:  #F44336;
+    -fx-text-fill:  WHITE;
+    -fx-font-family: SansSerif;
+    -fx-font-weight: normal;
+    -fx-font-size: 14px;
+    -fx-background-insets: 0;
+}

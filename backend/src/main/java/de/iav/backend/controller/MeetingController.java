@@ -36,14 +36,12 @@ public class MeetingController {
     @GetMapping("/search")
     public MeetingResponseDTO searchMeetingByStandortAndDateTime(
             @RequestParam String dateTime,
-            @RequestParam String location
-
-    ) {
+            @RequestParam String location) {
         return meetingService.getMeetingByDateTimeAndLocation(dateTime, location);
     }
 
     @PutMapping("/{id}")
-    public MeetingResponseDTO createMeeting(@PathVariable String id,@Valid @RequestBody MeetingRequestDTO meetingRequestDto) {
+    public MeetingResponseDTO createMeeting(@PathVariable String id, @Valid @RequestBody MeetingRequestDTO meetingRequestDto) {
         return meetingService.updateMeeting(id, meetingRequestDto);
     }
 }
