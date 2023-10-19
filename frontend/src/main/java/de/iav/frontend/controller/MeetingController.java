@@ -6,6 +6,7 @@ import de.iav.frontend.model.User;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.MeetingService;
 import de.iav.frontend.service.SceneSwitchService;
+import de.iav.frontend.service.SpeechContributionService;
 import de.iav.frontend.util.Alerts;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
@@ -26,6 +27,7 @@ import java.util.List;
 public class MeetingController {
     private final MeetingService meetingService = MeetingService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
+    private final SpeechContributionService speechContributionService = SpeechContributionService.getInstance();
     private final AuthService authService = AuthService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
 
@@ -145,7 +147,18 @@ public class MeetingController {
     }
 
     public void onDeleteSpeechContributionClick() {
-        Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Löschen noch nicht umgesetzt", "kommt später");
+        try {
+            if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null)
+            {
+                speechContributionService.deleteSpeechContribution(tvSpeechContribution.getSelectionModel().getSelectedItem().id(), tvSpeechContribution, authService.getSessionId());
+
+            }
+            else {
+                Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Zum Löschen selektieren Sie bitte einen Redebeitrag", "Ohne Selektieren des Redebeitrags geht es hier nicht weiter");
+            }
+        } catch (Exception e) {
+            Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Löschen nicht möglich, weile siehe unten: ", e.getMessage());
+        }
     }
 
     public void onEditSpeechContributionClick(ActionEvent event) throws IOException {

@@ -103,14 +103,14 @@ public class SpeechContributionController {
 
     public void onDeleteSpeechContributionClick() {
         try {
-        if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null)
-        {
-            speechContributionService.deleteSpeechContribution(tvSpeechContribution.getSelectionModel().getSelectedItem().id(), tvSpeechContribution, authService.getSessionId());
+            if(tvSpeechContribution.getSelectionModel().getSelectedItem() != null)
+            {
+                speechContributionService.deleteSpeechContribution(tvSpeechContribution.getSelectionModel().getSelectedItem().id(), tvSpeechContribution, authService.getSessionId());
 
-        }
-        else {
-            Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Zum Löschen selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
-        }
+            }
+            else {
+                Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Zum Löschen selektieren Sie bitte einen Redebeitrag", "ohne dies geht es hier nicht weiter");
+            }
         } catch (Exception e) {
             Alerts.getMessageBoxWithWarningAndOkButton(DELETE_NOT_POSSIBLE, "Löschen nicht möglich, weile siehe unten: ", e.getMessage());
         }

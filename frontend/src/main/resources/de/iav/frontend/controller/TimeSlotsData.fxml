@@ -17,19 +17,18 @@
         <Button fx:id="bUserData" layoutX="324.0" mnemonicParsing="false" onAction="#onUsersDataButtonClick" prefHeight="25.0" prefWidth="109.0" text="Users Verwalten" AnchorPane.leftAnchor="324.0" AnchorPane.rightAnchor="0.0" />
     </AnchorPane>
    <Label fx:id="lLoggedInUser" text="Label" />
-
     <HBox prefHeight="100.0" prefWidth="200.0">
-        <Button onAction="#onNewTimeSlotClick" text="neuen timeSlot anlegen">
+        <Button onAction="#onNewTimeSlotClick" text="Zeitschlitz erstellen">
             <HBox.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>
         </Button>
-        <Button onAction="#onEditTimeSlotClick" text="timeSlot bearbeiten">
+        <Button onAction="#onEditTimeSlotClick" text="Zeitschlitz bearbeiten">
             <HBox.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </HBox.margin>
         </Button>
-        <Button onAction="#onDeleteTimeSlotClick" text="timeSlot löschen">
+        <Button onAction="#onDeleteTimeSlotClick" text="Zeitschlitz löschen">
            <HBox.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
            </HBox.margin>
