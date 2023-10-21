@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.RegistrationController">
 
@@ -15,13 +17,26 @@
 <Label layoutX="42.0" layoutY="160.0" text="email address" />
 <Label fx:id="lPassword" layoutX="42.0" layoutY="203.0" text="Password" />
 <TextField fx:id="firstName" layoutX="207.0" layoutY="65.0" prefHeight="25.0" prefWidth="264.0" />
+   <HBox layoutX="32.0" layoutY="252.0" prefHeight="53.0" prefWidth="555.0">
+      <Button fx:id="bBackToLogin" mnemonicParsing="false" onAction="#backToLoginButtonPressed" prefHeight="25.0" prefWidth="165.0" text="Back to  Login">
+            <HBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </HBox.margin></Button>
+      <Button fx:id="bSignUp" mnemonicParsing="false" onAction="#onSignUpButtonClick" prefHeight="26.0" prefWidth="126.0" styleClass="create" stylesheets="@../../../../css/buttonStyling.css" text="Sign Up">
+            <HBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </HBox.margin></Button>
+         <Button fx:id="bUpdate" mnemonicParsing="false" onAction="#onUpdateButtonClick" prefHeight="26.0" prefWidth="126.0" styleClass="update" stylesheets="@../../../../css/buttonStyling.css" text="speichern">
+            <HBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </HBox.margin></Button>
+   </HBox>
 <TextField fx:id="lastName" layoutX="207.0" layoutY="103.0" prefHeight="25.0" prefWidth="264.0" />
 <TextField fx:id="email" layoutX="207.0" layoutY="156.0" prefHeight="25.0" prefWidth="264.0" />
 <PasswordField fx:id="password" layoutX="207.0" layoutY="199.0" prefHeight="25.0" prefWidth="264.0" />
-<Button fx:id="signUp" layoutX="479.0" layoutY="256.0" mnemonicParsing="false" onAction="#onSignUpButtonClick" prefHeight="25.0" prefWidth="80.0" styleClass="create" stylesheets="@../../../../css/buttonStyling.css" text="Sign Up" />
-<Button layoutX="422.0" layoutY="289.0" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="25.0" prefWidth="137.0" text="Back to  Login" />
-<Label fx:id="errorLabel" layoutX="50.0" layoutY="261.0" text=" " />
+<Label fx:id="errorLabel" layoutX="50.0" layoutY="300.0" text=" " />
    <Label fx:id="lRole" layoutX="42.0" layoutY="211.0" text="Role" />
    <ComboBox fx:id="cbRole" layoutX="207.0" layoutY="207.0" prefHeight="26.0" prefWidth="264.0" />
+   <Button fx:id="bUserRead" layoutX="31.0" layoutY="232.0" mnemonicParsing="false" onAction="#onUserReadButtonClick" prefHeight="25.0" prefWidth="166.0" styleClass="read" stylesheets="@../../../../css/buttonStyling.css" text="User-Verwaltung" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="257.0" />
 
 </AnchorPane>

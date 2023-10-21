@@ -215,7 +215,7 @@ class NewUserControllerIntegrationTest {
     @Test
     void updateUser_shouldReturn400_whenValuesInBodyArentValidAndIdIsInvalid() throws Exception {
         String THIS_ID_DOES_NOT_EXIST = "THIS_ID_NUMBER_DOES_NOT_EXIST";
-        NewAppUser userThatDoesntExist = new NewAppUser("?", "?", "?", "?", "?");
+        UserResponseDTO userThatDoesntExist = new UserResponseDTO("?", "?", "?", "?", "?");
 
         mockMvc.perform(put(BASE_URL + "/" + THIS_ID_DOES_NOT_EXIST)
                         .contentType("application/json")
@@ -232,7 +232,7 @@ class NewUserControllerIntegrationTest {
         });
         UserResponseDTO originalUser = usersList.get(0);
 
-        NewAppUser invalidRequestBody = new NewAppUser("?", "?", "?", "?", "?");
+        UserResponseDTO invalidRequestBody = new UserResponseDTO("?", "?", "?", "?", "?");
 
         mockMvc.perform(put(BASE_URL + "/" + originalUser.getId())
                         .contentType("application/json")

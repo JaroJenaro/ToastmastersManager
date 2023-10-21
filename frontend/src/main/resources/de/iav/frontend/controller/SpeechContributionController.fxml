@@ -7,37 +7,43 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="613.0" prefWidth="473.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.iav.frontend.controller.SpeechContributionController">
+<VBox alignment="CENTER" prefHeight="613.0" prefWidth="473.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.iav.frontend.controller.SpeechContributionController">
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
    <Label fx:id="lLoggedInUser" text="Label" />
-
     <HBox prefHeight="100.0" prefWidth="200.0">
-        <Button onAction="#onEditSpeechContributionClick" text="Redebeitrag bearbeiten" styleClass="update" stylesheets="@../../../../css/buttonStyling.css">
-         <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </HBox.margin>
-        </Button>
-        <Button onAction="#onDeleteSpeechContributionClick" text="Redebeitrag löschen" styleClass="delete" stylesheets="@../../../../css/buttonStyling.css">
-            <HBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </HBox.margin>
-        </Button>
-        <Button fx:id="bBack" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" text="Zeitschlitze verwalten" styleClass="read" stylesheets="@../../../../css/buttonStyling.css">
+         <Label text="Redebeiträge">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+    </HBox>
+    <HBox prefHeight="100.0" prefWidth="200.0">
+        <Button fx:id="bBack" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" styleClass="read" stylesheets="@../../../../css/buttonStyling.css" text="Zeitschlitze verwalten">
          <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </HBox.margin>
       </Button>
+        <Button onAction="#onEditSpeechContributionClick" styleClass="update" stylesheets="@../../../../css/buttonStyling.css" text="Redebeitrag bearbeiten">
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+        </Button>
+        <Button onAction="#onDeleteSpeechContributionClick" styleClass="delete" stylesheets="@../../../../css/buttonStyling.css" text="Redebeitrag löschen">
+            <HBox.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </HBox.margin>
+        </Button>
     </HBox>
    <TableView fx:id="tvSpeechContribution" prefHeight="599.0" prefWidth="433.0">
      <columns>
        <TableColumn fx:id="tcFirsteName" text="Vorname" />
        <TableColumn fx:id="tcLastName" text="Nachname" />
-       <TableColumn fx:id="tcEmail"  text="Email" />
-       <TableColumn fx:id="tcTitle"  text="Title" />
+       <TableColumn fx:id="tcEmail" text="Email" />
+       <TableColumn fx:id="tcTitle" text="Title" />
      </columns>
    </TableView>
    <opaqueInsets>

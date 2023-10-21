@@ -33,7 +33,7 @@ public class RegistrationController {
     @FXML
     public PasswordField password;
     @FXML
-    public Button signUp;
+    public Button bSignUp;
     @FXML
     public Label errorLabel;
 
@@ -41,11 +41,17 @@ public class RegistrationController {
     private final UserService userService = UserService.getInstance();
     private final SceneSwitchService sceneSwitchService = SceneSwitchService.getInstance();
     private static final Logger LOG = LogManager.getLogger();
+    @FXML
+    public Button bUpdate;
+    @FXML
+    public Button bUserRead;
+    @FXML
+    public Button bBackToLogin;
 
     private User loggedUser;
     private User userToUpdate;
 
-    WayToCreateOrEditUser wayToCreateOrEditUser;
+    private WayToCreateOrEditUser wayToCreateOrEditUser;
 
     public void initialize() {
         firstName.setPromptText("Vorname mind 4 Zeichen Lang");
@@ -59,39 +65,37 @@ public class RegistrationController {
     public void onSignUpButtonClick(ActionEvent event) throws IOException {
         if(wayToCreateOrEditUser==WayToCreateOrEditUser.REGISTER)
             registerUser(event);
-        else if (wayToCreateOrEditUser==WayToCreateOrEditUser.UPDATE) {
-            updateUser(event);
-        }
+
     }
 
     private void updateUser(ActionEvent event) throws IOException {
         if (isUpdateDataValid()) {
-            User user = new User(
+            User newUserToUpdate = new User(
                     userToUpdate.id(),
                     firstName.getText(),
                     lastName.getText(),
                     email.getText(),
                     cbRole.getValue()
             );
-            if (isUserUpdateSuccessful(user,userService.updateUser(user, authService.getSessionId()))) {
+            User savedUser = userService.updateUser(newUserToUpdate, authService.getSessionId());
+            if (isUserUpdateSuccessful(newUserToUpdate, savedUser)) {
+                LOG.info("updateUser: {}", newUserToUpdate);
                 sceneSwitchService.switchToUsersController(event, loggedUser);
-                LOG.info("updateUser: {}", user);
             } else {
-                errorLabel.setText(authService.getErrorMessage());
+                errorLabel.setText("da ist was schiefgelaufen: authService.getErrorMessage():" + authService.getErrorMessage());
             }
-        }
-        else {
+        }else {
             errorLabel.setText("Bitte alle Felder ausfüllen" );
         }
+
+
     }
 
     private boolean isUserUpdateSuccessful(User userIn, User userOut)
     {
         return userIn.equals(userOut);
     }
-    public void backButtonPressed(ActionEvent actionEvent) throws IOException {
-        sceneSwitchService.switchToLoginController(actionEvent);
-    }
+
 
     public void setUserWithoutIdDtoForSignIn(UserRequestDto userRequestDto ) {
         this.wayToCreateOrEditUser = WayToCreateOrEditUser.REGISTER;
@@ -107,8 +111,14 @@ public class RegistrationController {
         cbRole.setVisible(false);
         lRole.setVisible(false);
 
-        signUp.setText("Sign Up");
+        bUpdate.setVisible(false);
+        bSignUp.setVisible(true);
+
+        bUserRead.setVisible(false);
+        bBackToLogin.setVisible(true);
+
         lRegisterTitle.setText("Register User");
+
     }
 
     public void registerUser(ActionEvent event) throws IOException {
@@ -192,7 +202,26 @@ public class RegistrationController {
         password.setVisible(false);
         lPassword.setVisible(false);
 
-        signUp.setText("Update User");
+        bUpdate.setVisible(true);
+        bSignUp.setVisible(false);
+
+        bUserRead.setVisible(true);
+        bBackToLogin.setVisible(false);
+
         lRegisterTitle.setText(loggedUser.toString());
+    }
+
+    public void onUpdateButtonClick(ActionEvent event) throws IOException {
+        if (wayToCreateOrEditUser==WayToCreateOrEditUser.UPDATE) {
+            updateUser(event);
+        }
+    }
+
+    public void backToLoginButtonPressed(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToLoginController(event);
+    }
+
+    public void onUserReadButtonClick(ActionEvent event) throws IOException {
+        sceneSwitchService.switchToUsersController(event, loggedUser);
     }
 }
