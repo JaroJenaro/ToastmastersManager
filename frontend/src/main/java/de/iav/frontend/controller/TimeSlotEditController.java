@@ -5,6 +5,7 @@ import de.iav.frontend.model.User;
 import de.iav.frontend.security.AuthService;
 import de.iav.frontend.service.SceneSwitchService;
 import de.iav.frontend.service.TimeSlotService;
+import de.iav.frontend.util.Alerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -29,8 +30,7 @@ public class TimeSlotEditController {
     public TextField tfGreen;
     @FXML
     public TextField tfAmber;
-    @FXML
-    public Button bSave;
+
     @FXML
     public Button bCancel;
     @FXML
@@ -39,6 +39,10 @@ public class TimeSlotEditController {
     public Label lLoggedInUser;
     @FXML
     public Label lId;
+    @FXML
+    public Button bCreate;
+    @FXML
+    public Button bUpdate;
 
     private User loggedUser;
 
@@ -61,16 +65,15 @@ public class TimeSlotEditController {
         if(isTimeSlotDataValid()) {
             TimeSlot timeSlotToSave = getNewDataOfTimeSlot();
             TimeSlot savedTimeSlot;
+
             if (timeSlotToSave.id().isEmpty()) {
                 LOG.error("Versuch neu zur erstellen: {}", timeSlotToSave);
                 savedTimeSlot = timeSlotService.createTimeSlot(timeSlotToSave, authService.getSessionId());
+                LOG.info("Gespeicherte timeSlot {}", savedTimeSlot);
+                sceneSwitchService.switchToTimeSlotsController(event, loggedUser);
             } else {
-                LOG.error("Versuch zu updaten: {}", timeSlotToSave);
-                savedTimeSlot = timeSlotService.updateTimeSlot(timeSlotToSave, authService.getSessionId());
+                Alerts.getMessageBoxWithWarningAndOkButton("Create fehlgeschlagen", "Aus unbekannten Gründen.","TimeSlot id ist NICHT leer" );
             }
-
-            LOG.info("Gespeicherte timeSlot {}", savedTimeSlot);
-            sceneSwitchService.switchToTimeSlotsController(event, loggedUser);
         }
         else {
             lLoggedInUser.setText("Ungültige Daten");
@@ -86,12 +89,18 @@ public class TimeSlotEditController {
     public void setUserToShow(User user) {
         loggedUser= user;
         lLoggedInUser.setText(user.toString());
+        bUpdate.setVisible(false);
+        bCreate.setVisible(true);
     }
     public void setTimeSlotToEdit(TimeSlot timeSlotToEdit)
     {
-        if (!timeSlotToEdit.id().isEmpty())
-        {
+        if (!timeSlotToEdit.id().isEmpty()){
             showAllTimeSlotData(timeSlotToEdit);
+            bUpdate.setVisible(true);
+            bCreate.setVisible(false);
+        }
+        else {
+            Alerts.getMessageBoxWithWarningAndOkButton("setTimeSlotToEdit","setTimeSlotToEdit2", "setTimeSlotToEdit2");
         }
     }
 
@@ -124,6 +133,26 @@ public class TimeSlotEditController {
                 return false;
             }
             else return tfDescription.getText().length() >= 10;
+        }
+    }
+
+    public void onUpdateButtonClick(ActionEvent event) throws IOException {
+        if(isTimeSlotDataValid()) {
+            TimeSlot timeSlotToSave = getNewDataOfTimeSlot();
+            TimeSlot savedTimeSlot;
+            if (!timeSlotToSave.id().isEmpty()) {
+                LOG.error("Versuch zu updaten: {}", timeSlotToSave);
+                savedTimeSlot = timeSlotService.updateTimeSlot(timeSlotToSave, authService.getSessionId());
+                LOG.info("Gespeicherte timeSlot {}", savedTimeSlot);
+                sceneSwitchService.switchToTimeSlotsController(event, loggedUser);
+            } else {
+                Alerts.getMessageBoxWithWarningAndOkButton("Update fehlgeschlagen", "Aus unbekannten Gründen.","TimeSlot id ist leer" );
+            }
+
+
+        }
+        else {
+            lLoggedInUser.setText("Ungültige Daten");
         }
     }
 }
