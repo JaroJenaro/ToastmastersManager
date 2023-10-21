@@ -57,13 +57,14 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public UserResponseDTO updateUser(String id, NewAppUser userDto) {
+    public UserResponseDTO updateUser(String id, UserResponseDTO userDto) {
         User userToUpdate = userRepository
                 .findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        userToUpdate.setFirstName(userDto.firstName());
-        userToUpdate.setLastName(userDto.lastName());
-        userToUpdate.setEmail(userDto.email());
+        userToUpdate.setFirstName(userDto.getFirstName());
+        userToUpdate.setLastName(userDto.getLastName());
+        userToUpdate.setEmail(userDto.getEmail());
+        userToUpdate.setRole(userDto.getRole());
 
 
         User savedUser = userRepository.save(userToUpdate);

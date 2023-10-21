@@ -70,18 +70,19 @@ public class RegistrationController {
 
     private void updateUser(ActionEvent event) throws IOException {
         if (isUpdateDataValid()) {
-            User user = new User(
+            User newUserToUpdate = new User(
                     userToUpdate.id(),
                     firstName.getText(),
                     lastName.getText(),
                     email.getText(),
                     cbRole.getValue()
             );
-            if (isUserUpdateSuccessful(user,userService.updateUser(user, authService.getSessionId()))) {
-                LOG.info("updateUser: {}", user);
+            User savedUser = userService.updateUser(newUserToUpdate, authService.getSessionId());
+            if (isUserUpdateSuccessful(newUserToUpdate, savedUser)) {
+                LOG.info("updateUser: {}", newUserToUpdate);
                 sceneSwitchService.switchToUsersController(event, loggedUser);
             } else {
-                errorLabel.setText(authService.getErrorMessage());
+                errorLabel.setText("da ist was schiefgelaufen: authService.getErrorMessage():" + authService.getErrorMessage());
             }
         }else {
             errorLabel.setText("Bitte alle Felder ausfüllen" );
